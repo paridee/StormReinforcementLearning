@@ -18,7 +18,7 @@ import monitors.StormMonitor;
 import singletons.Settings;
 
 public class MainClass {
-	public static int 	 		monitoringInterval	=	60001;							//storm monitoring interval (>=60000)
+	public static int 	 		monitoringInterval	=	Settings.decisionInterval;							//storm monitoring interval (>=60000)
 	public static final String	PROMETHEUS_URL		=	"http://160.80.97.147:9090";	//prometheus server url
 	public static final String	PROMETHEUS_PUSHG	=	"http://160.80.97.147:9091";	//prometheus push gateway
 	public static final	Gauge	REWARD_VAL			=	Gauge.build().name("bench_rewardVal").help("Reward received value").register();	//prometheus metric to be monitored on Graphana
@@ -33,12 +33,12 @@ public class MainClass {
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
-		StormMonitor 	rm		=	new StormMonitor(monitoringInterval,PROMETHEUS_URL,PROMETHEUS_PUSHG);
+		StormMonitor 	rm		=	new StormMonitor(60000,PROMETHEUS_URL,PROMETHEUS_PUSHG);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
 		ParabolicProcessTimeRewardCalculator 	rewarder	=	new ParabolicProcessTimeRewardCalculator(850,100,200,1700);
-		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(850000,0.2,2);
-		FixedIntervalManager					intManager	=	new FixedIntervalManager(60000);
+		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(850,0.2,2);
+		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		EpsilonGreedyChooser					chooser		=	new EpsilonGreedyChooser(0.1);
 		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.1);
