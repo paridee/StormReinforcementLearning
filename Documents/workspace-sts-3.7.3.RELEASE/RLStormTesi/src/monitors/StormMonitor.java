@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mainClasses.MainClass;
 import singletons.SystemStatus;
 
 public class StormMonitor implements Runnable{
@@ -96,6 +97,7 @@ public class StormMonitor implements Runnable{
 										latest.put(metricName+""+innerMet.getString("exported_instance"), processTimeValue);
 										this.topologyLatency		=	processTimeValue;
 										SystemStatus.processLatency	=	processTimeValue;
+										MainClass.LATENCY_VAL.set(processTimeValue);
 										LOG.info("Updated latency to "+topologyLatency);
 									}
 								}

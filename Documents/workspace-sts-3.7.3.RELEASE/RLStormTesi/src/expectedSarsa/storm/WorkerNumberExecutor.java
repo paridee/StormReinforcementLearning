@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import expectedSarsa.ActionExecutor;
 import expectedSarsa.IntervalManager;
 import expectedSarsa.RewardCalculator;
+import mainClasses.MainClass;
 import singletons.Settings;
 
 public class WorkerNumberExecutor implements ActionExecutor {
@@ -31,6 +32,7 @@ public class WorkerNumberExecutor implements ActionExecutor {
 				String command	=	singletons.Settings.stormPath+"storm rebalance "+Settings.topologyName+" -n "+nWorker;
 				LOG.info("Sending command to rebalance "+command);
 				singletons.SystemStatus.workerNumber	=	nWorker;
+				MainClass.PARALLELISM_VAL.set(nWorker);
 				Process pr 		= rt.exec(command);
 				int	sleepInt	=	intManager.getEvalInterval();
 				LOG.info("Evaulation time "+sleepInt+", sleep");

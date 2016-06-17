@@ -22,6 +22,8 @@ public class MainClass {
 	public static final String	PROMETHEUS_URL		=	"http://160.80.97.147:9090";	//prometheus server url
 	public static final String	PROMETHEUS_PUSHG	=	"http://160.80.97.147:9091";	//prometheus push gateway
 	public static final	Gauge	REWARD_VAL			=	Gauge.build().name("bench_rewardVal").help("Reward received value").register();	//prometheus metric to be monitored on Graphana
+	public static final	Gauge	LATENCY_VAL			=	Gauge.build().name("bench_latencyRead").help("Latency read by decisor").register();	//prometheus metric to be monitored on Graphana
+	public static final	Gauge	PARALLELISM_VAL		=	Gauge.build().name("bench_parallelism").help("Parallelism level decided").register();	//prometheus metric to be monitored on Graphana
 	public static final int 	STATES_NUM			=	3;		//states
 	public static final int		ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
