@@ -50,12 +50,12 @@ public class MainClass {
 	}
 	
 	public static void launchWebServerForPrometheus(){
+		  org.eclipse.jetty.util.log.Log.setLog(new NoLogging());
 		  Server server = new Server(1234);
 		  ServletContextHandler context = new ServletContextHandler();
 		  context.setContextPath("/");
 		  server.setHandler(context);
 		  context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
-		  org.eclipse.jetty.util.log.Log.setLog(new NoLogging());
 		  try {
 			  server.start();
 		  } catch (Exception e1) {
