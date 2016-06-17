@@ -55,6 +55,7 @@ public class MainClass {
 		  context.setContextPath("/");
 		  server.setHandler(context);
 		  context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
+		  org.eclipse.jetty.util.log.Log.setLog(new NoLogging());
 		  try {
 			  server.start();
 		  } catch (Exception e1) {
