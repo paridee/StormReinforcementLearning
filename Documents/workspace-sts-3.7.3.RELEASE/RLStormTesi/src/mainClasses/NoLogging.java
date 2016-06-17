@@ -25,13 +25,13 @@ public class NoLogging implements Logger {
 	@Override
 	public Logger getLogger(String arg0) {
 		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
