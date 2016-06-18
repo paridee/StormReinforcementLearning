@@ -98,7 +98,7 @@ public class StormMonitor implements Runnable{
 											}
 										}
 									}
-									if(discard==false){
+									if(discard==false&&processTimeValue>0){
 										latest.put(metricName+""+innerMet.getString("exported_instance"), processTimeValue);
 										this.topologyLatency		=	processTimeValue;
 										SystemStatus.processLatency	=	processTimeValue;
