@@ -19,14 +19,14 @@ import singletons.SystemStatus;
 public class StormMonitor implements Runnable{
 	private static final Logger LOG = LoggerFactory.getLogger(StormMonitor.class);
 	boolean continueEx	=	true;
-	int interval		=	10000;
+	//int interval		=	10000;
 	String promUrl		=	"";
 	private String pushGatUrl;
 	HashMap<String,Object> latest	=	new HashMap<String,Object>();
 	double topologyLatency	=	0;
 	
-	public StormMonitor(int intervalM,String promUrl,String pushGatUrl){
-		interval			=	intervalM;
+	public StormMonitor(String promUrl,String pushGatUrl){
+		//interval			=	intervalM;
 		this.promUrl		=	promUrl;
 		this.pushGatUrl		=	pushGatUrl;
 	}

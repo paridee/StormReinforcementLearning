@@ -35,7 +35,7 @@ public class MainClass {
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
-		StormMonitor 	rm		=	new StormMonitor(60000,PROMETHEUS_URL,PROMETHEUS_PUSHG);
+		StormMonitor 	rm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
 		ParabolicProcessTimeRewardCalculator 	rewarder	=	new ParabolicProcessTimeRewardCalculator(850,100,200,1700);
