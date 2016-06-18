@@ -51,7 +51,7 @@ public class StormMonitor implements Runnable{
 				String inputLine;
 				String outl=null;
 				while ((inputLine = in.readLine()) != null){
-					LOG.info("Metric query result "+inputLine);
+					//LOG.info("Metric query result "+inputLine);
 					outl	=	inputLine;
 					if(outl!=null){
 						JSONObject jObj		=	new JSONObject(outl);
@@ -61,7 +61,7 @@ public class StormMonitor implements Runnable{
 							JSONObject 	result	=	results.getJSONObject(i);
 							JSONArray	value	=	result.getJSONArray("value");
 							JSONObject  innerMet=	result.getJSONObject("metric");
-							LOG.info("STORM metric "+innerMet.toString()+" value "+value);
+							//LOG.info("STORM metric "+innerMet.toString()+" value "+value);
 							boolean discard	=	false;
 							if(innerMet.has("exported_instance")&&innerMet.has("job")){
 								if(innerMet.has("__name__")){
@@ -76,7 +76,7 @@ public class StormMonitor implements Runnable{
 												URL url = null;
 												try {
 												    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
-												    LOG.info("Going to DETETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												    LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
 												} catch (MalformedURLException exception) {
 												    exception.printStackTrace();
 												}
