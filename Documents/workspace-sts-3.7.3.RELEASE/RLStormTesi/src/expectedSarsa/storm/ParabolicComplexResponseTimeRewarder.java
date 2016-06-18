@@ -57,6 +57,7 @@ public class ParabolicComplexResponseTimeRewarder implements RewardCalculator {
 		if(singletons.SystemStatus.workerNumber!=this.prevInstanceNumber){
 			LOG.info("switch number detected");
 			reward			=	reward-(2*maxReward);
+			this.prevInstanceNumber	=	singletons.SystemStatus.workerNumber;
 		}
 		LOG.info("reward returned "+reward);
 		return reward;
