@@ -37,6 +37,7 @@ public class StormMonitor implements Runnable{
 	
 	@Override
 	public void run() {
+		int count = 0; //each 60 seconds delete
 		while(continueEx == true){
 			try {
 				//String query	=	"rate(node_cpu{job=\""+this.subj.promName+"\",mode=\"idle\",instance=\""+this.subj.promInstance+"\"}["+interval/1000+"s])";
@@ -68,28 +69,32 @@ public class StormMonitor implements Runnable{
 									double processTimeValue	=	value.getDouble(1);
 									if(this.latest.containsKey(metricName+""+innerMet.getString("exported_instance"))){										
 										if(this.latest.get(metricName+""+innerMet.getString("exported_instance")).equals(processTimeValue)){
-											LOG.info("Duplicate value found, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
 											discard	=	true;
-											URL url = null;
-											try {
-											    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
-											    LOG.info("Going to DETETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
-											} catch (MalformedURLException exception) {
-											    exception.printStackTrace();
-											}
-											HttpURLConnection httpURLConnection = null;
-											try {
-											    httpURLConnection = (HttpURLConnection) url.openConnection();
-											    httpURLConnection.setRequestProperty("Content-Type",
-											                "application/x-www-form-urlencoded");
-											    httpURLConnection.setRequestMethod("DELETE");
-											    LOG.info("Response code "+httpURLConnection.getResponseCode());
-											} catch (IOException exception) {
-											    exception.printStackTrace();
-											} finally {         
-											    if (httpURLConnection != null) {
-											        httpURLConnection.disconnect();
-											    }
+											if(count%6==0){
+												LOG.info("Duplicate value found after 60 seconds, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
+												
+												URL url = null;
+												try {
+												    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												    LOG.info("Going to DETETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												} catch (MalformedURLException exception) {
+												    exception.printStackTrace();
+												}
+												HttpURLConnection httpURLConnection = null;
+												try {
+												    httpURLConnection = (HttpURLConnection) url.openConnection();
+												    httpURLConnection.setRequestProperty("Content-Type",
+												                "application/x-www-form-urlencoded");
+												    httpURLConnection.setRequestMethod("DELETE");
+												    LOG.info("Response code "+httpURLConnection.getResponseCode());
+												} catch (IOException exception) {
+												    exception.printStackTrace();
+												} finally {         
+												    if (httpURLConnection != null) {
+												        httpURLConnection.disconnect();
+												    }
+												}
+												count	= 0;
 											}
 										}
 									}
@@ -104,7 +109,8 @@ public class StormMonitor implements Runnable{
 							}
 						}
 					}
-					Thread.sleep(this.interval);
+					count++;
+					Thread.sleep(10000);
 				}
 			}
 			catch(Exception e){
