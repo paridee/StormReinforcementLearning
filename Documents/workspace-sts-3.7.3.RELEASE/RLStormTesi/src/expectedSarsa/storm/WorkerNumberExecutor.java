@@ -34,15 +34,19 @@ public class WorkerNumberExecutor implements ActionExecutor {
 				singletons.SystemStatus.workerNumber	=	nWorker;
 				MainClass.PARALLELISM_VAL.set(nWorker);
 				Process pr 		= rt.exec(command);
-				int	sleepInt	=	intManager.getEvalInterval();
-				LOG.info("Evaulation time "+sleepInt+", sleep");
-				Thread.sleep(sleepInt);
 			} catch (IOException e) {
 				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+				LOG.debug(e.getMessage());
+			}		
+		}
+		int	sleepInt	=	intManager.getEvalInterval();
+		LOG.info("Evaulation time "+sleepInt+", sleep");
+		try {
+			Thread.sleep(sleepInt);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			LOG.debug(e.getMessage());
 		}
 		// TODO Auto-generated method stub
 		return rewarder.giveReward();
