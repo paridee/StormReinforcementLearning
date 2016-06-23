@@ -54,11 +54,11 @@ public class ParabolicComplexResponseTimeRewarder implements RewardCalculator {
 		double latSquared	=	lat*lat;
 		double reward		=	(a*latSquared)+(b*lat)+c;
 		reward				=	reward	-	(maxReward/(nInstances*2))*singletons.SystemStatus.workerNumber;
-		if(singletons.SystemStatus.workerNumber!=this.prevInstanceNumber){
+		/*if(singletons.SystemStatus.workerNumber!=this.prevInstanceNumber){
 			LOG.info("switch number detected");
 			reward			=	reward-(maxReward/4);
 			this.prevInstanceNumber	=	singletons.SystemStatus.workerNumber;
-		}
+		}*/
 		LOG.info("reward returned "+reward);
 		return reward;
 	}
