@@ -31,11 +31,11 @@ public class ParabolicComplexResponseTimeRewarder implements RewardCalculator {
 	
 	
 	public ParabolicComplexResponseTimeRewarder(double targetProcessTime, double maxReward,
-		double xLIntercept, double xRIntercept,int nInstances) {
+		double xRIntercept,int nInstances) { //XL intercept is fixed on order to have maxv there!!!
 		super();
 		this.focus = targetProcessTime;
 		this.maxReward = maxReward;
-		this.xLIntercept 	= 	xLIntercept;
+		this.xLIntercept 	= 	targetProcessTime-(xRIntercept-targetProcessTime);
 		this.xRIntercept 	= 	xRIntercept;
 		this.nInstances		=	nInstances;
 	}

@@ -40,8 +40,8 @@ public class MainClass {
 		StormMonitor 	rm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
-		RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(800,125,266,2400,ACTIONS_NUM);
-		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(850,0.3,3);
+		RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4000,ACTIONS_NUM);
+		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.75,1.3);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		EpsilonGreedyChooser					chooser		=	new EpsilonGreedyChooser(0.1);
