@@ -26,13 +26,12 @@ public class ParabolicProcessTimeRewardCalculator implements RewardCalculator {
 	
 	
 	
-	public ParabolicProcessTimeRewardCalculator(double targetProcessTime, double maxReward,
-			double xLIntercept, double xRIntercept) {
+	public ParabolicProcessTimeRewardCalculator(double targetProcessTime, double maxReward, double xRIntercept) {
 		super();
 		this.focus = targetProcessTime;
 		this.maxReward = maxReward;
-		this.xLIntercept = xLIntercept;
 		this.xRIntercept = xRIntercept;
+		this.xLIntercept = focus-(xRIntercept-focus);
 	}
 
 	@Override
