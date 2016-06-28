@@ -61,7 +61,8 @@ public class MainClass {
 		int 									actionsN	=	(boltsName.size()*2)+1;	
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, monitoringInterval, monitoringInterval, singletons.Settings.topologyName);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
-		
+		Thread									sarsaTh		=	new Thread(sarsa);
+		sarsaTh.start();
 		
 		
 		
