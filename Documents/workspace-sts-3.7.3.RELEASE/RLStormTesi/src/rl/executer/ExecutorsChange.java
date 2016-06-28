@@ -94,6 +94,7 @@ public class ExecutorsChange implements ActionExecutor {
 		String	execFlags	=	"";
 		int totalExecutors	=	0;
 		for(int i=0;i<executorLevel.length;i++){
+			MainClass.operatorsLevel[i].set(executorLevel[i]);
 			totalExecutors	=	totalExecutors	+	executorLevel[i];
 			execFlags		=	execFlags+" -e "+this.boltsName.get(i)+"="+this.executorLevel[i];
 		}
@@ -103,6 +104,7 @@ public class ExecutorsChange implements ActionExecutor {
 		else{
 			totalExecutors	=	(totalExecutors/coresPerMachine)+1;
 		}
+		MainClass.PARALLELISM_VAL.set(totalExecutors);
 		String command	=	singletons.Settings.stormPath+"storm rebalance "+this.topologyName+" -n "+totalExecutors+execFlags;
 		logger.debug("sending command "+command);
 		Runtime rt 		= 	Runtime.getRuntime();

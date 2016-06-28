@@ -32,7 +32,8 @@ public class MainClass {
 	public static final int 	STATES_NUM			=	3;		//states
 	public static int			ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
-	
+	public static Gauge.Child[]		operatorsLevel;			//prometheus variables
+
 	public static void main(String[] args) {	//arguments (opt): topology name
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
@@ -64,7 +65,7 @@ public class MainClass {
 		
 		BasicConfigurator.configure();			//default logging configuration
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		initializePromVariables();				//initializes variables for prometheus
+		initializePromVariables(boltsName);				//initializes variables for prometheus
 		sarsaTh.start();
 		
 	}
@@ -83,7 +84,7 @@ public class MainClass {
 		  }
 	}
 	
-	public static void initializePromVariables(){
+	public static void initializePromVariables(ArrayList<String> boltsName){
 		qMatrix			=	new Gauge.Child[STATES_NUM][ACTIONS_NUM];
 		String[] labels	=	new String[2];
 		labels[0]		=	"row";
@@ -98,6 +99,14 @@ public class MainClass {
 				qMatrix[i][j]	=	new Gauge.Child();
 				q.setChild(qMatrix[i][j], labelst);
 			}
+		}
+		labels	=	new String[1];
+		labels[0]		=	"row";
+		Gauge l			=	Gauge.build().name("OperatorsLevel").help("Operators").labelNames(labels).register();
+		for(int i=0;i<boltsName.size();i++){
+			operatorsLevel[i]	=	new Gauge.Child();
+			String labelst		=	boltsName.get(i);
+			l.setChild(operatorsLevel[i],labelst);
 		}
 	}
 }
