@@ -45,8 +45,8 @@ public class MainClass {
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
-		EpsilonGreedyChooser					chooser		=	new EpsilonGreedyChooser(0.3);
-		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.6);
+		EpsilonGreedyChooser					chooser		=	new EpsilonGreedyChooser(0.1);
+		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.4);
 		//Thread sarsaThread									=	new Thread(sarsa);
 		//sarsaThread.start();
 		
@@ -58,7 +58,7 @@ public class MainClass {
 		boltsName.add("secondstage");
 		int 									actionsN	=	(boltsName.size()*2)+1;	
 		ACTIONS_NUM											=	actionsN;
-		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, 32/4, 32, singletons.Settings.topologyName,intManager,rewarder);
+		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, 32/8, 32, singletons.Settings.topologyName,intManager,rewarder);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
 		Thread									sarsaTh		=	new Thread(sarsa);
 		
