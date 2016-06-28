@@ -41,6 +41,15 @@ public class MainClass {
 		StormMonitor 	rm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
+		
+		
+		//TEST
+		ArrayList<String>						boltsName	=	new ArrayList<String>();
+		boltsName.add("firststage");
+		boltsName.add("secondstage");
+		initializePromVariables(boltsName);				//initializes variables for prometheus
+		
+		
 		RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
@@ -51,11 +60,6 @@ public class MainClass {
 		//sarsaThread.start();
 		
 		
-		
-		//TEST
-		ArrayList<String>						boltsName	=	new ArrayList<String>();
-		boltsName.add("firststage");
-		boltsName.add("secondstage");
 		int 									actionsN	=	(boltsName.size()*2)+1;	
 		ACTIONS_NUM											=	actionsN;
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, 32/8, 32, singletons.Settings.topologyName,intManager,rewarder);
@@ -65,7 +69,7 @@ public class MainClass {
 		
 		BasicConfigurator.configure();			//default logging configuration
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		initializePromVariables(boltsName);				//initializes variables for prometheus
+		
 		sarsaTh.start();
 		
 	}
@@ -86,6 +90,7 @@ public class MainClass {
 	
 	public static void initializePromVariables(ArrayList<String> boltsName){
 		qMatrix			=	new Gauge.Child[STATES_NUM][ACTIONS_NUM];
+		operatorsLevel	=	new Gauge.Child[boltsName.size()];
 		String[] labels	=	new String[2];
 		labels[0]		=	"row";
 		labels[1]		=	"column";
