@@ -30,7 +30,7 @@ public class MainClass {
 	public static final	Gauge	LATENCY_VAL			=	Gauge.build().name("bench_latencyRead").help("Latency read by decisor").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	PARALLELISM_VAL		=	Gauge.build().name("bench_parallelism").help("Parallelism level decided").register();	//prometheus metric to be monitored on Graphana
 	public static final int 	STATES_NUM			=	3;		//states
-	public static int		ACTIONS_NUM			=	4;		//actions
+	public static int			ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
 	
 	public static void main(String[] args) {	//arguments (opt): topology name
