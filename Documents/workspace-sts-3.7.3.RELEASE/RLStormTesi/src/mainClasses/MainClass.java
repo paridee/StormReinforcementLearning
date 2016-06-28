@@ -34,9 +34,6 @@ public class MainClass {
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
 	
 	public static void main(String[] args) {	//arguments (opt): topology name
-		BasicConfigurator.configure();			//default logging configuration
-		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		initializePromVariables();				//initializes variables for prometheus
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
@@ -66,6 +63,9 @@ public class MainClass {
 		sarsaTh.start();
 		
 		
+		BasicConfigurator.configure();			//default logging configuration
+		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
+		initializePromVariables();				//initializes variables for prometheus
 		
 		
 	}
