@@ -60,13 +60,12 @@ public class MainClass {
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, monitoringInterval, monitoringInterval, singletons.Settings.topologyName);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
 		Thread									sarsaTh		=	new Thread(sarsa);
-		sarsaTh.start();
 		
 		
 		BasicConfigurator.configure();			//default logging configuration
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		initializePromVariables();				//initializes variables for prometheus
-		
+		sarsaTh.start();
 		
 	}
 	
@@ -89,6 +88,7 @@ public class MainClass {
 		String[] labels	=	new String[2];
 		labels[0]		=	"row";
 		labels[1]		=	"column";
+		System.out.println("Q matrix dimension "+STATES_NUM+" "+ACTIONS_NUM);
 		Gauge q			=	Gauge.build().name("QValue").help("Value of Q matrix in position").labelNames(labels).register();
 		for(int i=0;i<STATES_NUM;i++){// metrics, 3 == number of states
 			for(int j=0;j<ACTIONS_NUM;j++){
