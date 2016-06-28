@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import expectedSarsa.FixedIntervalManager;
+import expectedSarsa.IntervalManager;
 import mainClasses.MainClass;
 import rl.policies.EpsilonGreedyChooser;
+import rl.rewarder.RewardCalculator;
 import singletons.Settings;
 
 //TODO nota!!! diamo per scontato che tutti gli operatori abbiano lo stesso
@@ -23,14 +26,18 @@ public class ExecutorsChange implements ActionExecutor {
 	public final static Logger logger	=	LogManager.getLogger(ExecutorsChange.class);
 	String	topologyName;
 	int 	coresPerMachine	=	8;
+	private IntervalManager intManager;
+	RewardCalculator rewCalculator;
 	
-	public ExecutorsChange(ArrayList<String>boltsName,int increaseValue,int maxExecutorNumber,String topologyName){
+	public ExecutorsChange(ArrayList<String>boltsName,int increaseValue,int maxExecutorNumber,String topologyName, IntervalManager intManager,RewardCalculator rewCalculator){
 		super();
 		executorLevel			=	new int[boltsName.size()];
 		this.boltsName			=	boltsName;
 		this.increaseValue		=	increaseValue;
 		this.maxExecutorNumber	=	maxExecutorNumber;
 		this.topologyName		=	topologyName;
+		this.intManager			=	intManager;
+		this.rewCalculator		=	rewCalculator;
 		for(int i=0;i<this.executorLevel.length;i++){
 			executorLevel[i]	=	1;
 		}
@@ -73,7 +80,14 @@ public class ExecutorsChange implements ActionExecutor {
 			//logger.debug("action choosen: "+action+" leave unchanged");
 		}
 		// TODO Auto-generated method stub
-		return 0;
+		try {
+			Thread.sleep(this.intManager.getEvalInterval());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.debug(e.getMessage());
+		}
+		return this.rewCalculator.giveReward();
 	}
 	
 	public void applyLevel() {

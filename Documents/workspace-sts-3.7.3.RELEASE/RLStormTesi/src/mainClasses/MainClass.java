@@ -57,7 +57,7 @@ public class MainClass {
 		boltsName.add("secondstage");
 		int 									actionsN	=	(boltsName.size()*2)+1;	
 		ACTIONS_NUM											=	actionsN;
-		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, monitoringInterval, monitoringInterval, singletons.Settings.topologyName);
+		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, 32/4, 32, singletons.Settings.topologyName,intManager);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
 		Thread									sarsaTh		=	new Thread(sarsa);
 		
