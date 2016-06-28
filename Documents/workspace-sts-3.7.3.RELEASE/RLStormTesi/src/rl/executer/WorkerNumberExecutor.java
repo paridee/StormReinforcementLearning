@@ -1,4 +1,4 @@
-package expectedSarsa.storm;
+package rl.executer;
 
 import java.io.IOException;
 
@@ -6,10 +6,9 @@ import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import expectedSarsa.ActionExecutor;
 import expectedSarsa.IntervalManager;
-import expectedSarsa.RewardCalculator;
 import mainClasses.MainClass;
+import rl.rewarder.RewardCalculator;
 import singletons.Settings;
 
 public class WorkerNumberExecutor implements ActionExecutor {

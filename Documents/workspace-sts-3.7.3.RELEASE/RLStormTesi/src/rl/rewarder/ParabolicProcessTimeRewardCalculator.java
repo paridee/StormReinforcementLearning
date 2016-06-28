@@ -1,10 +1,9 @@
-package expectedSarsa.storm;
+package rl.rewarder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import Jama.Matrix;
-import expectedSarsa.RewardCalculator;
 
 public class ParabolicProcessTimeRewardCalculator implements RewardCalculator {
 	/**

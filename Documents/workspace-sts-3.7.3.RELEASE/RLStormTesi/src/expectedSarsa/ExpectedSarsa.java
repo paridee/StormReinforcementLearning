@@ -5,6 +5,10 @@ import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rl.alpha.AlphaCalculator;
+import rl.executer.ActionExecutor;
+import rl.policies.PolicyChooser;
+
 public class ExpectedSarsa implements Runnable{
 	int states				=	1;
 	int actions				=	1;

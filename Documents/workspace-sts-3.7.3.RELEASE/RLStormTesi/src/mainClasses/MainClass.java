@@ -1,22 +1,25 @@
 package mainClasses;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.BasicConfigurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import expectedSarsa.EpsilonGreedyChooser;
 import expectedSarsa.ExpectedSarsa;
 import expectedSarsa.FixedIntervalManager;
-import expectedSarsa.RewardCalculator;
-import expectedSarsa.StaticAlphaCalculator;
-import expectedSarsa.storm.ParabolicComplexResponseTimeRewarder;
-import expectedSarsa.storm.ParabolicProcessTimeRewardCalculator;
 import expectedSarsa.storm.ProcessTimeStateReader;
-import expectedSarsa.storm.WorkerNumberExecutor;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.MetricsServlet;
 import monitors.StormMonitor;
+import rl.alpha.StaticAlphaCalculator;
+import rl.executer.ExecutorsChange;
+import rl.executer.WorkerNumberExecutor;
+import rl.policies.EpsilonGreedyChooser;
+import rl.rewarder.ParabolicComplexResponseTimeRewarder;
+import rl.rewarder.ParabolicProcessTimeRewardCalculator;
+import rl.rewarder.RewardCalculator;
 import singletons.Settings;
 
 public class MainClass {
@@ -40,15 +43,29 @@ public class MainClass {
 		StormMonitor 	rm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
-		RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,6000,ACTIONS_NUM);
-		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.75,1.3);
+		RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
+		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
-		WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
-		EpsilonGreedyChooser					chooser		=	new EpsilonGreedyChooser(0.1);
-		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.5);
-		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,4,1,chooser,executor,reader,alpha);
-		Thread sarsaThread									=	new Thread(sarsa);
-		sarsaThread.start();
+		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
+		EpsilonGreedyChooser					chooser		=	new EpsilonGreedyChooser(0.3);
+		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.6);
+		//Thread sarsaThread									=	new Thread(sarsa);
+		//sarsaThread.start();
+		
+		
+		
+		//TEST
+		ArrayList<String>						boltsName	=	new ArrayList<String>();
+		boltsName.add("firststage");
+		boltsName.add("secondstage");
+		int 									actionsN	=	(boltsName.size()*2)+1;	
+		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, monitoringInterval, monitoringInterval, singletons.Settings.topologyName);
+		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
+		
+		
+		
+		
+		
 	}
 	
 	public static void launchWebServerForPrometheus(){

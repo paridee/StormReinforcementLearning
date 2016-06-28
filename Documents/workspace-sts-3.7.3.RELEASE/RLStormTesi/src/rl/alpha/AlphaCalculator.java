@@ -1,4 +1,4 @@
-package expectedSarsa;
+package rl.alpha;
 
 public interface AlphaCalculator {
 

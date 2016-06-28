@@ -1,4 +1,4 @@
-package expectedSarsa;
+package rl.policies;
 
 public interface PolicyChooser {
 	double[]	policyForState(int stateId, double[][] q);
