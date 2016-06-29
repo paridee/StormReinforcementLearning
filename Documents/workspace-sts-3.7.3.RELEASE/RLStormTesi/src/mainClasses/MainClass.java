@@ -47,8 +47,7 @@ public class MainClass {
 		ArrayList<String>						boltsName	=	new ArrayList<String>();
 		boltsName.add("firststage");
 		boltsName.add("secondstage");
-		initializePromVariables(boltsName);				//initializes variables for prometheus
-		
+
 		
 		RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
@@ -62,6 +61,8 @@ public class MainClass {
 		
 		int 									actionsN	=	(boltsName.size()*2)+1;	
 		ACTIONS_NUM											=	actionsN;
+		initializePromVariables(boltsName);				//initializes variables for prometheus
+		
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, 32/8, 32, singletons.Settings.topologyName,intManager,rewarder);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
 		Thread									sarsaTh		=	new Thread(sarsa);
