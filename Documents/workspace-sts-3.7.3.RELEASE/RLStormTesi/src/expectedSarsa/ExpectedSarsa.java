@@ -78,6 +78,7 @@ public class ExpectedSarsa implements Runnable{
 			logger.info("Q matrix:"+states+" "+actions);
 			for(int i=0;i<states;i++){
 				for(int j=0;j<actions;j++){
+					logger.debug("printing "+i+" "+j);
 					double qij					=	Q[i][j];
 					DecimalFormat numberFormat = new DecimalFormat("0.00");
 					System.out.print(numberFormat.format(qij)+"\t");
