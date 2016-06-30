@@ -51,7 +51,7 @@ public class MainClass {
 
 		
 		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
-		RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,1500,4500,5,0.2);
+		RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,1500,4500,50,0.2);
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
