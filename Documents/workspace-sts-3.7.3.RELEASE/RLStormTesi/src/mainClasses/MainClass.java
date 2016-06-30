@@ -17,6 +17,7 @@ import rl.alpha.StaticAlphaCalculator;
 import rl.executer.ExecutorsChange;
 import rl.executer.WorkerNumberExecutor;
 import rl.policies.EpsilonGreedyChooser;
+import rl.rewarder.DeltaRewarder;
 import rl.rewarder.ParabolicComplexResponseTimeRewarder;
 import rl.rewarder.ParabolicProcessTimeRewardCalculator;
 import rl.rewarder.RewardCalculator;
@@ -49,7 +50,8 @@ public class MainClass {
 		boltsName.add("secondstage");
 
 		
-		RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
+		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
+		RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,1500,4500,5);
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
