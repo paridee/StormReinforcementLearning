@@ -17,7 +17,7 @@ import singletons.Settings;
 //grado di parallelismo massimo
 
 
-public class ExecutorsChange implements ActionExecutor {
+public class ExecutorsChange implements ActionExecutor,BoltsLevel {
 
 	ArrayList<String>	boltsName;
 	int[]	executorLevel;
@@ -90,6 +90,14 @@ public class ExecutorsChange implements ActionExecutor {
 		return this.rewCalculator.giveReward();
 	}
 	
+	public int getExecutorsNumber(){
+		int temp	=	0;
+		for(int i=0;i<this.executorLevel.length;i++){
+			temp	=	temp+this.executorLevel[i];
+		}
+		return temp;
+	}
+	
 	public void applyLevel() {
 		String	execFlags	=	"";
 		int totalExecutors	=	0;
@@ -97,6 +105,7 @@ public class ExecutorsChange implements ActionExecutor {
 			MainClass.operatorsLevel[i].set(executorLevel[i]);
 			totalExecutors	=	totalExecutors	+	executorLevel[i];
 			execFlags		=	execFlags+" -e "+this.boltsName.get(i)+"="+this.executorLevel[i];
+			singletons.SystemStatus.setExecutorLevel(this.boltsName.get(i), this.executorLevel[i]);
 		}
 		if(totalExecutors%coresPerMachine==0){
 			totalExecutors	=	totalExecutors/coresPerMachine;
