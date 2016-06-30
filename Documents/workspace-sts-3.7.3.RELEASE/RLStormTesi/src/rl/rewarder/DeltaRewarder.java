@@ -1,7 +1,5 @@
 package rl.rewarder;
 
-import rl.executer.BoltsLevel;
-
 public class DeltaRewarder implements RewardCalculator {
 	private double oldDistance;
 	private int lowerBound;
@@ -9,7 +7,6 @@ public class DeltaRewarder implements RewardCalculator {
 	private int upperBound;
 	private int rewMax;
 	private double costPerInstance;
-	private BoltsLevel levRead;
 	private int oldExNumber	=	1;
 
 	public DeltaRewarder(int obj,int lowerBound, int upperBound, int rewMax,double costPerInstance) {
@@ -47,8 +44,8 @@ public class DeltaRewarder implements RewardCalculator {
 			delta	=	-delta;
 		}
 		//if more executor than past has to be a cost
-		delta	=	delta-(this.costPerInstance*(this.oldExNumber-this.levRead.getExecutorsNumber()));
-		this.oldExNumber	=	this.levRead.getExecutorsNumber();
+		delta	=	delta-(this.costPerInstance*(this.oldExNumber-singletons.SystemStatus.getOperatorsLevel()));
+		this.oldExNumber	=	singletons.SystemStatus.getOperatorsLevel();
 		return delta;
 	}
 	

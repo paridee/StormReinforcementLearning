@@ -17,7 +17,7 @@ import singletons.Settings;
 //grado di parallelismo massimo
 
 
-public class ExecutorsChange implements ActionExecutor,BoltsLevel {
+public class ExecutorsChange implements ActionExecutor {
 
 	ArrayList<String>	boltsName;
 	int[]	executorLevel;
