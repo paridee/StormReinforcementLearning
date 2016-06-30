@@ -61,7 +61,7 @@ public class EpsilonGreedyChooser implements PolicyChooser {
 		}
 		if(valueActions.size()!=1){
 			logger.debug("not a single action with value "+tempvalue);
-			int index	=	((int)(Math.random()*valueActions.size()))%valueActions.size();
+			int index	=	((int)(Math.random()*valueActions.size()+10000))%valueActions.size();
 			return valueActions.get(index);
 		}
 		return tempaction;
