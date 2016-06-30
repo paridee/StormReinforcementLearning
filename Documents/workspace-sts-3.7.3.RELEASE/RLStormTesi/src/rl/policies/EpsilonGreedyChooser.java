@@ -54,12 +54,12 @@ public class EpsilonGreedyChooser implements PolicyChooser {
 			}
 		}
 		ArrayList<Integer> valueActions	=	new ArrayList<Integer>();
-		for(int i=1;i<q[currentState].length;i++){
+		for(int i=0;i<q[currentState].length;i++){
 			if(q[currentState][i]==tempvalue){
 				valueActions.add(i);
 			}
 		}
-		if(valueActions.size()!=1){
+		if(valueActions.size()>1){
 			logger.debug("not a single action with value "+tempvalue);
 			int index	=	((int)(Math.random()*valueActions.size()+10000))%valueActions.size();
 			return valueActions.get(index);

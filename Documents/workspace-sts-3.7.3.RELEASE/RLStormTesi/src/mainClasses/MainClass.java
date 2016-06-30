@@ -54,7 +54,7 @@ public class MainClass {
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		EpsilonGreedyChooser					chooser		=	new EpsilonGreedyChooser(0.1);
-		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.7);
+		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.8);
 		//Thread sarsaThread									=	new Thread(sarsa);
 		//sarsaThread.start();
 		
