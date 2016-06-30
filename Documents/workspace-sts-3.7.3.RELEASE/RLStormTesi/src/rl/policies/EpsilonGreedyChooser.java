@@ -1,5 +1,7 @@
 package rl.policies;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -50,6 +52,17 @@ public class EpsilonGreedyChooser implements PolicyChooser {
 				tempaction	=	i;
 				tempvalue	=	q[currentState][i];
 			}
+		}
+		ArrayList<Integer> valueActions	=	new ArrayList<Integer>();
+		for(int i=1;i<q[currentState].length;i++){
+			if(q[currentState][i]==tempvalue){
+				valueActions.add(i);
+			}
+		}
+		if(valueActions.size()!=1){
+			logger.debug("not a single action with value "+tempvalue);
+			int index	=	((int)(Math.random()*valueActions.size()))%valueActions.size();
+			return valueActions.get(index);
 		}
 		return tempaction;
 	}
