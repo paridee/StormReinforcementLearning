@@ -43,6 +43,7 @@ public class DeltaRewarder implements RewardCalculator {
 		//if more executor than past has to be a cost
 		delta	=	delta-(this.costPerInstance*(this.oldExNumber-singletons.SystemStatus.getOperatorsLevel()));
 		this.oldExNumber	=	singletons.SystemStatus.getOperatorsLevel();
+		this.oldDistance	=	newDistance;
 		return delta;
 	}
 	
