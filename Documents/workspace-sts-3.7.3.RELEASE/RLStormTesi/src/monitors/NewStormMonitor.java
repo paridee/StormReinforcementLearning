@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mainClasses.MainClass;
+
 public class NewStormMonitor implements Runnable {
 	
 	private String promUrl;
@@ -60,6 +62,7 @@ public class NewStormMonitor implements Runnable {
 							JSONObject  innerMet=	result.getJSONObject("metric");
 							if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
 								singletons.SystemStatus.processLatency	=	value.getDouble(1);
+								MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
 								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
 							}
 						}
