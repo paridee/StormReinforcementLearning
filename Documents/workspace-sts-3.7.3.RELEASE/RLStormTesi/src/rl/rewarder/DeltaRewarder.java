@@ -31,12 +31,20 @@ public class DeltaRewarder implements RewardCalculator {
 		double latency	=	singletons.SystemStatus.processLatency;
 		if(latency<=upperBound){
 			if(latency>=lowerBound){
-				oldDistance	=	latency-obj;
+				double newDistance	=	latency-obj;
+				if(newDistance<0){
+					newDistance	=	-newDistance;
+				}
+				double delta		=	oldDistance-newDistance;
+				oldDistance	=	newDistance;
+				
 				if(oldDistance<0){
 					oldDistance	=	- oldDistance;
 				}
-				double reward		=	rewMax;
-				reward				=	reward+(this.costPerInstance*(this.oldExNumber-singletons.SystemStatus.getOperatorsLevel()));
+				double reward		=	(1-(delta/(upperBound-lowerBound)))*rewMax;
+				if(reward>rewMax){
+					reward	=	rewMax;	//possible if arrives from outside
+				}
 				this.oldExNumber	=	singletons.SystemStatus.getOperatorsLevel();
 				return reward;
 			}
