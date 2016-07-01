@@ -35,7 +35,10 @@ public class DeltaRewarder implements RewardCalculator {
 				if(oldDistance<0){
 					oldDistance	=	- oldDistance;
 				}
-				return rewMax;
+				double reward		=	rewMax;
+				reward				=	reward+(this.costPerInstance*(this.oldExNumber-singletons.SystemStatus.getOperatorsLevel()));
+				this.oldExNumber	=	singletons.SystemStatus.getOperatorsLevel();
+				return reward;
 			}
 		}
 		double newDistance	=	latency-obj;
@@ -47,6 +50,7 @@ public class DeltaRewarder implements RewardCalculator {
 		LOG.debug("delta distance "+(delta*1000)+" ms, instance delta penalty contribution "+(this.costPerInstance*(this.oldExNumber-singletons.SystemStatus.getOperatorsLevel()))+" delta contribution "+(delta/1000));
 		//if more executor than past has to be a cost
 		delta	=	delta+(this.costPerInstance*(this.oldExNumber-singletons.SystemStatus.getOperatorsLevel()));
+		double notOptimalPenalty	=	(upperBound-obj)/1000;
 		this.oldExNumber	=	singletons.SystemStatus.getOperatorsLevel();
 		this.oldDistance	=	newDistance;
 		return delta;
