@@ -13,9 +13,9 @@ public class DeltaRewarder implements RewardCalculator {
 	private double costPerInstance;
 	private int oldExNumber	=	1;
 
-	public DeltaRewarder(int obj,int lowerBound, int upperBound, int rewMax,double costPerInstance) {
+	public DeltaRewarder(int obj,int upperBound, int rewMax,double costPerInstance) {
 		super();
-		this.lowerBound = lowerBound;
+		this.lowerBound = obj-(upperBound-obj);
 		this.obj		=	obj;
 		this.upperBound = upperBound;
 		this.rewMax = rewMax;
