@@ -53,7 +53,7 @@ public class DeltaRewarder implements RewardCalculator {
 		double notOptimalPenalty	=	(upperBound-obj)/1000;
 		this.oldExNumber	=	singletons.SystemStatus.getOperatorsLevel();
 		this.oldDistance	=	newDistance;
-		return delta;
+		return delta-notOptimalPenalty;
 	}
 	
 	

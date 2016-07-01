@@ -7,7 +7,7 @@ public class SystemStatus {
 	public static double 	processLatency	=	-1;
 	public static int	 	workerNumber	=	-1;
 	public static HashMap<String, Integer>	executors		=	new HashMap<String,Integer>();
-	
+	public static HashMap<String, Double>	operatorCapacity=	new HashMap<String,Double>();
 	public static void setExecutorLevel(String exName,int value){
 		executors.put(exName, value);
 	}
