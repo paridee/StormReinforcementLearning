@@ -39,10 +39,14 @@ public class ExecutorsChange implements ActionExecutor {
 		this.topologyName		=	topologyName;
 		this.intManager			=	intManager;
 		this.rewCalculator		=	rewCalculator;
-		for(int i=0;i<this.executorLevel.length;i++){
-			executorLevel[i]	=	1;
+		for(int i=0;i<this.boltsName.size();i++){
+			if(singletons.SystemStatus.executors.containsKey(boltsName.get(i))){
+				executorLevel[i]	=	singletons.SystemStatus.executors.get(boltsName.get(i));
+			}
+			else{
+				executorLevel[i]	=	1;
+			}
 		}
-		applyLevel();
 	}
 	
 	@Override

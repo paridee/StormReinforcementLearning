@@ -44,7 +44,12 @@ public class MainClass {
 		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
-		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//TEST
 		ArrayList<String>						boltsName	=	new ArrayList<String>();
