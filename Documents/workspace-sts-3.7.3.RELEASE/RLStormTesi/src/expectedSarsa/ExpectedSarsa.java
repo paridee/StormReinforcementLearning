@@ -50,7 +50,7 @@ public class ExpectedSarsa implements Runnable{
 			currentState		=	this.stateReader.getCurrentState();
 			int action			=	this.policy.actionForState(currentState,Q);
 			logger.debug("Action chosen "+action);	//test
-			double reward		=	this.executor.execute(action);
+			double reward		=	this.executor.execute(action,currentState);
 			logger.debug("Reward obtained "+reward);	//test
 			mainClasses.MainClass.REWARD_VAL.set(reward);
 			int oldState		=	this.currentState;
