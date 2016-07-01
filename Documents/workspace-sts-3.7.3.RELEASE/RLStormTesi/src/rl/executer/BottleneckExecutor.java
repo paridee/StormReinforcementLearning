@@ -11,14 +11,21 @@ public class BottleneckExecutor implements ActionExecutor {
 	public double execute(int action) {
 		HashMap<Double,HashMap<String,Integer>> operatorCapacityAndLevel	=	new HashMap<Double, HashMap<String, Integer>>();
 		if(action==0){
+			operatorCapacityAndLevel.clear();
+			populate(operatorCapacityAndLevel);
 			boolean stop	=	false;
 			while(stop==false){
-				Iterator it	=	
-				double leastLoaded	=	
+				
+				//double leastLoaded	=	
 			}
 		}
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	private void populate(HashMap<Double, HashMap<String, Integer>> operatorCapacityAndLevel) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
