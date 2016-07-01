@@ -7,4 +7,6 @@ public interface ActionExecutor {
 	 * @return reward from the system
 	 */
 	double execute(int action);
+
+	double execute(int action, int state);
 }

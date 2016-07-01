@@ -71,12 +71,12 @@ public class StormMonitor implements Runnable{
 										if(this.latest.get(metricName+""+innerMet.getString("exported_instance")).equals(processTimeValue)){
 											discard	=	true;
 											if(count%6==0){
-												LOG.info("Duplicate value found after 60 seconds, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
+												//LOG.info("Duplicate value found after 60 seconds, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
 												
 												URL url = null;
 												try {
 												    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
-												    LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												    //LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
 												} catch (MalformedURLException exception) {
 												    exception.printStackTrace();
 												}
@@ -86,7 +86,7 @@ public class StormMonitor implements Runnable{
 												    httpURLConnection.setRequestProperty("Content-Type",
 												                "application/x-www-form-urlencoded");
 												    httpURLConnection.setRequestMethod("DELETE");
-												    LOG.info("Response code "+httpURLConnection.getResponseCode());
+												    //LOG.info("Response code "+httpURLConnection.getResponseCode());
 												} catch (IOException exception) {
 												    exception.printStackTrace();
 												} finally {         
@@ -103,7 +103,7 @@ public class StormMonitor implements Runnable{
 										this.topologyLatency		=	processTimeValue;
 										SystemStatus.processLatency	=	processTimeValue;
 										MainClass.LATENCY_VAL.set(processTimeValue);
-										LOG.info("Updated latency to "+topologyLatency);
+										//LOG.info("Updated latency to "+topologyLatency);
 									}
 								}
 							}

@@ -14,7 +14,7 @@ public class ExpectedSarsa implements Runnable{
 	int actions				=	1;
 	//int	evalInterval		=	1000;
 	int currentState		=	0;
-	double yotaParameter	=	0.1;
+	double yotaParameter	=	0.2;
 	double[] V;
 	double[][] Q;
 	PolicyChooser 	policy;

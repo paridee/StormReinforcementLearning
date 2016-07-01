@@ -51,4 +51,9 @@ public class WorkerNumberExecutor implements ActionExecutor {
 		return rewarder.giveReward();
 	}
 
+	@Override
+	public double execute(int action, int state) {
+		return execute(action);
+	}
+
 }

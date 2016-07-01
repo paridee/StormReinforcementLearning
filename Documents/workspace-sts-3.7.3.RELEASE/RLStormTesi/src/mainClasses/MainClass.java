@@ -12,6 +12,7 @@ import expectedSarsa.FixedIntervalManager;
 import expectedSarsa.storm.ProcessTimeStateReader;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.MetricsServlet;
+import monitors.NewStormMonitor;
 import monitors.StormMonitor;
 import rl.alpha.StaticAlphaCalculator;
 import rl.executer.ExecutorsChange;
@@ -36,10 +37,11 @@ public class MainClass {
 	public static Gauge.Child[]		operatorsLevel;			//prometheus variables
 
 	public static void main(String[] args) {	//arguments (opt): topology name
+		BasicConfigurator.configure();			//default logging configuration
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
-		StormMonitor 	rm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
+		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
 		
@@ -64,13 +66,16 @@ public class MainClass {
 		int 									actionsN	=	(boltsName.size()*2)+1;	
 		ACTIONS_NUM											=	actionsN;
 		initializePromVariables(boltsName);				//initializes variables for prometheus
-		
-		ExecutorsChange							executor	=	new ExecutorsChange(boltsName, 32/8, 32, singletons.Settings.topologyName,intManager,rewarder);
+		 
+		int[] steps	=	new int[3];
+		steps[0]	=	2;
+		steps[1]	=	1;
+		steps[2]	=	4;
+		ExecutorsChange							executor	=	new ExecutorsChange(boltsName,steps, 32, singletons.Settings.topologyName,intManager,rewarder);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
 		Thread									sarsaTh		=	new Thread(sarsa);
 		
 		
-		BasicConfigurator.configure();			//default logging configuration
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		
 		sarsaTh.start();

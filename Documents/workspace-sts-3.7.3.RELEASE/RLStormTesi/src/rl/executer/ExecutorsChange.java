@@ -21,19 +21,20 @@ public class ExecutorsChange implements ActionExecutor {
 
 	ArrayList<String>	boltsName;
 	int[]	executorLevel;
-	int 	increaseValue;
+	int[]	steps;
 	int		maxExecutorNumber;
 	public final static Logger logger	=	LogManager.getLogger(ExecutorsChange.class);
 	String	topologyName;
 	int 	coresPerMachine	=	8;
 	private IntervalManager intManager;
 	RewardCalculator rewCalculator;
+
 	
-	public ExecutorsChange(ArrayList<String>boltsName,int increaseValue,int maxExecutorNumber,String topologyName, IntervalManager intManager,RewardCalculator rewCalculator){
+	public ExecutorsChange(ArrayList<String>boltsName,int[] steps,int maxExecutorNumber,String topologyName, IntervalManager intManager,RewardCalculator rewCalculator){
 		super();
 		executorLevel			=	new int[boltsName.size()];
 		this.boltsName			=	boltsName;
-		this.increaseValue		=	increaseValue;
+		this.steps				=	steps;
 		this.maxExecutorNumber	=	maxExecutorNumber;
 		this.topologyName		=	topologyName;
 		this.intManager			=	intManager;
@@ -45,13 +46,13 @@ public class ExecutorsChange implements ActionExecutor {
 	}
 	
 	@Override
-	public double execute(int action) {
+	public double execute(int action,int state) {
 		int boltN	=	action/2;
 		int actionF	=	action-(2*boltN);
 		if(boltN<boltsName.size()){
 			if(actionF==0){
 				if(executorLevel[boltN]>1){
-					int tempValue	=	executorLevel[boltN]-increaseValue;
+					int tempValue	=	executorLevel[boltN]-steps[state];
 					if(tempValue<1){
 						executorLevel[boltN]	=	1;
 					}
@@ -64,7 +65,7 @@ public class ExecutorsChange implements ActionExecutor {
 			}
 			else if(actionF==1){
 				if(executorLevel[boltN]<this.maxExecutorNumber){
-					int tempValue	=	executorLevel[boltN]+increaseValue;
+					int tempValue	=	executorLevel[boltN]+steps[state];
 					if(tempValue>this.maxExecutorNumber){
 						executorLevel[boltN]	=	this.maxExecutorNumber;
 					}
@@ -114,6 +115,7 @@ public class ExecutorsChange implements ActionExecutor {
 			totalExecutors	=	(totalExecutors/coresPerMachine)+1;
 		}
 		MainClass.PARALLELISM_VAL.set(totalExecutors);
+		singletons.SystemStatus.workerNumber	=	totalExecutors;
 		String command	=	singletons.Settings.stormPath+"storm rebalance "+this.topologyName+" -n "+totalExecutors+execFlags;
 		logger.debug("sending command "+command);
 		Runtime rt 		= 	Runtime.getRuntime();
@@ -124,5 +126,17 @@ public class ExecutorsChange implements ActionExecutor {
 			e.printStackTrace();
 			logger.debug(e.getMessage());
 		}
+	}
+
+	@Override
+	public double execute(int action) {
+		try {
+			throw new Exception("this executor requires state management");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;	
+
 	}
 }

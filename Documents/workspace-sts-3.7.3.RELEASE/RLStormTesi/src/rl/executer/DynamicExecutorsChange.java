@@ -24,4 +24,10 @@ public class DynamicExecutorsChange implements ActionExecutor {
 		this.state	=	state;
 	}
 
+	@Override
+	public double execute(int action, int state) {
+		// TODO Auto-generated method stub
+		return execute(action);
+	}
+
 }
