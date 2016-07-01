@@ -26,8 +26,9 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 		else if(oldDistance-currentDist<-this.distThreshold){
 			reward	=	reward-1;
 		}
-		this.oldDistance	=	currentDist;
-		int machineDelta	=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();
+		this.oldDistance		=	currentDist;
+		int machineDelta		=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();
+		this.oldInstanceNumber	= 	singletons.SystemStatus.getOperatorsLevel();
 		if(machineDelta>0){
 			reward	=	reward+0.5;
 		}
