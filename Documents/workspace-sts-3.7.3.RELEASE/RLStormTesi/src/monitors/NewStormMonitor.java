@@ -63,7 +63,7 @@ public class NewStormMonitor implements Runnable {
 							if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
 								singletons.SystemStatus.processLatency	=	value.getDouble(1);
 								MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
-								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
+								LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
 							}
 						}
 					}
@@ -137,7 +137,7 @@ public class NewStormMonitor implements Runnable {
 								if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
 									//LOG.debug("capacity metric "+innerMet.getString("operatorName")+" "+value.getDouble(1));
 									singletons.SystemStatus.executors.put(innerMet.getString("operatorName"), value.getInt(1));
-									//LOG.debug("operator "+innerMet.getString("operatorName")+" level read "+value.getInt(1));
+									LOG.debug("operator "+innerMet.getString("operatorName")+" level read "+value.getInt(1));
 								}
 							}
 						}

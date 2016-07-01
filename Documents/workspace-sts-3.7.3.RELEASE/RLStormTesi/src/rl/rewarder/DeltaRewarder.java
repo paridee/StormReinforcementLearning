@@ -19,7 +19,7 @@ public class DeltaRewarder implements RewardCalculator {
 		this.obj		=	obj;
 		this.upperBound = upperBound;
 		this.rewMax = rewMax;
-		this.oldDistance	=	singletons.SystemStatus.processLatency-obj;
+		this.oldDistance	=	Double.POSITIVE_INFINITY;
 		this.costPerInstance=	costPerInstance;
 	}
 
