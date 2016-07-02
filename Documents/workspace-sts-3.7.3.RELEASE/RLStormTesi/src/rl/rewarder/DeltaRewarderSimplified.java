@@ -32,6 +32,9 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 		if(currentDist<0){
 			currentDist	=	-currentDist;
 		}
+		if(currentDist<this.distThreshold){
+			reward	=	reward+2;
+		}
 		logger.debug("distance delta "+(oldDistance-currentDist)+" positive means decreased");
 		if(oldDistance-currentDist>this.distThreshold){
 			

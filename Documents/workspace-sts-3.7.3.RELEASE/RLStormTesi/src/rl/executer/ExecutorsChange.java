@@ -83,6 +83,7 @@ public class ExecutorsChange implements ActionExecutor {
 		}
 		else{
 			//logger.debug("action choosen: "+action+" leave unchanged");
+			applyLevel();//REBALANCE SVUOTA CODE!!! MESSO PER TEST!!! (DEVO POTER CONFRONTARE)
 		}
 		// TODO Auto-generated method stub
 		try {
