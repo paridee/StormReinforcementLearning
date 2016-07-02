@@ -29,6 +29,9 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 	public double giveReward() {
 		double reward		=	0;
 		double currentDist	=	singletons.SystemStatus.processLatency-obj;
+		if(currentDist<0){
+			currentDist	=	-currentDist;
+		}
 		logger.debug("distance delta "+(oldDistance-currentDist)+" positive means decreased");
 		if(oldDistance-currentDist>this.distThreshold){
 			
@@ -37,7 +40,7 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 		}
 		else if(oldDistance-currentDist<-this.distThreshold){
 			reward	=	reward-1;
-			logger.debug("Distance shortened, reward -1");
+			logger.debug("Distance increased, reward -1");
 		}
 		this.oldDistance		=	currentDist;
 		int machineDelta		=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();
