@@ -56,6 +56,7 @@ public class MainClass {
 		ArrayList<String>						boltsName	=	new ArrayList<String>();
 		boltsName.add("firststage");
 		boltsName.add("secondstage");
+		boltsName.add("thirdstage");
 
 		
 		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
