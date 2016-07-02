@@ -75,9 +75,9 @@ public class MainClass {
 		initializePromVariables(boltsName);				//initializes variables for prometheus
 		 
 		int[] steps	=	new int[3];
-		steps[0]	=	2;
+		steps[0]	=	1;
 		steps[1]	=	1;
-		steps[2]	=	4;
+		steps[2]	=	1;
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName,steps, 32, singletons.Settings.topologyName,intManager,rewarder);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
 		Thread									sarsaTh		=	new Thread(sarsa);
