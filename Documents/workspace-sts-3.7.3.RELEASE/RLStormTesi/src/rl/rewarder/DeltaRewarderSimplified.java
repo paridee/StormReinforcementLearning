@@ -53,7 +53,7 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 			reward	=	reward+0.5;
 		}
 		else if(machineDelta<0){
-			logger.debug("Instances number decreased, reward -0.5");
+			logger.debug("Instances number increased, reward -0.5");
 			reward	=	reward-0.5;
 		}
 		double currentLatency	=	singletons.SystemStatus.processLatency;
