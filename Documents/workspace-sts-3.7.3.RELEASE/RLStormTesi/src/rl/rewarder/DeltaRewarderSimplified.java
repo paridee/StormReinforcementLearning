@@ -1,6 +1,11 @@
 package rl.rewarder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public class DeltaRewarderSimplified implements RewardCalculator {
+	private static final Logger logger = LoggerFactory.getLogger(DeltaRewarderSimplified.class);
 	int distThreshold;
 	int oldInstanceNumber;
 	int upperBound;
@@ -24,23 +29,30 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 	public double giveReward() {
 		double reward		=	0;
 		double currentDist	=	singletons.SystemStatus.processLatency-obj;
+		logger.debug("distance delta "+(oldDistance-currentDist)+" positive means decreased");
 		if(oldDistance-currentDist>this.distThreshold){
+			
 			reward	=	reward+1;
+			logger.debug("Distance shortened, reward +1");
 		}
 		else if(oldDistance-currentDist<-this.distThreshold){
 			reward	=	reward-1;
+			logger.debug("Distance shortened, reward -1");
 		}
 		this.oldDistance		=	currentDist;
 		int machineDelta		=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();
 		this.oldInstanceNumber	= 	singletons.SystemStatus.getOperatorsLevel();
 		if(machineDelta>0){
+			logger.debug("Instances number decreased, reward +0.5");
 			reward	=	reward+0.5;
 		}
 		else if(machineDelta<0){
+			logger.debug("Instances number decreased, reward -0.5");
 			reward	=	reward-0.5;
 		}
 		double currentLatency	=	singletons.SystemStatus.processLatency;
 		if((currentLatency<this.lowerBound)||(currentLatency>this.upperBound)){
+			logger.debug("Destination state not optimal, reward -0.5 (latency "+currentLatency+")");
 			reward	=	reward - 0.5;
 		}
 		return reward;
