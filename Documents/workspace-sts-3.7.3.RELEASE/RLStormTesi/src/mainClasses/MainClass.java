@@ -46,6 +46,12 @@ public class MainClass {
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
+		ArrayList<String>						boltsName	=	new ArrayList<String>();
+		boltsName.add("firststage");
+		boltsName.add("secondstage");
+		boltsName.add("thirdstage");
+		SystemStatus.bolts	=	boltsName;
+		
 		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
@@ -61,10 +67,7 @@ public class MainClass {
 		}
 		
 		//TEST
-		ArrayList<String>						boltsName	=	new ArrayList<String>();
-		boltsName.add("firststage");
-		boltsName.add("secondstage");
-		boltsName.add("thirdstage");
+
 
 		
 		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
