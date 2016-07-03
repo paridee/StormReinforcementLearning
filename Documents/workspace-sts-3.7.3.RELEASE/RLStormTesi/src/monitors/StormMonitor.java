@@ -101,8 +101,10 @@ public class StormMonitor implements Runnable{
 									if(discard==false&&processTimeValue>0){
 										latest.put(metricName+""+innerMet.getString("exported_instance"), processTimeValue);
 										this.topologyLatency		=	processTimeValue;
-										SystemStatus.processLatency	=	processTimeValue;
-										MainClass.LATENCY_VAL.set(processTimeValue);
+										
+										//TODO check again (storm UI updates each 10m!!!)
+										//SystemStatus.processLatency	=	processTimeValue;
+										//MainClass.LATENCY_VAL.set(processTimeValue);
 										//LOG.info("Updated latency to "+topologyLatency);
 									}
 								}
