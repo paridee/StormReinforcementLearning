@@ -53,6 +53,9 @@ public class MainClass {
 		SystemStatus.bolts	=	boltsName;
 		
 		StormMonitor 		sm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
+		Thread			sm_th	=	new Thread(sm);
+		sm_th.start();
+		
 		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
