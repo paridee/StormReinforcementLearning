@@ -38,6 +38,11 @@ public class ProcessTimeStateReader implements StateReader {
 	@Override
 	public int getCurrentState() {
 		double currentLatency	=	singletons.SystemStatus.processLatency;
+		while(currentLatency<=0){
+			//if status is unknown return normal load
+			LOG.warn("unknown system status, waiting data (1s sleep)");
+			Thread.sleep(1000);
+		}
 		if(currentLatency>0){
 			if(currentLatency<this.underLoadThreshold*targetTime){
 				LOG.info("System underloaded latency "+currentLatency+" ms");
@@ -53,8 +58,7 @@ public class ProcessTimeStateReader implements StateReader {
 			}
 		}
 		
-		//if status is unknown return normal load
-		LOG.warn("unknown system status, returning load ok");
+
 		return 1;
 	}
 
