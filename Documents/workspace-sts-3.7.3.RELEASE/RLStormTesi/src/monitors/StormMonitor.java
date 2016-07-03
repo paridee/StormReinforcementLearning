@@ -31,9 +31,9 @@ public class StormMonitor implements Runnable{
 		this.pushGatUrl		=	pushGatUrl;
 	}
 	
-	double getTopologyLatency(){
-		return this.topologyLatency;
-	}
+	//double getTopologyLatency(){
+	//	return this.topologyLatency;
+	//}
 	
 	@Override
 	public void run() {
@@ -103,8 +103,8 @@ public class StormMonitor implements Runnable{
 										this.topologyLatency		=	processTimeValue;
 										
 										//TODO check again (storm UI updates each 10m!!!)
-										//SystemStatus.processLatency	=	processTimeValue;
-										//MainClass.LATENCY_VAL.set(processTimeValue);
+										SystemStatus.processLatency	=	processTimeValue;
+										MainClass.LATENCY_VAL.set(processTimeValue);
 										//LOG.info("Updated latency to "+topologyLatency);
 									}
 								}

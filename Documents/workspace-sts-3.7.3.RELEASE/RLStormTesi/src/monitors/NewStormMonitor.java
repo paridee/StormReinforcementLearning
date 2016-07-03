@@ -61,8 +61,12 @@ public class NewStormMonitor implements Runnable {
 							JSONArray	value	=	result.getJSONArray("value");
 							JSONObject  innerMet=	result.getJSONObject("metric");
 							if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
-								singletons.SystemStatus.processLatency	=	value.getDouble(1);
-								MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
+								
+								//TODO removed because storm UI averages on latest 10m
+								//singletons.SystemStatus.processLatency	=	value.getDouble(1);
+								//MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
+								
+								
 								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
 							}
 						}
