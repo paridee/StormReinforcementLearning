@@ -41,7 +41,12 @@ public class ProcessTimeStateReader implements StateReader {
 		while(currentLatency<=0){
 			//if status is unknown return normal load
 			LOG.warn("unknown system status, waiting data (1s sleep)");
-			Thread.sleep(1000);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if(currentLatency>0){
 			if(currentLatency<this.underLoadThreshold*targetTime){
