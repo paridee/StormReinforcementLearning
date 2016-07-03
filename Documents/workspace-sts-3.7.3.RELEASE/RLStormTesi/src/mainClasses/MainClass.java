@@ -46,7 +46,7 @@ public class MainClass {
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
-		ArrayList<String>						boltsName	=	new ArrayList<String>();
+		ArrayList<String> boltsName	=	new ArrayList<String>();
 		boltsName.add("firststage");
 		boltsName.add("secondstage");
 		boltsName.add("thirdstage");

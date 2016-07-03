@@ -9,7 +9,7 @@ public class SystemStatus {
 	public static int	 	workerNumber	=	-1;
 	public static HashMap<String, Integer>	executors		=	new HashMap<String,Integer>();
 	public static HashMap<String, Double>	operatorCapacity=	new HashMap<String,Double>();
-	public static ArrayList<String> bolts;
+	public static ArrayList<String> bolts	=	new ArrayList<String>();
 	public static void setExecutorLevel(String exName,int value){
 		if(bolts.contains(exName)){
 			executors.put(exName, value);	
@@ -21,7 +21,7 @@ public class SystemStatus {
 		Iterator<String> it	=	executors.keySet().iterator();
 		while(it.hasNext()){
 			String name	=	it.next();
-			if(bolts.contains(name)){
+			if(bolts.contains(name)&&executors.containsKey(name)){
 				temp	=	temp+executors.get(name);
 			}
 		}
