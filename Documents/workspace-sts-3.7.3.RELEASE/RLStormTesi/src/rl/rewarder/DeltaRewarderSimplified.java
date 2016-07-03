@@ -57,8 +57,8 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 			reward	=	reward-0.5;
 		}
 		double currentLatency	=	singletons.SystemStatus.processLatency;
-		if((currentLatency<this.lowerBound)||(currentLatency>this.upperBound)){
-			logger.debug("Destination state not optimal, reward -0.5 (latency "+currentLatency+")");
+		if(/*(currentLatency<this.lowerBound)||*/(currentLatency>this.upperBound)){
+			logger.debug("Destination state overloaded, reward -0.5 (latency "+currentLatency+")");
 			reward	=	reward - 0.5;
 		}
 		return reward;
