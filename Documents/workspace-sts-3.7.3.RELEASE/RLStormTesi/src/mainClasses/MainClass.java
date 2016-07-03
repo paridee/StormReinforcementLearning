@@ -6,6 +6,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import expectedSarsa.ExpectedSarsa;
 import expectedSarsa.FixedIntervalManager;
@@ -24,8 +26,10 @@ import rl.rewarder.ParabolicComplexResponseTimeRewarder;
 import rl.rewarder.ParabolicProcessTimeRewardCalculator;
 import rl.rewarder.RewardCalculator;
 import singletons.Settings;
+import singletons.SystemStatus;
 
 public class MainClass {
+	private static final Logger LOG = LoggerFactory.getLogger(MainClass.class);
 	public static int 	 		monitoringInterval	=	Settings.decisionInterval;							//storm monitoring interval (>=60000)
 	public static final String	PROMETHEUS_URL		=	"http://160.80.97.147:9090";	//prometheus server url
 	public static final String	PROMETHEUS_PUSHG	=	"http://160.80.97.147:9091";	//prometheus push gateway
@@ -45,11 +49,15 @@ public class MainClass {
 		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
-		try {
-			Thread.sleep(20000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while(SystemStatus.executors.size()==0){
+			try {
+				Thread.sleep(1000);
+				LOG.debug("waiting operators level");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 		//TEST
