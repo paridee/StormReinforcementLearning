@@ -23,7 +23,7 @@ public class SoftmaxPolicyChooser implements PolicyChooser {
 		}
 		for(int i=0;i<q[stateId].length;i++){
 			result[i]	=	Math.pow(e, (q[stateId][i]/temperature))/den;
-			//logger.debug("p("+i+")="+result[i]);
+			logger.debug("p("+i+")="+result[i]);
 		}
 		return result;
 	}
