@@ -21,6 +21,7 @@ import rl.executer.BottleneckExecutor;
 import rl.executer.ExecutorsChange;
 import rl.executer.WorkerNumberExecutor;
 import rl.policies.EpsilonGreedyChooser;
+import rl.rewarder.CongestionRewarder;
 import rl.rewarder.DeltaRewarder;
 import rl.rewarder.DeltaRewarderSimplified;
 import rl.rewarder.ParabolicComplexResponseTimeRewarder;
@@ -77,7 +78,8 @@ public class MainClass {
 		
 		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
 		//RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,4500,15,0.2);
-		RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500);
+		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500);
+		RewardCalculator					 	rewarder	=	new CongestionRewarder(boltsName,4500);
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);

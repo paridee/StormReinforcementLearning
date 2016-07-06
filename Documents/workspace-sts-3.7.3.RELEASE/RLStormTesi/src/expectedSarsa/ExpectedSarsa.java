@@ -117,6 +117,12 @@ public class ExpectedSarsa implements Runnable{
 				logger.debug("wrong line number");
 				return;
 		    }
+		    for(int i=0;i<states;i++){
+		    	Double[] row	=	matrix.get(i);
+		    	for(int j=0;j<actions;j++){
+		    		this.Q[i][j]=row[j];
+		    	}
+		    }
 		    String everything = sb.toString();
 		    logger.debug("matrix read\n "+everything);
 		} finally {

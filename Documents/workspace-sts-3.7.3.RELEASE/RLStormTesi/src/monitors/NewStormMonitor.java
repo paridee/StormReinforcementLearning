@@ -29,6 +29,10 @@ public class NewStormMonitor implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		int emitted			=	-1;
+		double latency		=	-1.0;
+		int window			=	-1;
+		long rebalanceTime	=	System.currentTimeMillis();
 		while(continueEx==true){
 			try {
 				//String query	=	"rate(node_cpu{job=\""+this.subj.promName+"\",mode=\"idle\",instance=\""+this.subj.promInstance+"\"}["+interval/1000+"s])";
@@ -65,9 +69,8 @@ public class NewStormMonitor implements Runnable {
 								//TODO removed because storm UI averages on latest 10m
 								//singletons.SystemStatus.processLatency	=	value.getDouble(1);
 								//MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
-								
-								
 								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
+								latency	=	value.getDouble(1);
 							}
 						}
 					}
@@ -147,6 +150,89 @@ public class NewStormMonitor implements Runnable {
 						}
 					}
 				}
+				
+				
+				query	=	"emitted";
+				//System.out.println("Query "+query);
+		
+				urlString=promUrl+"/api/v1/query?query="+query;
+				//LOG.debug("fetching metrics "+urlString);
+				//System.out.println(urlString);
+				oracle = new URL(urlString);
+				con = (HttpURLConnection) oracle.openConnection();
+				con.setRequestMethod("GET");
+				responseCode = con.getResponseCode();
+				//LOG.debug("\nSending 'GET' request to URL : " + urlString+" response code "+responseCode);
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				outl=null;
+				while ((inputLine = in.readLine()) != null){
+					//LOG.info("Metric query result "+inputLine);
+					outl	=	inputLine;
+					if(outl!=null){
+						//LOG.debug("fetched metrics JSON: "+outl);
+						JSONObject jObj		=	new JSONObject(outl);
+						jObj				=	jObj.getJSONObject("data");
+						JSONArray results	=	jObj.getJSONArray("result");
+						for(int i=0;i<results.length();i++){
+							JSONObject 	result	=	results.getJSONObject(i);
+							JSONArray	value	=	result.getJSONArray("value");
+							JSONObject  innerMet=	result.getJSONObject("metric");
+							if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
+								//singletons.SystemStatus.processLatency	=	value.getDouble(1);
+								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
+								if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
+									//LOG.debug("capacity metric "+innerMet.getString("operatorName")+" "+value.getDouble(1));
+									emitted	=	(int)value.getDouble(1);
+									if(emitted==0){
+										rebalanceTime	=	System.currentTimeMillis();
+									}
+								}
+							}
+						}
+					}
+				}
+				query	=	"window";
+				//System.out.println("Query "+query);
+		
+				urlString=promUrl+"/api/v1/query?query="+query;
+				//LOG.debug("fetching metrics "+urlString);
+				//System.out.println(urlString);
+				oracle = new URL(urlString);
+				con = (HttpURLConnection) oracle.openConnection();
+				con.setRequestMethod("GET");
+				responseCode = con.getResponseCode();
+				//LOG.debug("\nSending 'GET' request to URL : " + urlString+" response code "+responseCode);
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				outl=null;
+				while ((inputLine = in.readLine()) != null){
+					//LOG.info("Metric query result "+inputLine);
+					outl	=	inputLine;
+					if(outl!=null){
+						//LOG.debug("fetched metrics JSON: "+outl);
+						JSONObject jObj		=	new JSONObject(outl);
+						jObj				=	jObj.getJSONObject("data");
+						JSONArray results	=	jObj.getJSONArray("result");
+						for(int i=0;i<results.length();i++){
+							JSONObject 	result	=	results.getJSONObject(i);
+							JSONArray	value	=	result.getJSONArray("value");
+							JSONObject  innerMet=	result.getJSONObject("metric");
+							if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
+								//singletons.SystemStatus.processLatency	=	value.getDouble(1);
+								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
+								if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
+									//LOG.debug("capacity metric "+innerMet.getString("operatorName")+" "+value.getDouble(1));
+									window	=	(int)value.getDouble(1)*1000;
+								}
+							}
+						}
+					}
+				}
+				this.LOG.debug("Calculated utilization "+emitted+" "+window+" "+latency+" "+(((double)emitted/(double)window)*latency));
+				
+				long delta	=	System.currentTimeMillis()-rebalanceTime;
+				this.LOG.debug("Calculated utilization "+emitted+" "+delta+" "+latency+" "+(((double)emitted/(double)delta)*latency));
+				
+				
 			}
 			catch(Exception e){
 				e.printStackTrace();
