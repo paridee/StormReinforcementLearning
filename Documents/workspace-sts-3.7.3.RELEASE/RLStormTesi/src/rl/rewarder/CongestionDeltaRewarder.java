@@ -35,6 +35,7 @@ public class CongestionDeltaRewarder implements RewardCalculator{
 			reward	=	reward+base;
 		}
 		if(singletons.SystemStatus.processLatency>maxLatency){
+			LOG.debug("distance "+newDistance+" delta "+(newDistance-oldDistance)+" negative is better");
 			if(newDistance>oldDistance){
 				return -0.5;
 			}
