@@ -227,10 +227,10 @@ public class NewStormMonitor implements Runnable {
 						}
 					}
 				}
-				this.LOG.debug("Calculated utilization "+emitted+" "+window+" "+latency+" "+(((double)emitted/(double)window)*latency));
+				//this.LOG.debug("Calculated utilization "+emitted+" "+window+" "+latency+" "+(((double)emitted/(double)window)*latency));
 				
 				long delta	=	System.currentTimeMillis()-rebalanceTime;
-				this.LOG.debug("Calculated utilization "+emitted+" "+delta+" "+latency+" "+(((double)emitted/(double)delta)*latency));
+				//this.LOG.debug("Calculated utilization "+emitted+" "+delta+" "+latency+" "+(((double)emitted/(double)delta)*latency));
 				
 				
 			}

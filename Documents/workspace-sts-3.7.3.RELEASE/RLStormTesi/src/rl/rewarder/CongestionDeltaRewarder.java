@@ -2,9 +2,14 @@ package rl.rewarder;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import monitors.NewStormMonitor;
 import rl.executer.ActionExecutor;
 
 public class CongestionDeltaRewarder implements RewardCalculator{
+	private static final Logger LOG = LoggerFactory.getLogger(CongestionDeltaRewarder.class);
 	private double oldDistance=Double.MAX_VALUE;
 	ArrayList<String> bolts;
 	double maxLatency;
@@ -24,6 +29,7 @@ public class CongestionDeltaRewarder implements RewardCalculator{
 			newDistance	=	-newDistance;
 		}
 		for(int i=0;i<bolts.size();i++){
+			LOG.debug("Congestion level for "+bolts.get(i)+" "+singletons.SystemStatus.operatorCapacity.get(bolts.get(i)));
 			double base =	-0.5;
 			base = base+singletons.SystemStatus.operatorCapacity.get(bolts.get(i));
 			reward	=	reward+base;
@@ -37,6 +43,7 @@ public class CongestionDeltaRewarder implements RewardCalculator{
 			}
 		}
 		oldDistance	=	newDistance;
+		LOG.debug("Reward "+reward);
 		return reward;
 	}
 
