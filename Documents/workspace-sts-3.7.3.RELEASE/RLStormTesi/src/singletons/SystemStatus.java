@@ -27,4 +27,31 @@ public class SystemStatus {
 		}
 		return temp;
 	}
+	
+	public static  ArrayList<OperatorInformation> getOperatorInformationList(){
+		 ArrayList<OperatorInformation> opList	=	new ArrayList<OperatorInformation>();
+		for(int i=0;i<bolts.size();i++){
+			OperatorInformation opInfo	=	new OperatorInformation();
+			String 	boltName	=	bolts.get(i);
+			opInfo.operatorName	=	boltName;
+			if(executors.containsKey(boltName)){
+				opInfo.level	=	executors.get(boltName);
+			}
+			if(operatorCapacity.containsKey(boltName)){
+				opInfo.congestionLevel	=	operatorCapacity.get(boltName);
+			}
+			opList.add(opInfo);
+		}
+		return opList;
+	}
+	
+	public static ArrayList<OperatorInformation> removeOperatorAtLevel(ArrayList<OperatorInformation> info,int level){
+		ArrayList<OperatorInformation> newList	=	new ArrayList<OperatorInformation>();
+		for(int i=0;i<info.size();i++){
+			if(info.get(i).level!= level){
+				newList.add(info.get(i));
+			}
+		}
+		return newList;
+	}
 }
