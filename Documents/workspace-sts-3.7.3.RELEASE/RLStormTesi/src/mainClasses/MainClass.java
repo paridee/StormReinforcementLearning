@@ -81,7 +81,7 @@ public class MainClass {
 		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500);
 		RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
-		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
+		FixedIntervalManager					intManager	=	new FixedIntervalManager(1000);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
 		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.8);
