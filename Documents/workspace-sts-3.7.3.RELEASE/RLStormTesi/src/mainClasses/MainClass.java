@@ -17,6 +17,7 @@ import io.prometheus.client.exporter.MetricsServlet;
 import monitors.NewStormMonitor;
 import monitors.StormMonitor;
 import rl.alpha.StaticAlphaCalculator;
+import rl.executer.BottleneckExecutor;
 import rl.executer.ExecutorsChange;
 import rl.executer.WorkerNumberExecutor;
 import rl.policies.EpsilonGreedyChooser;
@@ -87,6 +88,7 @@ public class MainClass {
 		
 		
 		int 									actionsN	=	(boltsName.size()*2)+1;	
+		//actionsN	=	3; //TODO remove
 		ACTIONS_NUM											=	actionsN;
 		initializePromVariables(boltsName);				//initializes variables for prometheus
 		 
@@ -95,6 +97,7 @@ public class MainClass {
 		steps[1]	=	1;
 		steps[2]	=	4;
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName,steps, 32, singletons.Settings.topologyName,intManager,rewarder);
+		//BottleneckExecutor							executor	=	new BottleneckExecutor(rewarder,intManager,32);
 		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
 		Thread									sarsaTh		=	new Thread(sarsa);
 		

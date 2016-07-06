@@ -22,20 +22,36 @@ public class BottleneckExecutor implements ActionExecutor{
 	private IntervalManager intManager;
 	private int maxOpLevel;
 	private static final Logger LOG = 	LoggerFactory.getLogger(BottleneckExecutor.class);
-	public BottleneckExecutor(RewardCalculator rewarder){
+	public BottleneckExecutor(RewardCalculator rewarder,IntervalManager intManager,int maxOpLevel){
 		super();
 		this.rewarder	=	rewarder;
+		this.intManager	=	intManager;
+		this.maxOpLevel	=	maxOpLevel;
 	}
+	
+	
 	@Override
 	public double execute(int action) {
 		// TODO Auto-generated method stub
 		if(action==0){
 			ArrayList<OperatorInformation> operators	=	SystemStatus.getOperatorInformationList();
+			for(int i=0;i<operators.size();i++){
+				System.out.println(operators.get(i).operatorName+" level "+operators.get(i).level+" congestion "+operators.get(i).congestionLevel);
+			}
 			operators	=	SystemStatus.removeOperatorAtLevel(operators, 1);
+			System.out.println("\n\nremoving operator level 1");
+			for(int i=0;i<operators.size();i++){
+				System.out.println(operators.get(i).operatorName+" level "+operators.get(i).level+" congestion "+operators.get(i).congestionLevel);
+			}
 			Collections.sort(operators, OperatorInformation.ascendent);
+			System.out.println("\n\nordered list");
+			for(int i=0;i<operators.size();i++){
+				System.out.println(operators.get(i).operatorName+" level "+operators.get(i).level+" congestion "+operators.get(i).congestionLevel);
+			}
 			if(operators.size()>0){
 				String opName	=	operators.get(0).operatorName;
 				singletons.SystemStatus.executors.put(opName, singletons.SystemStatus.executors.get(opName)-1);
+				System.out.println("applicando livello -1 "+singletons.SystemStatus.executors.get(opName)+" ad esecutore "+opName);
 			}
 		}
 		else if(action==1){
@@ -43,18 +59,38 @@ public class BottleneckExecutor implements ActionExecutor{
 		}
 		else if(action==2){
 			ArrayList<OperatorInformation> operators	=	SystemStatus.getOperatorInformationList();
+			for(int i=0;i<operators.size();i++){
+				System.out.println(operators.get(i).operatorName+" level "+operators.get(i).level+" congestion "+operators.get(i).congestionLevel);
+			}
 			operators	=	SystemStatus.removeOperatorAtLevel(operators, this.maxOpLevel);
+			System.out.println("\n\nremoving operator level "+this.maxOpLevel);
+			for(int i=0;i<operators.size();i++){
+				System.out.println(operators.get(i).operatorName+" level "+operators.get(i).level+" congestion "+operators.get(i).congestionLevel);
+			}
 			Collections.sort(operators, OperatorInformation.discendent);
+			System.out.println("\n\nordered list");
+			for(int i=0;i<operators.size();i++){
+				System.out.println(operators.get(i).operatorName+" level "+operators.get(i).level+" congestion "+operators.get(i).congestionLevel);
+			}
 			if(operators.size()>0){
 				String opName	=	operators.get(0).operatorName;
 				singletons.SystemStatus.executors.put(opName, singletons.SystemStatus.executors.get(opName)+1);
+				System.out.println("applicando livello +1 "+singletons.SystemStatus.executors.get(opName)+" ad esecutore "+opName);
 			}
 		}
 		
 		//TODO apply method
+		try {
+			Thread.sleep(2000);
+			System.out.println("applicazione simulata");
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		
 		try {
-			Thread.sleep(this.intManager.getEvalInterval());
+			Thread.sleep(1);//this.intManager.getEvalInterval());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,7 +101,6 @@ public class BottleneckExecutor implements ActionExecutor{
 
 	@Override
 	public double execute(int action, int state) {
-		// TODO Auto-generated method stub
-		return 0;
+		return execute(action);
 	}
 }

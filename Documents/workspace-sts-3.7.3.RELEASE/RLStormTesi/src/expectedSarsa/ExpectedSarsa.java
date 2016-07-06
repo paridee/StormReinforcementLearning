@@ -1,6 +1,11 @@
 package expectedSarsa;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +46,66 @@ public class ExpectedSarsa implements Runnable{
 		}
 	}
 
+	private void loadQMatrix(String filename){
+		int lineCounter	=	0;
+		ArrayList<Double[]> matrix	=	new ArrayList<Double[]>();
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			logger.debug("Q matrix is not saved in FS, skipping loading");
+			return;
+		}
+		try {
+		    StringBuilder sb = new StringBuilder();
+		    String line;
+			try {
+				line = br.readLine();
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
+				logger.debug("skipping Q matrix loading");
+				return;
+			}
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        Double[] lineValues	=	new Double[actions];
+		        String[] values =	line.split(" ");
+		        if(values.length!=actions){
+		        	logger.debug("File not compatible");
+		        	return;
+		        }
+		        for(int i=0;i<values.length;i++){
+		        	lineValues[i]	=	Double.parseDouble(values[i]);
+		        }
+		        matrix.add(lineValues);
+		        lineCounter++;
+		        try {
+					line = br.readLine();
+					
+				} catch (IOException e) {
+					logger.debug(e.getMessage());
+					logger.debug("skipping Q matrix loading");
+					return;
+				}
+		    }
+		    if(lineCounter!=states){
+				logger.debug("wrong line number");
+				return;
+		    }
+		    String everything = sb.toString();
+		} finally {
+		    try {
+				br.close();
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
+				logger.debug("error while closing stream");
+				return;
+			}
+		}
+	}
+	
 	@Override
 	public void run() {
 		logger.debug("Start Expected Sarsa Algorithm");
