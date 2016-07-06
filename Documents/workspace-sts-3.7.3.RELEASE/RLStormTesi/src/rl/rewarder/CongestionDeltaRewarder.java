@@ -29,13 +29,13 @@ public class CongestionDeltaRewarder implements RewardCalculator{
 			newDistance	=	-newDistance;
 		}
 		for(int i=0;i<bolts.size();i++){
-			LOG.debug("Congestion level for "+bolts.get(i)+" "+singletons.SystemStatus.operatorCapacity.get(bolts.get(i)));
+			System.out.println("Congestion level for "+bolts.get(i)+" "+singletons.SystemStatus.operatorCapacity.get(bolts.get(i)));
 			double base =	-0.5;
 			base = base+singletons.SystemStatus.operatorCapacity.get(bolts.get(i));
 			reward	=	reward+base;
 		}
 		if(singletons.SystemStatus.processLatency>maxLatency){
-			LOG.debug("distance "+newDistance+" delta "+(newDistance-oldDistance)+" negative is better");
+			System.out.println("distance "+newDistance+" delta "+(newDistance-oldDistance)+" negative is better");
 			if(newDistance>oldDistance){
 				return -0.5;
 			}
@@ -44,7 +44,7 @@ public class CongestionDeltaRewarder implements RewardCalculator{
 			}
 		}
 		oldDistance	=	newDistance;
-		LOG.debug("Reward "+reward);
+		System.out.println("Reward "+reward);
 		return reward;
 	}
 
