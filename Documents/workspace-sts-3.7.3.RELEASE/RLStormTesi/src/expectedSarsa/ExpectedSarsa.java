@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ public class ExpectedSarsa implements Runnable{
 	//int	evalInterval		=	1000;
 	int currentState		=	0;
 	double yotaParameter	=	0.2;
+	String filename			=	"QMatrix.txt";
 	double[] V;
 	double[][] Q;
 	PolicyChooser 	policy;
@@ -46,6 +49,26 @@ public class ExpectedSarsa implements Runnable{
 		}
 	}
 
+	private void saveQMatrix(String filename){
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(filename, "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(int i=0;i<states;i++){
+			for(int j=0;j<actions;j++){
+				writer.print(Q[i][j]+" ");
+			}
+			writer.print("\n");
+		}
+		logger.debug("saved Q Matrix");
+		writer.close();
+	}
 	private void loadQMatrix(String filename){
 		int lineCounter	=	0;
 		ArrayList<Double[]> matrix	=	new ArrayList<Double[]>();
@@ -95,6 +118,7 @@ public class ExpectedSarsa implements Runnable{
 				return;
 		    }
 		    String everything = sb.toString();
+		    logger.debug("matrix read\n "+everything);
 		} finally {
 		    try {
 				br.close();
@@ -111,6 +135,7 @@ public class ExpectedSarsa implements Runnable{
 		logger.debug("Start Expected Sarsa Algorithm");
 		currentState		=	this.stateReader.getCurrentState();
 		logger.debug("State initialization "+currentState);
+		this.loadQMatrix(filename);
 		while(true){
 			currentState		=	this.stateReader.getCurrentState();
 			int action			=	this.policy.actionForState(currentState,Q);
@@ -151,6 +176,7 @@ public class ExpectedSarsa implements Runnable{
 				}
 				System.out.print("\n");
 			}
+			this.saveQMatrix(this.filename);
 			/*
 			try {
 				Thread.sleep(this.evalInterval);
