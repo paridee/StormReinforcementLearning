@@ -22,12 +22,12 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 	@Override
 	public int[] getFeatures(int state, int action) throws Exception {
 		// TODO Auto-generated method stub
-		int[] features	=	new int[5*states];
+		int[] features	=	new int[6*states];
 		System.out.println("features number "+features.length);
 		int operator	=	action/2;
 		int actionV		=	action%2;
 		if(operator==opName.size()&&actionV==0){
-			features[(state*5)+4]	=	1;
+			features[(state*5)+5]	=	1;
 		}
 		else if(operator>opName.size()||(operator==opName.size()&&actionV>0)){
 			System.out.println("not allowed");
@@ -38,8 +38,11 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 				if(singletons.SystemStatus.isLeastLoaded(op)){
 					features[(state*5)+0]	=	1;
 				}
-				else{
+				else if(singletons.SystemStatus.isLeastLoaded(op)){
 					features[(state*5)+2]	=	1;
+				}
+				else{
+					features[(state*5)+4]	=	1;
 				}
 			}
 			else{
