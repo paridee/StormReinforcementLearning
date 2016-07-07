@@ -2,6 +2,8 @@ package features;
 
 import java.util.ArrayList;
 
+import org.eclipse.jetty.util.log.Log;
+
 public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 	ArrayList<String> opName;
 	int states;
@@ -26,7 +28,7 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 			System.out.println("not allowed");
 		}
 		else{
-			if(action==0){
+			if(actionV==0){
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isLeastLoaded(op)){
 					features[(state*5)+0]	=	1;
@@ -38,6 +40,7 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 			else{
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isBottleneck(op)){
+					Log.debug("operator "+op+" is bottleneck increase action "+);
 					features[(state*5)+1]	=	1;
 				}
 				else{

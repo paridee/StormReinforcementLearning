@@ -1,6 +1,20 @@
 package linearGradientSarsa;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import rl.executer.ExecutorsChange;
+
 public class LinearGradientDescendSarsaLambda implements Runnable {
+	public final static Logger logger	=	LogManager.getLogger(LinearGradientDescendSarsaLambda.class);
 	int simulatedStep	=	0;
 	long nextStepTime	=	0;
 	int 	featuresN		=	12;
@@ -81,12 +95,14 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				e.printStackTrace();
 			}		
 			currentState	=	reader.getCurrentState();
+			logger.debug("reward obtained "+reward);
 			double delta	=	reward;
 			for(int i=0;i<features.length;i++){
 				if(features[i]==1){
 					delta		=	delta	+	omega[i];	
 				}
 			}
+			logger.debug("delta value "+reward);
 			double randomV			=	Math.random();
 			double qActionChoosen	=	0;
 			if(randomV>epsilon){
@@ -163,4 +179,94 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			}		
 		}
 	}
+	
+	
+	private void saveVectors(String filename){
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(filename, "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(int j=0;j<this.featuresN;j++){
+			writer.print(eVector[j]+" ");
+		}
+		writer.print("\n");
+		for(int j=0;j<this.featuresN;j++){
+			writer.print(omega[j]+" ");
+		}
+		logger.debug("saved Vector");
+		writer.close();
+	}
+	private void loadVector(String filename){
+		int lineCounter	=	0;
+		ArrayList<Double[]> matrix	=	new ArrayList<Double[]>();
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			logger.debug("Q matrix is not saved in FS, skipping loading");
+			return;
+		}
+		try {
+		    StringBuilder sb = new StringBuilder();
+		    String line;
+			try {
+				line = br.readLine();
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
+				logger.debug("skipping Q matrix loading");
+				return;
+			}
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        Double[] lineValues	=	new Double[actions];
+		        String[] values =	line.split(" ");
+		        if(values.length!=actions){
+		        	logger.debug("File not compatible");
+		        	return;
+		        }
+		        for(int i=0;i<values.length;i++){
+		        	lineValues[i]	=	Double.parseDouble(values[i]);
+		        }
+		        matrix.add(lineValues);
+		        lineCounter++;
+		        try {
+					line = br.readLine();
+					
+				} catch (IOException e) {
+					logger.debug(e.getMessage());
+					logger.debug("skipping Q matrix loading");
+					return;
+				}
+		    }
+		    if(lineCounter!=states){
+				logger.debug("wrong line number");
+				return;
+		    }
+		    for(int i=0;i<states;i++){
+		    	Double[] row	=	matrix.get(i);
+		    	for(int j=0;j<actions;j++){
+		    		this.Q[i][j]=row[j];
+		    	}
+		    }
+		    String everything = sb.toString();
+		    logger.debug("matrix read\n "+everything);
+		} finally {
+		    try {
+				br.close();
+			} catch (IOException e) {
+				logger.debug(e.getMessage());
+				logger.debug("error while closing stream");
+				return;
+			}
+		}
+	}
+	
 }
