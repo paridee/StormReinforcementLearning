@@ -149,6 +149,9 @@ public class ExecutorsChange implements ActionExecutor {
 	public boolean isFeasible(int currentState, int action) {
 		int boltN		=	action/2;
 		int actionF		=	action-(2*boltN);
+		if(boltN>=boltsName.size()){
+			return true;
+		}
 		String boltName	=	this.boltsName.get(boltN);
 		if(boltN<=this.boltsName.size()){
 			if(action==0){
