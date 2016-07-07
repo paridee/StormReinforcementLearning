@@ -39,12 +39,12 @@ public class SoftmaxPolicyChooser implements PolicyChooser {
 		}
 		
 		for(int i=0;i<policy.length;i++){
-			//logger.debug("X("+i+")="+cumulative[i]);
+			logger.debug("X("+i+")="+cumulative[i]);
 		}
 		
 		
 		double rand	=	Math.random();
-		//logger.debug("Random value "+rand);
+		logger.debug("Random value "+rand);
 		for(int i=0;i<policy.length;i++){
 			if(rand<=cumulative[i]){
 				return i;
