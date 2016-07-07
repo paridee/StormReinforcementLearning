@@ -100,7 +100,7 @@ public class MainClass {
 		steps[2]	=	4;
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName,steps, 32, singletons.Settings.topologyName,intManager,rewarder);
 		//BottleneckExecutor							executor	=	new BottleneckExecutor(rewarder,intManager,32);
-		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha);
+		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha,"QMatrix.txt");
 		Thread									sarsaTh		=	new Thread(sarsa);
 		
 		

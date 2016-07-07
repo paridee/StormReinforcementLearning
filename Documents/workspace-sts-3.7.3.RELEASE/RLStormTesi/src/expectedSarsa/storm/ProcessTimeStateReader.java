@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import expectedSarsa.StateReader;
+import mainClasses.MainClass;
 import monitors.StormMonitor;
 
 public class ProcessTimeStateReader implements StateReader {
@@ -48,6 +49,7 @@ public class ProcessTimeStateReader implements StateReader {
 				e.printStackTrace();
 			}
 		}
+		MainClass.LATENCY_VAL.set(currentLatency);
 		if(currentLatency>0){
 			if(currentLatency<this.underLoadThreshold*targetTime){
 				LOG.info("System underloaded latency "+currentLatency+" ms");

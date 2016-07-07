@@ -31,7 +31,7 @@ public class ExpectedSarsa implements Runnable{
 	AlphaCalculator	alphaCalculator;
 	private static final Logger logger = LoggerFactory.getLogger(ExpectedSarsa.class);
 	
-	public ExpectedSarsa(int states, int actions,int initialState,PolicyChooser chooser,ActionExecutor actionExecutor,StateReader stateReader,AlphaCalculator alphaCalculator){
+	public ExpectedSarsa(int states, int actions,int initialState,PolicyChooser chooser,ActionExecutor actionExecutor,StateReader stateReader,AlphaCalculator alphaCalculator,String filename){
 		V	=	new double[states];
 		Q	=	new double[states][actions];
 		this.states				=	states;
@@ -41,6 +41,7 @@ public class ExpectedSarsa implements Runnable{
 		this.stateReader		=	stateReader;
 		this.alphaCalculator	=	alphaCalculator;
 		currentState	=	0;
+		this.filename	=	filename;
 		for(int i=0;i<states;i++){
 			V[i]	=	0;
 			for(int j=0;j<actions;j++){

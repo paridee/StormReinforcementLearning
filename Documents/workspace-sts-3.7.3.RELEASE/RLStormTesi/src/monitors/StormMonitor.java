@@ -104,7 +104,6 @@ public class StormMonitor implements Runnable{
 										
 										//TODO check again (storm UI updates each 10m!!!)
 										SystemStatus.processLatency	=	processTimeValue;
-										MainClass.LATENCY_VAL.set(processTimeValue);
 										//LOG.info("Updated latency to "+topologyLatency);
 									}
 								}
