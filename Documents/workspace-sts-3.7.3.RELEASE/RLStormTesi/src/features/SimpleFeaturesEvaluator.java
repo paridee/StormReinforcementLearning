@@ -38,7 +38,7 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 				if(singletons.SystemStatus.isLeastLoaded(op)){
 					features[(state*5)+0]	=	1;
 				}
-				else if(singletons.SystemStatus.isLeastLoaded(op)){
+				else if(singletons.SystemStatus.isBottleneck(op)){
 					features[(state*5)+2]	=	1;
 				}
 				else{
