@@ -1,6 +1,7 @@
 package mainClasses;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.BasicConfigurator;
 import org.eclipse.jetty.server.Server;
@@ -42,6 +43,7 @@ public class MainClass {
 	public static int			ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
 	public static Gauge.Child[]		operatorsLevel;			//prometheus variables
+	public static HashMap<String,Gauge.Child> 	levelMap	=	new HashMap<String,Gauge.Child>();
 
 	public static void main(String[] args) {	//arguments (opt): topology name
 		BasicConfigurator.configure();			//default logging configuration
@@ -127,6 +129,11 @@ public class MainClass {
 	public static void initializePromVariables(ArrayList<String> boltsName){
 		qMatrix			=	new Gauge.Child[STATES_NUM][ACTIONS_NUM];
 		operatorsLevel	=	new Gauge.Child[boltsName.size()];
+		for(int i=0;i<boltsName.size();i++){
+			String boltName		=	boltsName.get(i);
+			Gauge.Child opLevel	=	operatorsLevel[i];
+			levelMap.put(boltName,opLevel);
+		}
 		String[] labels	=	new String[2];
 		labels[0]		=	"row";
 		labels[1]		=	"column";

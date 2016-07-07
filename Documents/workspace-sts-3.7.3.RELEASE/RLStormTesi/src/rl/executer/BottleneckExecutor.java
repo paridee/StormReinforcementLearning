@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.log4j.LogManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import expectedSarsa.IntervalManager;
 import mainClasses.MainClass;
@@ -18,10 +17,12 @@ import singletons.OperatorInformation;
 import singletons.SystemStatus;
 
 public class BottleneckExecutor implements ActionExecutor{
+	public final static Logger logger	=	LogManager.getLogger(BottleneckExecutor.class);
 	RewardCalculator rewarder;
 	private IntervalManager intManager;
 	private int maxOpLevel;
-	private static final Logger LOG = 	LoggerFactory.getLogger(BottleneckExecutor.class);
+	private int coresPerMachine;
+	private String topologyName;
 	public BottleneckExecutor(RewardCalculator rewarder,IntervalManager intManager,int maxOpLevel){
 		super();
 		this.rewarder	=	rewarder;
@@ -55,7 +56,7 @@ public class BottleneckExecutor implements ActionExecutor{
 			}
 		}
 		else if(action==1){
-			
+			System.out.println("Leaving level unchanged... action 1");
 		}
 		else if(action==2){
 			ArrayList<OperatorInformation> operators	=	SystemStatus.getOperatorInformationList();
@@ -81,7 +82,7 @@ public class BottleneckExecutor implements ActionExecutor{
 		
 		//TODO apply method
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(this.intManager.getEvalInterval());
 			System.out.println("applicazione simulata");
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
@@ -94,7 +95,7 @@ public class BottleneckExecutor implements ActionExecutor{
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			LOG.debug(e.getMessage());
+			logger.debug(e.getMessage());
 		}
 		return this.rewarder.giveReward();
 	}
@@ -102,5 +103,36 @@ public class BottleneckExecutor implements ActionExecutor{
 	@Override
 	public double execute(int action, int state) {
 		return execute(action);
+	}
+	
+	void apply(){
+		String	execFlags	=	"";
+		int totalExecutors	=	0;
+		Iterator<String> exIterator	= singletons.SystemStatus.executors.keySet().iterator();	
+		while(exIterator.hasNext()){
+			String 	opName	=	exIterator.next();
+			int 	opLevel	=	singletons.SystemStatus.executors.get(opName);
+			MainClass.levelMap.get(opName).set(opLevel);
+			totalExecutors	=	totalExecutors	+ opLevel;
+			execFlags		=	execFlags+" -e "+opName+"="+opLevel;
+		}
+		if(totalExecutors%coresPerMachine==0){
+			totalExecutors	=	totalExecutors/coresPerMachine;
+		}
+		else{
+			totalExecutors	=	(totalExecutors/coresPerMachine)+1;
+		}
+		MainClass.PARALLELISM_VAL.set(totalExecutors);
+		singletons.SystemStatus.workerNumber	=	totalExecutors;
+		String command	=	singletons.Settings.stormPath+"storm rebalance "+this.topologyName+" -n "+totalExecutors+execFlags;
+		logger.debug("sending command "+command);
+		Runtime rt 		= 	Runtime.getRuntime();
+		try {
+			Process pr 		= 	rt.exec(command);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.debug(e.getMessage());
+		}
 	}
 }

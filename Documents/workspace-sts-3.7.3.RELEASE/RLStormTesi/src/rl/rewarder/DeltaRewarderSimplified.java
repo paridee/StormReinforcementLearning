@@ -28,6 +28,7 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 	@Override
 	public double giveReward() {
 		double reward		=	0;
+		double currentLatency	=	singletons.SystemStatus.processLatency;
 		double currentDist	=	singletons.SystemStatus.processLatency-obj;
 		if(currentDist<0){
 			currentDist	=	-currentDist;
@@ -56,7 +57,10 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 			logger.debug("Instances number increased, reward -0.5");
 			reward	=	reward-0.5;
 		}
-		double currentLatency	=	singletons.SystemStatus.processLatency;
+		else if(currentLatency<this.lowerBound){	//test to force to do something in underload
+			reward	=	reward-0.25;
+			logger.debug("Underloaded and number of instance not decreased");
+		}
 		if(/*(currentLatency<this.lowerBound)||*/(currentLatency>this.upperBound)){
 			logger.debug("Destination state overloaded, reward -0.5 (latency "+currentLatency+")");
 			reward	=	reward - 0.5;
