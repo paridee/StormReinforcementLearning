@@ -13,8 +13,10 @@ import org.slf4j.LoggerFactory;
 import expectedSarsa.ExpectedSarsa;
 import expectedSarsa.FixedIntervalManager;
 import expectedSarsa.storm.ProcessTimeStateReader;
+import features.SimpleFeaturesEvaluator;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.MetricsServlet;
+import linearGradientSarsa.LinearGradientDescendSarsaLambda;
 import monitors.NewStormMonitor;
 import monitors.StormMonitor;
 import rl.alpha.StaticAlphaCalculator;
@@ -102,10 +104,15 @@ public class MainClass {
 		steps[2]	=	4;
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName,steps, 32, singletons.Settings.topologyName,intManager,rewarder);
 		//BottleneckExecutor							executor	=	new BottleneckExecutor(rewarder,intManager,32);
-		ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha,"QMatrix.txt");
+		
+		
+		//ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha,"QMatrix.txt");
+		//Thread									sarsaTh		=	new Thread(sarsa);
+		
+		
+		SimpleFeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluator(boltsName,3);
+		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda((5*boltsName.size()),0.1,0.2,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
 		Thread									sarsaTh		=	new Thread(sarsa);
-		
-		
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		
 		sarsaTh.start();

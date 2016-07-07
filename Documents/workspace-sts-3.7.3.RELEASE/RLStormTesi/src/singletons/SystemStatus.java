@@ -54,4 +54,40 @@ public class SystemStatus {
 		}
 		return newList;
 	}
+	
+	public static boolean isBottleneck(String operator) throws Exception{
+		if(bolts.contains(operator)){
+			if(operatorCapacity.containsKey(operator)){
+				double capacity	=	operatorCapacity.get(operator);
+				for(int i=0;i<bolts.size();i++){
+					double opCapacity	=	operatorCapacity.get(bolts.get(i));
+					if(opCapacity>capacity){
+						return false;
+					}
+				}
+			}
+		}
+		else{
+			throw new Exception("Operator not found");
+		}
+		return true;
+	}
+	
+	public static boolean isLeastLoaded(String operator) throws Exception{
+		if(bolts.contains(operator)){
+			if(operatorCapacity.containsKey(operator)){
+				double capacity	=	operatorCapacity.get(operator);
+				for(int i=0;i<bolts.size();i++){
+					double opCapacity	=	operatorCapacity.get(bolts.get(i));
+					if(opCapacity<capacity){
+						return false;
+					}
+				}
+			}
+		}
+		else{
+			throw new Exception("Operator not found");
+		}
+		return true;
+	}
 }
