@@ -202,6 +202,8 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		logger.debug("saved Vector");
 		writer.close();
 	}
+	
+	/*
 	private void loadVector(String filename){
 		int lineCounter	=	0;
 		ArrayList<Double[]> matrix	=	new ArrayList<Double[]>();
@@ -267,6 +269,6 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				return;
 			}
 		}
-	}
+	}*/
 	
 }

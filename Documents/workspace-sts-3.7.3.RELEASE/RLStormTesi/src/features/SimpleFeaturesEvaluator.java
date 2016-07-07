@@ -2,11 +2,16 @@ package features;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.log.Log;
+
+import linearGradientSarsa.LinearGradientDescendSarsaLambda;
 
 public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 	ArrayList<String> opName;
 	int states;
+	public final static Logger logger	=	LogManager.getLogger(SimpleFeaturesEvaluator.class);
 	public SimpleFeaturesEvaluator(ArrayList<String> opName,int states) {
 		super();
 		this.opName	=	opName;
@@ -40,7 +45,7 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 			else{
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isBottleneck(op)){
-					Log.debug("operator "+op+" is bottleneck increase action "+);
+					logger.debug("operator "+op+" is bottleneck increase action "+action);
 					features[(state*5)+1]	=	1;
 				}
 				else{
