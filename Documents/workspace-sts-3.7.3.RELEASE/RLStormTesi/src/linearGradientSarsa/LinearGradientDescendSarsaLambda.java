@@ -158,6 +158,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					tempQ	=	0;
 					for(int j=0;j<features.length;j++){
 						tempQ	=	tempQ	+	(omega[j]*features[j]);
 					}
