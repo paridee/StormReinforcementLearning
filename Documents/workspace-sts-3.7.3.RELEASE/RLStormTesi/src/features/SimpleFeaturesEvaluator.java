@@ -16,6 +16,7 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 	public int[] getFeatures(int state, int action) throws Exception {
 		// TODO Auto-generated method stub
 		int[] features	=	new int[5*states];
+		System.out.println("features number "+features.length);
 		int operator	=	action/2;
 		int actionV		=	action%2;
 		if(operator==opName.size()&&actionV==0){

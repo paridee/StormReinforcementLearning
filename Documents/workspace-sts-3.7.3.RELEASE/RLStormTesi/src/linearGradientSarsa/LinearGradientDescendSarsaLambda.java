@@ -23,6 +23,8 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			int actions,int initAction) {
 		super();
 		this.featuresN 			= 	featuresN;
+		this.eVector			=	new double[featuresN];
+		this.omega				=	new double[featuresN];
 		this.epsilon 			=	epsilon;
 		this.yota 				= 	yota;
 		this.lambda 			= 	lambda;
@@ -32,7 +34,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		this.alphaCalculator 	= 	alphaCalculator;
 		this.actions 			= 	actions;
 		this.initAction			=	initAction;
-		action			=	this.initAction;
+		action					=	this.initAction;
 	}
 /*
 	public SimulatedLinearGradientDescendSarsaLambda(SimulatedStateReader reader, SimulatedFeaturesEvaluator eval, SimulatedActionExecutor executor,
@@ -56,12 +58,14 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 	public void run() {
 		int[] features	=	null;
 		currentState	=	reader.getCurrentState();	//read state
+		System.out.println("features for state "+currentState+" "+action);
 		try {
 			features		=	eval.getFeatures(currentState, action);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		System.out.println("feat length "+features.length+" "+features[features.length-1]);
 		for(int i=0;i<features.length;i++){
 			if(features[i]==1){
 				eVector[i]	=	1;
