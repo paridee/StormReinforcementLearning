@@ -144,4 +144,24 @@ public class ExecutorsChange implements ActionExecutor {
 		return 0;	
 
 	}
+
+	@Override
+	public boolean isFeasible(int currentState, int action) {
+		int boltN		=	action/2;
+		int actionF		=	action-(2*boltN);
+		String boltName	=	this.boltsName.get(boltN);
+		if(boltN<=this.boltsName.size()){
+			if(action==0){
+				if(singletons.SystemStatus.executors.get(boltName)<=1){
+					return false;
+				}
+			}
+			else if(action==1){
+				if(singletons.SystemStatus.executors.get(boltName)>=this.maxExecutorNumber){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }

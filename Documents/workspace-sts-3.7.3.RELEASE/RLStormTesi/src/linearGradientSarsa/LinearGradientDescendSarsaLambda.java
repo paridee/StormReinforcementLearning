@@ -118,6 +118,10 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 					for(int j=0;j<features.length;j++){
 						Q[i]	=	Q[i]	+	(omega[j]*features[j]);
 					}
+					boolean feasible	=	this.executor.isFeasible(currentState,i);
+					if(feasible==false){
+						Q[i]	=	Double.NEGATIVE_INFINITY;
+					}
 				}
 				
 				//testing
@@ -145,19 +149,20 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			}
 			else{
 				//exploration
-				action			=	(int)((Math.random()*actions)%actions);
-				try {
-					features		=	eval.getFeatures(currentState, action);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				double tempQ	=	Double.NEGATIVE_INFINITY;
+				while(tempQ==Double.NEGATIVE_INFINITY){
+					action			=	(int)((Math.random()*actions)%actions);
+					try {
+						features		=	eval.getFeatures(currentState, action);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					for(int j=0;j<features.length;j++){
+						tempQ	=	tempQ	+	(omega[j]*features[j]);
+					}
+					qActionChoosen	=	tempQ;
 				}
-				double tempQ	=	0;
-				for(int j=0;j<features.length;j++){
-					tempQ	=	tempQ	+	(omega[j]*features[j]);
-				}
-				qActionChoosen	=	tempQ;
-				
 				//testing
 				System.out.println("Exploration:Current state: "+currentState+" action "+action);
 				System.out.println("Q["+currentState+"]["+action+"] "+qActionChoosen+"\t");

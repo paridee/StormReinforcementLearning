@@ -9,4 +9,6 @@ public interface ActionExecutor {
 	double execute(int action);
 
 	double execute(int action, int state);
+
+	boolean isFeasible(int currentState, int i);
 }

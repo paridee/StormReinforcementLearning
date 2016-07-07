@@ -135,4 +135,11 @@ public class BottleneckExecutor implements ActionExecutor{
 			logger.debug(e.getMessage());
 		}
 	}
+
+
+	@Override
+	public boolean isFeasible(int currentState, int i) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
