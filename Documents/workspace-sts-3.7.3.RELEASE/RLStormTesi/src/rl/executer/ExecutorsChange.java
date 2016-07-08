@@ -154,12 +154,12 @@ public class ExecutorsChange implements ActionExecutor {
 		}
 		String boltName	=	this.boltsName.get(boltN);
 		if(boltN<=this.boltsName.size()){
-			if(action==0){
+			if(actionF==0){
 				if(singletons.SystemStatus.executors.get(boltName)<=1){
 					return false;
 				}
 			}
-			else if(action==1){
+			else if(actionF==1){
 				if(singletons.SystemStatus.executors.get(boltName)>=this.maxExecutorNumber){
 					return false;
 				}
