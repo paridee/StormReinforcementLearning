@@ -148,7 +148,7 @@ public class ExecutorsChange implements ActionExecutor {
 	@Override
 	public boolean isFeasible(int currentState, int action) {
 		int boltN		=	action/2;
-		int actionF		=	action-(2*boltN);
+		int actionF		=	action%2;
 		if(boltN>=boltsName.size()){
 			return true;
 		}
