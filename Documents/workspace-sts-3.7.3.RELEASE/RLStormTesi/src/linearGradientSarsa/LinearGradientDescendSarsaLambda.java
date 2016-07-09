@@ -103,10 +103,10 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			double delta	=	reward;
 			for(int i=0;i<features.length;i++){
 				if(features[i]==1){
-					delta		=	delta	+	omega[i];	
+					delta		=	delta	-	omega[i];	
 				}
 			}
-			logger.debug("delta value "+reward);
+			logger.debug("delta value "+delta);
 			currentState	=	reader.getCurrentState();
 			
 			double randomV			=	Math.random();
