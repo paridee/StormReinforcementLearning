@@ -23,23 +23,26 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 	public int[] getFeatures(int state, int action) throws Exception {
 		// TODO Auto-generated method stub
 		int[] features	=	new int[6*states];
-		System.out.println("features number "+features.length);
+		System.out.print("features number "+features.length);
 		int operator	=	action/2;
 		int actionV		=	action%2;
 		if(operator==opName.size()&&actionV==0){
 			features[(state*5)+5]	=	1;
+			System.out.print(" Action do nothing\n");
 		}
 		else if(operator>opName.size()||(operator==opName.size()&&actionV>0)){
-			System.out.println("not allowed");
+			System.out.print(" not allowed\n");
 		}
 		else{
 			if(actionV==0){
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isLeastLoaded(op)){
-					features[(state*5)+0]	=	1;
+					features[(state*5)+0]	=	1; 
+					System.out.print(" least loaded\n");
 				}
 				else if(singletons.SystemStatus.isBottleneck(op)){
 					features[(state*5)+2]	=	1;
+					System.out.print(" bottleneck\n");
 				}
 				else{
 					features[(state*5)+4]	=	1;
@@ -48,14 +51,14 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 			else{
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isBottleneck(op)){
-					logger.debug("operator "+op+" is bottleneck increase action "+action);
+					//logger.debug("operator "+op+" is bottleneck increase action "+action);
 					features[(state*5)+1]	=	1;
 				}
 				else{
 					features[(state*5)+3]	=	1;
 				}
 			}
-			System.out.println("Action "+actionV+" on operator "+operator);
+			System.out.print(" Action "+actionV+" on operator "+operator+"\n");
 		}
 		return features;
 	}

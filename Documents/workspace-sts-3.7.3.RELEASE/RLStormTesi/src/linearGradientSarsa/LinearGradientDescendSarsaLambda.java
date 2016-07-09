@@ -76,7 +76,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		currentState	=	reader.getCurrentState();	//read state
 		while(true){
 			int[] features	=	null;
-			System.out.println("features for state "+currentState+" "+action);
+			System.out.println("features for state "+currentState+" action "+action);
 			try {
 				features		=	eval.getFeatures(currentState, action);
 			} catch (Exception e1) {
