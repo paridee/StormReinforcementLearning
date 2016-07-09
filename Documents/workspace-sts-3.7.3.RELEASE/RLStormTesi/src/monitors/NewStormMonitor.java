@@ -14,13 +14,16 @@ import org.slf4j.LoggerFactory;
 import mainClasses.MainClass;
 
 public class NewStormMonitor implements Runnable {
-	
+	long latestLatencyRead=0;
+	double latestLatencyValueRead=0;
 	private String promUrl;
 	private int pollingInt;
 	public NewStormMonitor(String promUrl,int pollingInt){
 		//interval			=	intervalM;
 		this.promUrl		=	promUrl;
 		this.pollingInt		=	pollingInt;
+		this.latestLatencyRead	=	System.currentTimeMillis();
+		this.latestLatencyValueRead	=	singletons.SystemStatus.processLatency;
 	}
 	
 	
@@ -65,12 +68,25 @@ public class NewStormMonitor implements Runnable {
 							JSONArray	value	=	result.getJSONArray("value");
 							JSONObject  innerMet=	result.getJSONObject("metric");
 							if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
+								latency	=	value.getDouble(1);
 								
+								//emergency latency read
+								long now			=	System.currentTimeMillis();
+								double latValInMon	=	singletons.SystemStatus.processLatency;
+								if(now-this.latestLatencyRead>60000){
+									if(this.latestLatencyValueRead==latValInMon){
+										LOG.debug("updated latency in emergency mode");
+										singletons.SystemStatus.processLatency	=	latency;
+									}
+									this.latestLatencyValueRead	=	singletons.SystemStatus.processLatency;
+									this.latestLatencyRead		=	now;
+								}
 								//TODO removed because storm UI averages on latest 10m
 								//singletons.SystemStatus.processLatency	=	value.getDouble(1);
 								//MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
 								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
-								latency	=	value.getDouble(1);
+								
+								
 							}
 						}
 					}

@@ -31,6 +31,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 	double[] 	omega			=	new double[featuresN];
 	int 		currentState;
 	int 		action;
+	String filename	=	"vectors.txt";
 	
 	public LinearGradientDescendSarsaLambda(int featuresN, double epsilon, double yota, double lambda,
 			expectedSarsa.StateReader reader, features.FeaturesEvaluator eval, rl.executer.ActionExecutor executor, rl.alpha.AlphaCalculator alphaCalculator,
@@ -68,6 +69,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 
 	@Override
 	public void run() {
+		this.loadVector(filename);
 		while(true){
 			int[] features	=	null;
 			currentState	=	reader.getCurrentState();	//read state
@@ -174,7 +176,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				omega[i]	=	omega[i]+(alphaCalculator.getAlpha(action)*delta*eVector[i]);
 				eVector[i]	=	yota*lambda*eVector[i];
 			}
-			
+			this.saveVectors(filename);
 			System.out.println("Omega vector:");
 			for(int i=0;i<featuresN;i++){
 				System.out.print(omega[i]+"\t");
@@ -209,7 +211,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		writer.close();
 	}
 	
-	/*
+
 	private void loadVector(String filename){
 		int lineCounter	=	0;
 		ArrayList<Double[]> matrix	=	new ArrayList<Double[]>();
@@ -217,7 +219,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		try {
 			br = new BufferedReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
-			logger.debug("Q matrix is not saved in FS, skipping loading");
+			logger.debug("Vector is not saved in FS, skipping loading");
 			return;
 		}
 		try {
@@ -227,45 +229,55 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				line = br.readLine();
 			} catch (IOException e) {
 				logger.debug(e.getMessage());
-				logger.debug("skipping Q matrix loading");
+				logger.debug("skipping Feature vector loading");
 				return;
 			}
 
-		    while (line != null) {
+		    if(line!=null){
 		        sb.append(line);
 		        sb.append(System.lineSeparator());
-		        Double[] lineValues	=	new Double[actions];
+		        double[] lineValues	=	new double[actions];
 		        String[] values =	line.split(" ");
-		        if(values.length!=actions){
+		        if(values.length!=this.featuresN){
 		        	logger.debug("File not compatible");
 		        	return;
 		        }
 		        for(int i=0;i<values.length;i++){
 		        	lineValues[i]	=	Double.parseDouble(values[i]);
 		        }
-		        matrix.add(lineValues);
-		        lineCounter++;
+		        this.eVector	=	lineValues;
 		        try {
 					line = br.readLine();
 					
 				} catch (IOException e) {
 					logger.debug(e.getMessage());
-					logger.debug("skipping Q matrix loading");
+					logger.debug("skipping trace vector loading");
 					return;
 				}
 		    }
-		    if(lineCounter!=states){
-				logger.debug("wrong line number");
-				return;
+		    if(line!=null){
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        double[] lineValues	=	new double[actions];
+		        String[] values =	line.split(" ");
+		        if(values.length!=this.featuresN){
+		        	logger.debug("File not compatible");
+		        	return;
+		        }
+		        for(int i=0;i<values.length;i++){
+		        	lineValues[i]	=	Double.parseDouble(values[i]);
+		        }
+		        this.omega	=	lineValues;
+		        try {
+					line = br.readLine();
+					
+				} catch (IOException e) {
+					logger.debug(e.getMessage());
+					logger.debug("skipping omega vector loading");
+					return;
+				}
 		    }
-		    for(int i=0;i<states;i++){
-		    	Double[] row	=	matrix.get(i);
-		    	for(int j=0;j<actions;j++){
-		    		this.Q[i][j]=row[j];
-		    	}
-		    }
-		    String everything = sb.toString();
-		    logger.debug("matrix read\n "+everything);
+		    
 		} finally {
 		    try {
 				br.close();
@@ -275,6 +287,6 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				return;
 			}
 		}
-	}*/
+	}
 	
 }
