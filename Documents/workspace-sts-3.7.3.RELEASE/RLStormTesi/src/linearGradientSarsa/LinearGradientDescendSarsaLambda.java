@@ -173,7 +173,10 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			}
 			delta	=	delta	+	(yota*qActionChoosen);
 			for(int i=0;i<featuresN;i++){
+				System.out.println("updating values for feature "+i+" omega "+omega[i]);
+				System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
 				omega[i]	=	omega[i]+(alphaCalculator.getAlpha(action)*delta*eVector[i]);
+				System.out.println("updated values for feature "+i+" omega "+omega[i]);
 				eVector[i]	=	yota*lambda*eVector[i];
 			}
 			this.saveVectors(filename);
