@@ -73,9 +73,9 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 	@Override
 	public void run() {
 		this.loadVector(filename);
+		currentState	=	reader.getCurrentState();	//read state
 		while(true){
 			int[] features	=	null;
-			currentState	=	reader.getCurrentState();	//read state
 			System.out.println("features for state "+currentState+" "+action);
 			try {
 				features		=	eval.getFeatures(currentState, action);
@@ -83,12 +83,12 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			System.out.println("feat length "+features.length+" "+features[features.length-1]);
+			System.out.println("feat length "+features.length);
 			for(int i=0;i<features.length;i++){
 				if(features[i]==1){
 					eVector[i]	=	1;
 				}
-				System.out.print(features[i]+"\t");
+				System.out.print(features[i]+" ");
 			}
 			System.out.println("\n");
 	
@@ -168,6 +168,10 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 					for(int j=0;j<features.length;j++){
 						tempQ	=	tempQ	+	(omega[j]*features[j]);
 					}
+					boolean feasible	=	this.executor.isFeasible(currentState,action);
+					if(feasible==false){
+						tempQ	=	Double.NEGATIVE_INFINITY;
+					}
 					qActionChoosen	=	tempQ;
 				}
 				//testing
@@ -186,11 +190,11 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			this.saveVectors(filename);
 			System.out.println("Omega vector:");
 			for(int i=0;i<featuresN;i++){
-				System.out.print(omega[i]+"\t");
+				System.out.print(omega[i]+" ");
 			}
 			System.out.println("\nTrace vector:");
 			for(int i=0;i<featuresN;i++){
-				System.out.print(eVector[i]+"\t");
+				System.out.print(eVector[i]+" ");
 			}		
 		}
 	}
