@@ -129,4 +129,16 @@ public class EpsilonGreedyVBDEChooser implements PolicyChooser{
 		}
 	}
 
+	@Override
+	public double[] policyForState(int stateId, double[] qrow) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int actionForState(int currentState, double[] qrow) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

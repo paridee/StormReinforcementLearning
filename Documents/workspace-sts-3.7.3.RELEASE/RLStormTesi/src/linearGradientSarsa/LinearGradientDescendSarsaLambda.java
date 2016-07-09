@@ -12,6 +12,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import rl.executer.ExecutorsChange;
+import rl.policies.PolicyChooser;
 
 public class LinearGradientDescendSarsaLambda implements Runnable {
 	public final static Logger logger	=	LogManager.getLogger(LinearGradientDescendSarsaLambda.class);
@@ -31,12 +32,14 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 	double[] 	omega			=	new double[featuresN];
 	int 		currentState;
 	int 		action;
+	PolicyChooser chooser;
 	String filename	=	"vectors.txt";
 	
-	public LinearGradientDescendSarsaLambda(int featuresN, double epsilon, double yota, double lambda,
+	public LinearGradientDescendSarsaLambda(PolicyChooser chooser,int featuresN, double epsilon, double yota, double lambda,
 			expectedSarsa.StateReader reader, features.FeaturesEvaluator eval, rl.executer.ActionExecutor executor, rl.alpha.AlphaCalculator alphaCalculator,
 			int actions,int initAction) {
 		super();
+		this.chooser			=	chooser;
 		this.featuresN 			= 	featuresN;
 		this.eVector			=	new double[featuresN];
 		this.omega				=	new double[featuresN];
@@ -96,7 +99,6 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}		
-			currentState	=	reader.getCurrentState();
 			logger.debug("reward obtained "+reward);
 			double delta	=	reward;
 			for(int i=0;i<features.length;i++){
@@ -105,6 +107,8 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				}
 			}
 			logger.debug("delta value "+reward);
+			currentState	=	reader.getCurrentState();
+			
 			double randomV			=	Math.random();
 			double qActionChoosen	=	0;
 			if(randomV>epsilon){
@@ -173,10 +177,10 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			}
 			delta	=	delta	+	(yota*qActionChoosen);
 			for(int i=0;i<featuresN;i++){
-				System.out.println("updating values for feature "+i+" omega "+omega[i]);
-				System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
+				//System.out.println("updating values for feature "+i+" omega "+omega[i]);
+				//System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
 				omega[i]	=	omega[i]+(alphaCalculator.getAlpha(action)*delta*eVector[i]);
-				System.out.println("updated values for feature "+i+" omega "+omega[i]);
+				//System.out.println("updated values for feature "+i+" omega "+omega[i]);
 				eVector[i]	=	yota*lambda*eVector[i];
 			}
 			this.saveVectors(filename);

@@ -24,6 +24,7 @@ import rl.executer.BottleneckExecutor;
 import rl.executer.ExecutorsChange;
 import rl.executer.WorkerNumberExecutor;
 import rl.policies.EpsilonGreedyChooser;
+import rl.policies.EpsilonGreedyWithFeasibilityCheck;
 import rl.rewarder.CongestionDeltaRewarder;
 import rl.rewarder.DeltaRewarder;
 import rl.rewarder.DeltaRewarderSimplified;
@@ -87,7 +88,7 @@ public class MainClass {
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
-		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
+		rl.policies.PolicyChooser				chooser		;//=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
 		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.8);
 		//Thread sarsaThread									=	new Thread(sarsa);
 		//sarsaThread.start();
@@ -104,14 +105,14 @@ public class MainClass {
 		steps[2]	=	4;
 		ExecutorsChange							executor	=	new ExecutorsChange(boltsName,steps, 32, singletons.Settings.topologyName,intManager,rewarder);
 		//BottleneckExecutor							executor	=	new BottleneckExecutor(rewarder,intManager,32);
-		
+		chooser	=	new EpsilonGreedyWithFeasibilityCheck(executor,0.1);
 		
 		//ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha,"QMatrix.txt");
 		//Thread									sarsaTh		=	new Thread(sarsa);
 		
 		
 		SimpleFeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluator(boltsName,3);
-		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda((6*STATES_NUM),0.1,0.2,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
+		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,(6*STATES_NUM),0.1,0.2,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		

@@ -16,21 +16,31 @@ public class SoftmaxPolicyChooser implements PolicyChooser {
 	
 	@Override
 	public double[] policyForState(int stateId, double[][] q) {
+		return policyForState(stateId,q[stateId]);
+	}
+
+	@Override
+	public int actionForState(int currentState, double[][] q) {
+		return actionForState(currentState,q[currentState]);
+	}
+
+	@Override
+	public double[] policyForState(int stateId, double[] qrow) {
 		double den		=	0;
-		double[] result	=	new double[q[stateId].length];
-		for(int i=0;i<q[stateId].length;i++){
-			den	=	den+(Math.pow(e, (q[stateId][i]/temperature)));
+		double[] result	=	new double[qrow.length];
+		for(int i=0;i<qrow.length;i++){
+			den	=	den+(Math.pow(e, (qrow[i]/temperature)));
 		}
-		for(int i=0;i<q[stateId].length;i++){
-			result[i]	=	Math.pow(e, (q[stateId][i]/temperature))/den;
+		for(int i=0;i<qrow.length;i++){
+			result[i]	=	Math.pow(e, (qrow[i]/temperature))/den;
 			//logger.debug("p("+i+")="+result[i]);
 		}
 		return result;
 	}
 
 	@Override
-	public int actionForState(int currentState, double[][] q) {
-		double[] policy				=	this.policyForState(currentState, q);
+	public int actionForState(int currentState, double[] qrow) {
+		double[] policy				=	this.policyForState(currentState, qrow);
 		double[] cumulative			=	new double[policy.length];
 		cumulative[0]				=	policy[0];
 		cumulative[policy.length-1]	=	1;
