@@ -94,6 +94,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 	
 			double reward	=	-Double.MAX_VALUE;
 			try {
+				logger.debug("going to execute action "+action);
 				reward	=	executor.execute(action,currentState);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

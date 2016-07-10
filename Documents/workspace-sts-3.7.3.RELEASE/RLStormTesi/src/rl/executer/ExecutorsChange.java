@@ -64,7 +64,7 @@ public class ExecutorsChange implements ActionExecutor {
 						executorLevel[boltN]	=	tempValue;
 					}
 				}
-				//logger.debug("action choosen: "+action+" decrease level for bolt "+boltN+" to "+bolts.get(boltN).level);
+				logger.debug("action choosen: "+action+" decrease level for bolt "+boltN+" to "+bolts.get(boltN).level);
 				applyLevel();
 			}
 			else if(actionF==1){
@@ -77,12 +77,12 @@ public class ExecutorsChange implements ActionExecutor {
 						executorLevel[boltN]	=	tempValue;
 					}
 				}
-				//logger.debug("action choosen: "+action+" increase level for bolt "+boltN+" to "+bolts.get(boltN).level);
+				logger.debug("action choosen: "+action+" increase level for bolt "+boltN+" to "+bolts.get(boltN).level);
 				applyLevel();
 			}
 		}
 		else{
-			//logger.debug("action choosen: "+action+" leave unchanged");
+			logger.debug("action choosen: "+action+" leave unchanged");
 			applyLevel();//REBALANCE SVUOTA CODE!!! MESSO PER TEST!!! (DEVO POTER CONFRONTARE)
 		}
 		// TODO Auto-generated method stub
