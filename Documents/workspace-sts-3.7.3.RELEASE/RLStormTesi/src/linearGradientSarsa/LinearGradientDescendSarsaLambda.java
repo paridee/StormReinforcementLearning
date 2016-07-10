@@ -253,6 +253,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		        	logger.debug("File not compatible");
 		        	return;
 		        }
+		        logger.debug("size array "+values.length);
 		        for(int i=0;i<values.length;i++){
 		        	lineValues[i]	=	Double.parseDouble(values[i]);
 		        }
