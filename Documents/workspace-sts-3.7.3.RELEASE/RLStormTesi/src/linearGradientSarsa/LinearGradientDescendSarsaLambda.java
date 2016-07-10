@@ -270,14 +270,13 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		    if(line!=null){
 		        sb.append(line);
 		        sb.append(System.lineSeparator());
-		        double[] lineValues	=	new double[actions];
+		        double[] lineValues	=	new double[this.featuresN];
 		        String[] values =	line.split(" ");
 		        if(values.length!=this.featuresN){
 		        	logger.debug("File not compatible");
 		        	return;
 		        }
 		        for(int i=0;i<values.length;i++){
-		        	logger.debug("index i "+i+" size "+values.length);
 		        	lineValues[i]	=	Double.parseDouble(values[i]);
 		        }
 		        this.omega	=	lineValues;
