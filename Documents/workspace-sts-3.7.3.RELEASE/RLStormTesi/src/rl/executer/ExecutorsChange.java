@@ -167,4 +167,44 @@ public class ExecutorsChange implements ActionExecutor {
 		}
 		return true;
 	}
+
+	@Override
+	public int[] newConfigurationPreview(int action, int state) {
+		int boltN	=	action/2;
+		int actionF	=	action-(2*boltN);
+		int[] preview	=	new int[executorLevel.length];
+		if(boltN<boltsName.size()){
+			if(actionF==0){
+				if(executorLevel[boltN]>1){
+					int tempValue	=	executorLevel[boltN]-steps[state];
+					if(tempValue<1){
+						preview[boltN]	=	1;
+					}
+					else{
+						preview[boltN]	=	tempValue;
+					}
+				}
+				//logger.debug("action choosen: "+action+" decrease level for bolt "+boltN+" to "+bolts.get(boltN).level);
+				applyLevel();
+			}
+			else if(actionF==1){
+				if(executorLevel[boltN]<this.maxExecutorNumber){
+					int tempValue	=	executorLevel[boltN]+steps[state];
+					if(tempValue>this.maxExecutorNumber){
+						preview[boltN]	=	this.maxExecutorNumber;
+					}
+					else{
+						preview[boltN]	=	tempValue;
+					}
+				}
+	
+			}
+		}
+		else{
+			for(int i=0;i<executorLevel.length;i++){
+				preview[i]	=	executorLevel[i];
+			}
+		}
+		return preview;
+	}
 }

@@ -11,4 +11,6 @@ public interface ActionExecutor {
 	double execute(int action, int state);
 
 	boolean isFeasible(int currentState, int i);
+	
+	int[] newConfigurationPreview(int action,int state);
 }

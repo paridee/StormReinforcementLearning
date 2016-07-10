@@ -62,4 +62,10 @@ public class WorkerNumberExecutor implements ActionExecutor {
 		return false;
 	}
 
+	@Override
+	public int[] newConfigurationPreview(int action, int state) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

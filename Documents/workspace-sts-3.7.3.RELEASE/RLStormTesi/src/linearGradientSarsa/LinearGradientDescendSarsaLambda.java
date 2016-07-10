@@ -108,77 +108,26 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			}
 			logger.debug("delta value "+delta);
 			currentState	=	reader.getCurrentState();
-			
-			double randomV			=	Math.random();
 			double qActionChoosen	=	0;
-			if(randomV>epsilon){
-				//exploitation
-				double Q[]	=	new double[actions];
-				for(int i=0;i<actions;i++){
-					try {
-						features	=	eval.getFeatures(currentState, i);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					for(int j=0;j<features.length;j++){
-						Q[i]	=	Q[i]	+	(omega[j]*features[j]);
-					}
-					boolean feasible	=	this.executor.isFeasible(currentState,i);
-					if(feasible==false){
-						Q[i]	=	Double.NEGATIVE_INFINITY;
-					}
+			double Q[]	=	new double[actions];
+			for(int i=0;i<actions;i++){
+				try {
+					features	=	eval.getFeatures(currentState, i);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				
-				//testing
-				for(int i=0;i<actions;i++){
-					System.out.println("Q["+currentState+"]["+i+"] "+Q[i]+"\t");
+				for(int j=0;j<features.length;j++){
+					Q[i]	=	Q[i]	+	(omega[j]*features[j]);
 				}
-				
-				
-				//find best action
-				int newAction	=	0;
-				
-				System.out.println("number of actions "+actions);
-				
-				double qAction	=	Q[0];
-				for(int j=1;j<actions;j++){
-					if(Q[j]>qAction){
-						newAction	=	j;
-						qAction		=	Q[j];
-					}
+				boolean feasible	=	this.executor.isFeasible(currentState,i);
+				if(feasible==false){
+					Q[i]	=	Double.NEGATIVE_INFINITY;
 				}
-				action			=	newAction;
-				qActionChoosen	=	qAction;
-				System.out.println("Exploiation:Current state: "+currentState+" action "+action);
-				//best action found
+				logger.debug("Q["+currentState+"]["+i+"] = "+Q[i]);
 			}
-			else{
-				//exploration
-				double tempQ	=	Double.NEGATIVE_INFINITY;
-				while(tempQ==Double.NEGATIVE_INFINITY){
-					action			=	(int)((Math.random()*actions)%actions);
-					try {
-						features		=	eval.getFeatures(currentState, action);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					tempQ	=	0;
-					for(int j=0;j<features.length;j++){
-						tempQ	=	tempQ	+	(omega[j]*features[j]);
-					}
-					boolean feasible	=	this.executor.isFeasible(currentState,action);
-					if(feasible==false){
-						tempQ	=	Double.NEGATIVE_INFINITY;
-					}
-					qActionChoosen	=	tempQ;
-				}
-				//testing
-				System.out.println("Exploration:Current state: "+currentState+" action "+action);
-				System.out.println("Q["+currentState+"]["+action+"] "+qActionChoosen+"\t");
-				
-			}
+			int action				=	chooser.actionForState(currentState, Q);
+			qActionChoosen			=	Q[action];
 			delta	=	delta	+	(yota*qActionChoosen);
 			for(int i=0;i<featuresN;i++){
 				//System.out.println("updating values for feature "+i+" omega "+omega[i]);

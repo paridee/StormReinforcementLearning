@@ -142,4 +142,13 @@ public class BottleneckExecutor implements ActionExecutor{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+	@Override
+	public int[] newConfigurationPreview(int action, int state) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }
