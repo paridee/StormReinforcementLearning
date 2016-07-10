@@ -277,6 +277,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		        	return;
 		        }
 		        for(int i=0;i<values.length;i++){
+		        	logger.debug("index i "+i+" size "+values.length);
 		        	lineValues[i]	=	Double.parseDouble(values[i]);
 		        }
 		        this.omega	=	lineValues;
