@@ -112,7 +112,7 @@ public class MainClass {
 		
 		
 		SimpleFeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluator(boltsName,3,8);
-		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,(8*STATES_NUM),0.1,0.4,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
+		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,(8*STATES_NUM),0.1,0.4,0.4,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		
