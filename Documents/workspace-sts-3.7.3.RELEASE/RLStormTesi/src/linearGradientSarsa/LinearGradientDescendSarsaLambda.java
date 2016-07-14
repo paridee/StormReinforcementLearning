@@ -100,6 +100,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}		
+			mainClasses.MainClass.REWARD_VAL.set(reward);
 			logger.debug("reward obtained "+reward);
 			double delta	=	reward;
 			for(int i=0;i<features.length;i++){
