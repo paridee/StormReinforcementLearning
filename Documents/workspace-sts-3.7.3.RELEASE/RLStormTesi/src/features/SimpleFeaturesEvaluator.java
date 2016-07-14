@@ -49,7 +49,6 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 				else{
 					features[(state*this.featuresPerState)+4]	=	1;
 				}
-				features[(state*this.featuresPerState)+6]	=	1;
 			}
 			else{
 				String op	=	opName.get(operator);
@@ -60,7 +59,6 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 				else{
 					features[(state*this.featuresPerState)+3]	=	1;
 				}
-				features[(state*this.featuresPerState)+7]	=	1;
 			}
 			//System.out.print(" Action "+actionV+" on operator "+operator+"\n");
 		}

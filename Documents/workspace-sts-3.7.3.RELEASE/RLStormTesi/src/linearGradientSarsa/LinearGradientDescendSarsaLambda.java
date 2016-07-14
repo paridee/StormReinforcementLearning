@@ -86,8 +86,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			System.out.println("feat length "+features.length);
 			for(int i=0;i<features.length;i++){
 				if(features[i]==1){
-					//eVector[i]	=	1;
-					eVector[i]	=	eVector[i]+1;
+					eVector[i]	=	1;
 				}
 				System.out.print(features[i]+" ");
 			}

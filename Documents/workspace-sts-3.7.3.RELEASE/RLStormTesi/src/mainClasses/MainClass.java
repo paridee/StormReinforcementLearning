@@ -88,7 +88,7 @@ public class MainClass {
 		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
-		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.4);//EpsilonGreedyChooser(0.1);
+		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
 		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.8);
 		//Thread sarsaThread									=	new Thread(sarsa);
 		//sarsaThread.start();
@@ -111,8 +111,8 @@ public class MainClass {
 		//Thread									sarsaTh		=	new Thread(sarsa);
 		
 		
-		SimpleFeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluator(boltsName,3,8);
-		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,(8*STATES_NUM),0.1,0.4,0.4,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
+		SimpleFeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluator(boltsName,3,6);
+		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,(6*STATES_NUM),0.1,0.2,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		
