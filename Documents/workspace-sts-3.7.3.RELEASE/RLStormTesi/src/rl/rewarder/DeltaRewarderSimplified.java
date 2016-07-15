@@ -65,6 +65,8 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 			logger.debug("Destination state overloaded, reward -0.5 (latency "+currentLatency+")");
 			reward	=	reward - 0.5;
 		}
+		//TODO test
+		reward	=	reward+2;
 		return reward;
 	}
 

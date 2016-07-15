@@ -12,13 +12,17 @@ import org.slf4j.LoggerFactory;
 
 import expectedSarsa.ExpectedSarsa;
 import expectedSarsa.FixedIntervalManager;
+import expectedSarsa.StateReader;
 import expectedSarsa.storm.ProcessTimeStateReader;
+import expectedSarsa.storm.ProcessTimeStateReaderEvo;
+import expectedSarsa.storm.StateTranslator;
 import features.SimpleFeaturesEvaluator;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.MetricsServlet;
 import linearGradientSarsa.LinearGradientDescendSarsaLambda;
 import monitors.NewStormMonitor;
 import monitors.StormMonitor;
+import redis.clients.jedis.Jedis;
 import rl.alpha.StaticAlphaCalculator;
 import rl.executer.BottleneckExecutor;
 import rl.executer.ExecutorsChange;
@@ -85,7 +89,7 @@ public class MainClass {
 		//RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,4500,15,0.2);
 		RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500);
 		//RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
-		ProcessTimeStateReader					reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
+		StateReader								reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
@@ -113,6 +117,38 @@ public class MainClass {
 		
 		SimpleFeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluator(boltsName,3,6);
 		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,(6*STATES_NUM),0.1,0.2,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,(2*boltsName.size()));
+		/*
+		
+		//TODO TEST
+	    Jedis jedis = new Jedis("127.0.0.1",6379);
+	    jedis.flushAll();
+		
+	    
+	    StateTranslator translator	=	new StateTranslator(3, 3, 32, jedis);
+		reader	=	new ProcessTimeStateReaderEvo(1500,3500,translator);
+		
+		
+		
+		try {
+			Thread.sleep(20000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for(int i=0;i<30;i++){
+			int stateC	=	reader.getCurrentState();
+			System.out.println("Associated state "+stateC);
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//TODO ENDTEST
+		
+		
+		*/
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		
