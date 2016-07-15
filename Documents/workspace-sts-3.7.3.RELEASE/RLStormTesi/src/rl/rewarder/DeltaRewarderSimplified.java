@@ -11,9 +11,10 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 	int upperBound;
 	int lowerBound;
 	double oldDistance;
+	boolean onlyPositive;
 	int obj;
 	
-	public DeltaRewarderSimplified(int distThreshold, int obj,int upperBound) {
+	public DeltaRewarderSimplified(int distThreshold, int obj,int upperBound,boolean onlyPositive) {
 		super();
 		this.distThreshold = distThreshold;
 		this.obj = obj;
@@ -21,6 +22,7 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 		this.oldDistance	=	singletons.SystemStatus.processLatency-obj;	
 		this.upperBound		=	upperBound;
 		lowerBound			=	obj-(upperBound-obj);
+		this.onlyPositive	=	onlyPositive;
 	}
 
 
@@ -65,8 +67,10 @@ public class DeltaRewarderSimplified implements RewardCalculator {
 			logger.debug("Destination state overloaded, reward -0.5 (latency "+currentLatency+")");
 			reward	=	reward - 0.5;
 		}
-		//TODO test
-		reward	=	reward+2;
+		if(onlyPositive==true)
+			if(reward<0){
+				reward	=	0;
+			}
 		return reward;
 	}
 
