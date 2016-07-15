@@ -73,7 +73,7 @@ public class NewStormMonitor implements Runnable {
 								//emergency latency read
 								long now			=	System.currentTimeMillis();
 								double latValInMon	=	singletons.SystemStatus.processLatency;
-								if(now-this.latestLatencyRead>60000){
+								if(now-this.latestLatencyRead>120000){
 									if(this.latestLatencyValueRead==latValInMon){
 										LOG.debug("updated latency in emergency mode");
 										singletons.SystemStatus.processLatency	=	latency;
