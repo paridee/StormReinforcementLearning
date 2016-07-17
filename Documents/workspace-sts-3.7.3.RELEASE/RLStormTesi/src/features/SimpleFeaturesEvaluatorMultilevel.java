@@ -100,7 +100,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 		}
 
 		int[][][][] secondBlock	= 	new int[maxParallelism+1][this.states][3][this.featuresPerState];
-		if(offset<(this.featuresPerState-1)){
+		if(offset<(this.featuresPerState)){
 			secondBlock[parallelismLevel][state][changeStep][offset]	=	1;
 			logger.debug("Second Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
 		}

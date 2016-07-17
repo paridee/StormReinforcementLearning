@@ -167,7 +167,7 @@ public class NewStormMonitor implements Runnable {
 					}
 				}
 				
-				query	=	"emitted";
+				query	=	"acked";
 				//System.out.println("Query "+query);
 		
 				urlString=promUrl+"/api/v1/query?query="+query;
@@ -248,7 +248,7 @@ public class NewStormMonitor implements Runnable {
 					readInterval	=	Double.MAX_VALUE;
 				}
 				double utilLevel	=	((double)emitted/readInterval)*latency;
-				//this.LOG.debug("Calculated utilization "+emitted+" "+readInterval+" "+latency+" "+utilLevel);
+				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
 				singletons.SystemStatus.completeUtilization	=	utilLevel;
 				long delta	=	System.currentTimeMillis()-rebalanceTime;
 				//this.LOG.debug("Calculated utilization "+emitted+" "+delta+" "+latency+" "+(((double)emitted/(double)delta)*latency));

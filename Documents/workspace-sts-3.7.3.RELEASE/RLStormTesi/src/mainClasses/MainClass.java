@@ -82,7 +82,7 @@ public class MainClass {
 		Thread			sm_th	=	new Thread(sm);
 		sm_th.start();
 		
-		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
+		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,10000);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
 		while(SystemStatus.executors.size()==0){
@@ -167,7 +167,6 @@ public class MainClass {
 		*/
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		
 		sarsaTh.start();
 	}
 	
