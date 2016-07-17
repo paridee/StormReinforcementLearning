@@ -156,10 +156,15 @@ public class ExecutorsChangeMultipleSteps implements ActionExecutor {
 				}
 	
 			}
-			else{
-				for(int i=0;i<executorLevel.length;i++){
+			for(int i=0;i<executorLevel.length;i++){
+				if(i!=boltN){
 					preview[i]	=	executorLevel[i];
 				}
+			}
+		}
+		else{
+			for(int i=0;i<executorLevel.length;i++){
+				preview[i]	=	executorLevel[i];
 			}
 		}
 		return preview;
