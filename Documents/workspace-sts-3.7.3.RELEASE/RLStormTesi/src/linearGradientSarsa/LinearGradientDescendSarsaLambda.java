@@ -130,8 +130,25 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				if(feasible==false){
 					Q[i]	=	Double.NEGATIVE_INFINITY;
 				}
-				logger.debug("Q["+currentState+"]["+i+"] = "+Q[i]);
 			}
+			//TODO ONLY FOR DEBUG
+			int printstate	=	-1;
+			double currentLatency	=	logger.debug("Q["+currentState+"]["+i+"] = "+Q[i]);
+			if(currentLatency<1500){
+				printstate	=	0;
+			}
+			else if(currentLatency<4500){
+				printstate	=	1;
+			}
+			else{
+				printstate	=	2;
+			}
+			logger.debug("CurrentLatency "+currentLatency);
+			for(int i=0;i<Q.length;i++){
+				logger.debug("Q["+printstate+"]["+i+"] = "+Q[i]);
+			}	
+			//TODO END DEBUG
+			
 			action				=	chooser.actionForState(currentState, Q);
 			qActionChoosen			=	Q[action];
 			delta	=	delta	+	(yota*qActionChoosen);
@@ -146,11 +163,11 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			this.saveVectors(filename);
 			System.out.println("Omega vector:");
 			for(int i=0;i<featuresN;i++){
-				System.out.print(omega[i]+" ");
+				//System.out.print(omega[i]+" ");
 			}
 			System.out.println("\nTrace vector:");
 			for(int i=0;i<featuresN;i++){
-				System.out.print(eVector[i]+" ");
+				//System.out.print(eVector[i]+" ");
 			}		
 		}
 	}
