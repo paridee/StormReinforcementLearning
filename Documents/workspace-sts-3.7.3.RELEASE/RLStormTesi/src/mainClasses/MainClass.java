@@ -132,7 +132,7 @@ public class MainClass {
 		
 		
 		FeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluatorMultilevel(boltsName,3,6,maxParallelism,translator,executor);
-		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,actionsN-1);
+		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
 		/*
 		
 		//TODO TEST
