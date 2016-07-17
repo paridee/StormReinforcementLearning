@@ -42,7 +42,7 @@ public class DeltaNonNegativeRewarderRelativeSteps implements RewardCalculator {
 		int machineDelta		=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();
 		if(oldDistance-currentDist>this.distThreshold){
 			reward	=	reward+1;
-			reward	=	reward + (distDelta/100);
+			reward	=	reward + (distDelta/1000);
 			if(machineDelta<0){	//ho aumentato il numero di thread
 				reward	=	reward+((machineDelta*(1/(maxStep)*2)*reward));
 			}

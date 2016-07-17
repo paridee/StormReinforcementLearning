@@ -25,6 +25,7 @@ public class ProcessTimeStateReaderEvo implements StateReader {
 		ArrayList<String> bolts	=	singletons.SystemStatus.bolts;
 		Integer[] feat		=	new Integer[(2*(bolts.size()))+2];
 		double latency	=	singletons.SystemStatus.processLatency;
+		MainClass.LATENCY_VAL.set(latency);
 		if(latency<lowerBound){
 			feat[0]		=	0;
 		}
