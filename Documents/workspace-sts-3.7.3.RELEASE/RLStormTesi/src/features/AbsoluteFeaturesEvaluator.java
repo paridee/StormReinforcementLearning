@@ -8,4 +8,10 @@ public class AbsoluteFeaturesEvaluator implements FeaturesEvaluator {
 		return null;
 	}
 
+	@Override
+	public int getFeaturesN() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

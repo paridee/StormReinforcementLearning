@@ -88,4 +88,10 @@ public class RelativeFeaturesEvaluator implements FeaturesEvaluator {
 			e.printStackTrace();
 		}
 	}
+
+
+	@Override
+	public int getFeaturesN() {
+		return this.featuresPerState*states;
+	}
 }

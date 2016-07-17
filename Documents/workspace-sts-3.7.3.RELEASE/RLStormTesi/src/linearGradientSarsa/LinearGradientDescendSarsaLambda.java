@@ -45,6 +45,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 		this.omega				=	new double[featuresN];
 		for(int i=0;i<featuresN;i++){
 			omega[i]			=	1;
+			System.out.println("Omega "+i+" "+omega[i]);
 		}
 		this.epsilon 			=	epsilon;
 		this.yota 				= 	yota;

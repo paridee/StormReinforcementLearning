@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class DeltaNonNegativeRewarder implements RewardCalculator {
 
 
-	private static final Logger logger = LoggerFactory.getLogger(DeltaRewarderSimplified.class);
+	private static final Logger logger = LoggerFactory.getLogger(DeltaNonNegativeRewarder.class);
 	int distThreshold;
 	int oldInstanceNumber;
 	int upperBound;

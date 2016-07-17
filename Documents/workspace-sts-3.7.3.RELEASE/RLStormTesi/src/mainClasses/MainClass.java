@@ -16,7 +16,9 @@ import expectedSarsa.StateReader;
 import expectedSarsa.storm.ProcessTimeStateReader;
 import expectedSarsa.storm.ProcessTimeStateReaderEvo;
 import expectedSarsa.storm.StateTranslator;
+import features.FeaturesEvaluator;
 import features.SimpleFeaturesEvaluator;
+import features.SimpleFeaturesEvaluatorMultilevel;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.MetricsServlet;
 import linearGradientSarsa.LinearGradientDescendSarsaLambda;
@@ -24,13 +26,16 @@ import monitors.NewStormMonitor;
 import monitors.StormMonitor;
 import redis.clients.jedis.Jedis;
 import rl.alpha.StaticAlphaCalculator;
+import rl.executer.ActionExecutor;
 import rl.executer.BottleneckExecutor;
 import rl.executer.ExecutorsChange;
+import rl.executer.ExecutorsChangeMultipleSteps;
 import rl.executer.WorkerNumberExecutor;
 import rl.policies.EpsilonGreedyChooser;
 import rl.policies.EpsilonGreedyWithFeasibilityCheck;
 import rl.rewarder.CongestionDeltaRewarder;
 import rl.rewarder.DeltaNonNegativeRewarder;
+import rl.rewarder.DeltaNonNegativeRewarderRelativeSteps;
 import rl.rewarder.DeltaRewarder;
 import rl.rewarder.DeltaRewarderSimplified;
 import rl.rewarder.ParabolicComplexResponseTimeRewarder;
@@ -47,6 +52,7 @@ public class MainClass {
 	public static final	Gauge	REWARD_VAL			=	Gauge.build().name("bench_rewardVal").help("Reward received value").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	LATENCY_VAL			=	Gauge.build().name("bench_latencyRead").help("Latency read by decisor").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	PARALLELISM_VAL		=	Gauge.build().name("bench_parallelism").help("Parallelism level decided").register();	//prometheus metric to be monitored on Graphana
+	public static final	Gauge	SYST_UTIL			=	Gauge.build().name("bench_utilization").help("System utilization").register();	//prometheus metric to be monitored on Graphana
 	public static final int 	STATES_NUM			=	3;		//states
 	public static int			ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
@@ -58,6 +64,115 @@ public class MainClass {
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
+		dynamicSteps();
+	}
+	
+	public static void dynamicSteps(){
+		int maxParallelism	=	32;
+		ArrayList<String> boltsName	=	new ArrayList<String>();
+		boltsName.add("firststage");
+		boltsName.add("secondstage");
+		boltsName.add("thirdstage");
+		SystemStatus.bolts	=	boltsName;
+	    Jedis jedis = new Jedis("127.0.0.1",6379);
+	    jedis.flushAll();	    
+	    StateTranslator translator	=	new StateTranslator(3, 3, 32, jedis);
+	    
+		StormMonitor 		sm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
+		Thread			sm_th	=	new Thread(sm);
+		sm_th.start();
+		
+		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
+		Thread			rm_th	=	new Thread(rm);
+		rm_th.start();
+		while(SystemStatus.executors.size()==0){
+			try {
+				Thread.sleep(1000);
+				LOG.debug("waiting operators level");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		//TEST
+
+
+		
+		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
+		//RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,4500,15,0.2);
+		RewardCalculator						rewarder	=	new DeltaNonNegativeRewarderRelativeSteps(300,3000,4500,maxParallelism);
+		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500,true);
+		//RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
+		StateReader								reader		=	new ProcessTimeStateReaderEvo(1500,4500,translator,maxParallelism);
+		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
+		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
+		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
+		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.8);
+		//Thread sarsaThread									=	new Thread(sarsa);
+		//sarsaThread.start();
+		
+		
+		int 									actionsN	=	(boltsName.size()*6)+1;	
+		//actionsN	=	3; //TODO remove
+		ACTIONS_NUM											=	actionsN;
+		initializePromVariables(boltsName);				//initializes variables for prometheus
+		 
+		int[] steps	=	new int[3];
+		steps[0]	=	1;
+		steps[1]	=	maxParallelism/16;
+		steps[2]	=	maxParallelism/8;
+		ActionExecutor							executor	=	new ExecutorsChangeMultipleSteps(boltsName,steps, maxParallelism, singletons.Settings.topologyName,intManager,rewarder);
+		//BottleneckExecutor							executor	=	new BottleneckExecutor(rewarder,intManager,32);
+		//chooser	=	new EpsilonGreedyWithFeasibilityCheck(executor,0.1);
+		
+		//ExpectedSarsa							sarsa		=	new	ExpectedSarsa(3,actionsN,1,chooser,executor,reader,alpha,"QMatrix.txt");
+		//Thread									sarsaTh		=	new Thread(sarsa);
+		
+		
+		FeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluatorMultilevel(boltsName,3,6,maxParallelism,translator,executor);
+		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,(2*boltsName.size())+1,actionsN-1);
+		/*
+		
+		//TODO TEST
+	    Jedis jedis = new Jedis("127.0.0.1",6379);
+	    jedis.flushAll();
+		
+	    
+	    StateTranslator translator	=	new StateTranslator(3, 3, 32, jedis);
+		reader	=	new ProcessTimeStateReaderEvo(1500,3500,translator);
+		
+		
+		
+		try {
+			Thread.sleep(20000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for(int i=0;i<30;i++){
+			int stateC	=	reader.getCurrentState();
+			System.out.println("Associated state "+stateC);
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//TODO ENDTEST
+		
+		
+		*/
+		Thread									sarsaTh		=	new Thread(sarsa);
+		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
+		
+		sarsaTh.start();
+	}
+	
+	public static void nonDynamicSteps(){
+
 		ArrayList<String> boltsName	=	new ArrayList<String>();
 		boltsName.add("firststage");
 		boltsName.add("secondstage");
@@ -155,7 +270,6 @@ public class MainClass {
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
 		
 		sarsaTh.start();
-		
 	}
 	
 	public static void launchWebServerForPrometheus(){

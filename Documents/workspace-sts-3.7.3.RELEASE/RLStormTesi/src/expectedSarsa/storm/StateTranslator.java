@@ -75,7 +75,6 @@ public class StateTranslator {
 	this.operators = operators;
 	this.stateLevels = stateLevels;
 	this.maxParallelism = maxParallelism;
-	int size	=	(int) (3*Math.pow(operators, maxParallelism)*Math.pow(10, operators));
 	/*
 	for(int i=0;i<stateLevels;i++){
 		Integer[] story	=	new Integer[1];
@@ -86,21 +85,28 @@ public class StateTranslator {
 	jedisManagerRev.flush();*/
 }
 	public int[] getValuesFromState(String state){
-		int[] result	=	new int[1+(2*operators)];
+		int[] result	=	new int[2+(2*operators)];
 		String stateN	=	state.substring(0, (this.stateLevels+"").length());
-		System.out.println("Parsing "+stateN);
+		//System.out.println("Parsing "+stateN);
 		result[0]		=	Integer.parseInt(stateN);
 		String rest		=	state.substring((this.stateLevels+"").length());
+		String temp		=	rest.substring(0,(this.maxParallelism+"").length());
+		//System.out.println("Parsing load "+temp);
+		result[1]		=	Integer.parseInt(temp);
+		if(result[1]>this.maxParallelism){
+			result[1]	=	this.maxParallelism;
+		}
+		rest	=	rest.substring((this.maxParallelism+"").length());
 		for(int i=0;i<operators;i++){
-			String temp	=	rest.substring(0,(this.maxParallelism+"").length());
-			System.out.println("Parsing "+temp);
-			result[i+1]	=	Integer.parseInt(temp);
+			temp	=	rest.substring(0,(this.maxParallelism+"").length());
+			//System.out.println("Parsing "+temp);
+			result[i+2]	=	Integer.parseInt(temp);
 			rest	=	rest.substring((this.maxParallelism+"").length());
 		}
 		for(int i=0;i<operators;i++){
-			String temp	=	rest.substring(0,(10+"").length());
-			System.out.println("Parsing "+temp);
-			result[i+operators+1]	=	Integer.parseInt(temp);
+			temp	=	rest.substring(0,(10+"").length());
+			//System.out.println("Parsing "+temp);
+			result[i+operators+2]	=	Integer.parseInt(temp);
 			rest	=	rest.substring((10+"").length());
 		}
 		return result;
@@ -120,11 +126,12 @@ public class StateTranslator {
 	
 	public String getStringForState(Integer[] stateArray){
 		String stateString	=	getStringForInt(stateLevels,stateArray[0]);
+		stateString			=	stateString+getStringForInt(maxParallelism,stateArray[1]);
 		for(int i=0;i<operators;i++){
-			stateString	=	stateString+getStringForInt(maxParallelism,stateArray[i+1]);
+			stateString	=	stateString+getStringForInt(maxParallelism,stateArray[i+2]);
 		}
 		for(int i=0;i<operators;i++){
-			stateString	=	stateString+getStringForInt(10,stateArray[operators+i+1]);
+			stateString	=	stateString+getStringForInt(10,stateArray[operators+i+2]);
 		}
 		return stateString;
 	}
@@ -218,5 +225,9 @@ public class StateTranslator {
 		String test		=	"09";
 		int testparse	=	Integer.parseInt(test);
 		System.out.println("test parsing "+testparse);
+	}
+	public String getStringFromId(int key) {
+		jedis.select(1);
+		return jedis.get(key+"");
 	}
 }

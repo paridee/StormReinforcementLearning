@@ -83,4 +83,11 @@ public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 			e.printStackTrace();
 		}
 	}
+
+
+	@Override
+	public int getFeaturesN() {
+		// TODO Auto-generated method stub
+		return this.featuresPerState*states;
+	}
 }

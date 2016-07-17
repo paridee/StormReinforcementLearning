@@ -35,7 +35,7 @@ public class NewStormMonitor implements Runnable {
 		int emitted			=	-1;
 		double latency		=	-1.0;
 		int window			=	-1;
-		long rebalanceTime	=	System.currentTimeMillis();
+		long rebalanceTime	=	0L;
 		while(continueEx==true){
 			try {
 				//String query	=	"rate(node_cpu{job=\""+this.subj.promName+"\",mode=\"idle\",instance=\""+this.subj.promInstance+"\"}["+interval/1000+"s])";
@@ -167,7 +167,6 @@ public class NewStormMonitor implements Runnable {
 					}
 				}
 				
-				
 				query	=	"emitted";
 				//System.out.println("Query "+query);
 		
@@ -198,8 +197,9 @@ public class NewStormMonitor implements Runnable {
 								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
 								if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
 									//LOG.debug("capacity metric "+innerMet.getString("operatorName")+" "+value.getDouble(1));
+									int oldEmitted	=	emitted;
 									emitted	=	(int)value.getDouble(1);
-									if(emitted==0){
+									if(emitted==0||(emitted<oldEmitted)){
 										rebalanceTime	=	System.currentTimeMillis();
 									}
 								}
@@ -243,8 +243,14 @@ public class NewStormMonitor implements Runnable {
 						}
 					}
 				}
-				//this.LOG.debug("Calculated utilization "+emitted+" "+window+" "+latency+" "+(((double)emitted/(double)window)*latency));
-				
+				double readInterval	=	System.currentTimeMillis()-rebalanceTime;
+				if(rebalanceTime==0){
+					readInterval	=	Double.MAX_VALUE;
+				}
+				double utilLevel	=	((double)emitted/readInterval)*latency;
+				//this.LOG.debug("Calculated utilization "+emitted+" "+readInterval+" "+latency+" "+utilLevel);
+				MainClass.SYST_UTIL.set(utilLevel);
+				singletons.SystemStatus.completeUtilization	=	utilLevel;
 				long delta	=	System.currentTimeMillis()-rebalanceTime;
 				//this.LOG.debug("Calculated utilization "+emitted+" "+delta+" "+latency+" "+(((double)emitted/(double)delta)*latency));
 				

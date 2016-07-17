@@ -10,6 +10,7 @@ public class SystemStatus {
 	public static HashMap<String, Integer>	executors		=	new HashMap<String,Integer>();
 	public static HashMap<String, Double>	operatorCapacity=	new HashMap<String,Double>();
 	public static ArrayList<String> bolts	=	new ArrayList<String>();
+	public static double completeUtilization	=	-1.0;
 	public static void setExecutorLevel(String exName,int value){
 		if(bolts.contains(exName)){
 			executors.put(exName, value);	
