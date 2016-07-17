@@ -199,12 +199,13 @@ public class ExecutorsChange implements ActionExecutor {
 				}
 	
 			}
-		}
-		else{
-			for(int i=0;i<executorLevel.length;i++){
-				preview[i]	=	executorLevel[i];
+			else{
+				for(int i=0;i<executorLevel.length;i++){
+					preview[i]	=	executorLevel[i];
+				}
 			}
 		}
+
 		return preview;
 	}
 }
