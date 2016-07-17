@@ -3,6 +3,7 @@ package expectedSarsa.storm;
 import java.util.ArrayList;
 
 import expectedSarsa.StateReader;
+import mainClasses.MainClass;
 
 public class ProcessTimeStateReaderEvo implements StateReader {
 	int lowerBound;
@@ -35,6 +36,7 @@ public class ProcessTimeStateReaderEvo implements StateReader {
 		}
 		do{
 			feat[1]	=	(int)singletons.SystemStatus.completeUtilization;
+			MainClass.SYST_UTIL.set(feat[1]);
 		}while(feat[1]==-1.0);
 		
 		if(feat[1]>this.maxParallelism){

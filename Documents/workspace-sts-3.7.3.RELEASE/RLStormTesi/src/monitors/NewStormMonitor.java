@@ -249,7 +249,6 @@ public class NewStormMonitor implements Runnable {
 				}
 				double utilLevel	=	((double)emitted/readInterval)*latency;
 				//this.LOG.debug("Calculated utilization "+emitted+" "+readInterval+" "+latency+" "+utilLevel);
-				MainClass.SYST_UTIL.set(utilLevel);
 				singletons.SystemStatus.completeUtilization	=	utilLevel;
 				long delta	=	System.currentTimeMillis()-rebalanceTime;
 				//this.LOG.debug("Calculated utilization "+emitted+" "+delta+" "+latency+" "+(((double)emitted/(double)delta)*latency));
