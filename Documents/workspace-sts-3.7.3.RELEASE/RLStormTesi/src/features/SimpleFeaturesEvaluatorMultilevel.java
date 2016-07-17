@@ -52,7 +52,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 		if(operator==opName.size()&&actionV==0){
 			features[(state*this.featuresPerState)+5]	=	1;
 			offset	=	this.featuresPerState-1;
-			logger.debug("Feature leave unchanged");
+			//logger.debug("Feature leave unchanged");
 		}
 		else if(operator>opName.size()||(operator==opName.size()&&actionV>0)){
 			//System.out.print(" not allowed\n");
@@ -63,18 +63,18 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 				if(singletons.SystemStatus.isLeastLoaded(op)){
 					features[(state*this.featuresPerState)+0]	=	1; 
 					offset	=	0;
-					logger.debug("Feature decrease least loaded");
+				//	logger.debug("Feature decrease least loaded");
 				//	System.out.print(" least loaded\n");
 				}
 				else if(singletons.SystemStatus.isBottleneck(op)){
 					features[(state*this.featuresPerState)+2]	=	1;
 					offset	=	2;
-					logger.debug("Feature decrease bottleneck");
+					//logger.debug("Feature decrease bottleneck");
 					//System.out.print(" bottleneck\n");
 				}
 				else{
 					features[(state*this.featuresPerState)+4]	=	1;
-					logger.debug("Feature decrease intermediate");
+					//logger.debug("Feature decrease intermediate");
 					offset	=	4;
 				}
 			}
@@ -83,12 +83,12 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 				if(singletons.SystemStatus.isBottleneck(op)){
 					//logger.debug("operator "+op+" is bottleneck increase action "+action);
 					features[(state*this.featuresPerState)+1]	=	1;
-					logger.debug("Feature increase bottleneck");
+					//logger.debug("Feature increase bottleneck");
 					offset	=	1;
 				}
 				else{
 					features[(state*this.featuresPerState)+3]	=	1;
-					logger.debug("Feature increase another");
+					//logger.debug("Feature increase another");
 					offset	=	3;
 				}
 			}
@@ -102,7 +102,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 		int[][][][] secondBlock	= 	new int[maxParallelism+1][this.states][3][this.featuresPerState];
 		if(offset<(this.featuresPerState)){
 			secondBlock[parallelismLevel][state][changeStep][offset]	=	1;
-			logger.debug("Second Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
+			//logger.debug("Second Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
 		}
 		for(int i=0;i<maxParallelism+1;i++){
 			for(int j=0;j<this.states;j++){
@@ -121,7 +121,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 			int[] preview		=	executor.newConfigurationPreview(action, stateRaw);
 			for(int i=0;i<preview.length;i++){
 				thirdBlock[parallelismLevel][i][preview[i]]=1;
-				logger.debug("Third block feature for parallelism level "+parallelismLevel+" operator "+i+" operator level "+preview[i]);
+				//logger.debug("Third block feature for parallelism level "+parallelismLevel+" operator "+i+" operator level "+preview[i]);
 			}
 			for(int i=0;i<maxParallelism+1;i++){
 				for(int j=0;j<this.opName.size();j++){
