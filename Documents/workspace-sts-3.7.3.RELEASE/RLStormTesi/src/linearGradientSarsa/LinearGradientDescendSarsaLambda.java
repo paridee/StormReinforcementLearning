@@ -133,7 +133,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 			}
 			//TODO ONLY FOR DEBUG
 			int printstate	=	-1;
-			double currentLatency	=	logger.debug("Q["+currentState+"]["+i+"] = "+Q[i]);
+			double currentLatency	=	singletons.SystemStatus.processLatency;
 			if(currentLatency<1500){
 				printstate	=	0;
 			}
