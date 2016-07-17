@@ -38,9 +38,9 @@ public class DeltaNonNegativeRewarderRelativeSteps implements RewardCalculator {
 			reward	=	reward+30;
 		}
 		double distDelta	=	oldDistance-currentDist;
-		logger.debug("distance delta "+(distDelta)+" positive means decreased");
 		int machineDelta		=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();
-		if(oldDistance-currentDist>this.distThreshold){
+		logger.debug("distance delta "+(distDelta)+"threshold "+this.distThreshold+" positive means decreased "+" machine delta "+machineDelta);
+		if(distDelta>this.distThreshold){
 			reward	=	reward+1;
 			reward	=	reward + (distDelta/1000);
 			if(machineDelta<0){	//ho aumentato il numero di thread
@@ -50,8 +50,8 @@ public class DeltaNonNegativeRewarderRelativeSteps implements RewardCalculator {
 		}
 		else if(oldDistance-currentDist>-this.distThreshold){	//se non mi sono allontanato oltre la soglia
 			if(machineDelta>0){
-				logger.debug("Instances number decreased, reward "+reward);
 				reward	=	reward+(0.1*machineDelta);
+				logger.debug("Instances number decreased, reward "+reward);
 			}
 		}
 		this.oldDistance		=	currentDist;
