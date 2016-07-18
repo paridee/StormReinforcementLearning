@@ -402,7 +402,7 @@ public class NewStormMonitor implements Runnable {
 					readInterval	=	Double.MAX_VALUE;
 				}
 				double totalServTime=	this.getServiceTime();
-				double utilLevel	=	((double)emitted/readInterval)*totalServTime;
+				double utilLevel	=	((double)emitted/window)*totalServTime;
 				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
 				singletons.SystemStatus.completeUtilization	=	utilLevel;
 				this.LOG.debug("Calculated Processor Equivalent number "+utilLevel+" emitted "+emitted+" read interval "+readInterval+" total service time "+totalServTime);
