@@ -154,11 +154,11 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			this.saveVectors(filename);
 			System.out.println("Omega vector:");
 			for(int i=0;i<featuresN;i++){
-				System.out.print(omega[i]+" ");
+				//System.out.print(omega[i]+" ");
 			}
 			System.out.println("\nTrace vector:");
 			for(int i=0;i<featuresN;i++){
-				System.out.print(eVector[i]+" ");
+				//System.out.print(eVector[i]+" ");
 			}		
 		}
 	}
