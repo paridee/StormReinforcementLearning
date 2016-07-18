@@ -117,6 +117,7 @@ public class MainClass {
 		int 									actionsN	=	(boltsName.size()*6)+1;	
 		//actionsN	=	3; //TODO remove
 		ACTIONS_NUM											=	actionsN;
+		LOG.debug("start prometheus variables");
 		initializePromVariables(boltsName);				//initializes variables for prometheus
 		 
 		int[] steps	=	new int[3];
@@ -167,7 +168,7 @@ public class MainClass {
 		*/
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		//sarsaTh.start();
+		sarsaTh.start();
 	}
 	
 	public static void nonDynamicSteps(){
