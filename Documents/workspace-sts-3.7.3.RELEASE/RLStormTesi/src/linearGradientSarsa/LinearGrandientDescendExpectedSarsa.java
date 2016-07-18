@@ -45,7 +45,7 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 		this.omega				=	new double[featuresN];
 		for(int i=0;i<featuresN;i++){
 			omega[i]			=	1;
-			//System.out.println("Omega "+i+" "+omega[i]);
+			System.out.println("Omega "+i+" "+omega[i]);
 		}
 		this.epsilon 			=	epsilon;
 		this.yota 				= 	yota;
@@ -112,22 +112,25 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			}
 			logger.debug("reward obtained "+reward);
 			logger.debug("delta value "+delta);
-			currentState	=	reader.getCurrentState();
+			currentState	=	reader.getCurrentState();			
 			double Q[]	=	this.getUpdatedQMatrix();			
 			double[] policyR	=	this.chooser.policyForState(currentState,Q);
-			double temp			=	0;
+			double tempP			=	0;
 			for(int i=0;i<actions;i++){
-				temp			=	temp	+	(policyR[i]*Q[i]);
+				if(Q[i]>Double.NEGATIVE_INFINITY){
+					tempP			=	tempP	+	(policyR[i]*Q[i]);
+				}
 			}
-			double V			=	temp;
-			delta	=	delta	+	(yota*V);
+			double V			=	tempP;
+			delta	=	delta	+	(yota*V);			
 			for(int i=0;i<featuresN;i++){
 				//System.out.println("updating values for feature "+i+" omega "+omega[i]);
 				//System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
 				omega[i]	=	omega[i]+(alphaCalculator.getAlpha(action)*delta*eVector[i]);
 				//System.out.println("updated values for feature "+i+" omega "+omega[i]);
 				eVector[i]	=	yota*lambda*eVector[i];
-			}
+			}				
+			logger.debug("updated matrix");
 			Q	=	this.getUpdatedQMatrix();
 			//TODO ONLY FOR DEBUG
 			int printstate	=	-1;
@@ -151,11 +154,11 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			this.saveVectors(filename);
 			System.out.println("Omega vector:");
 			for(int i=0;i<featuresN;i++){
-				//System.out.print(omega[i]+" ");
+				System.out.print(omega[i]+" ");
 			}
 			System.out.println("\nTrace vector:");
 			for(int i=0;i<featuresN;i++){
-				//System.out.print(eVector[i]+" ");
+				System.out.print(eVector[i]+" ");
 			}		
 		}
 	}
@@ -172,6 +175,9 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			}
 			for(int j=0;j<features.length;j++){
 				Q[i]	=	Q[i]	+	(omega[j]*features[j]);
+				if(Q[i]==Double.NaN){
+					logger.debug("NaN value omega "+omega[j]+" features "+features[j]);
+				}
 			}
 			boolean feasible	=	this.executor.isFeasible(currentState,i);
 			if(feasible==false){
