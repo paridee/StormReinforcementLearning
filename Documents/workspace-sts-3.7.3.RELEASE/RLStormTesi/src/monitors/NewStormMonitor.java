@@ -196,6 +196,7 @@ public class NewStormMonitor implements Runnable {
 							JSONObject 	result	=	results.getJSONObject(i);
 							JSONArray	value	=	result.getJSONArray("value");
 							JSONObject  innerMet=	result.getJSONObject("metric");
+							//LOG.debug("test "+innerMet.toString());
 							if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
 								//singletons.SystemStatus.processLatency	=	value.getDouble(1);
 								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
@@ -404,7 +405,7 @@ public class NewStormMonitor implements Runnable {
 				double utilLevel	=	((double)emitted/readInterval)*totalServTime;
 				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
 				singletons.SystemStatus.completeUtilization	=	utilLevel;
-				this.LOG.debug("Calculated Processor Equivalent number "+utilLevel+" emitted "+emitted+" read interval "+readInterval+" total service time "+totalServTime);
+				//this.LOG.debug("Calculated Processor Equivalent number "+utilLevel+" emitted "+emitted+" read interval "+readInterval+" total service time "+totalServTime);
 				
 				
 			}
@@ -438,7 +439,7 @@ public class NewStormMonitor implements Runnable {
 		boltsName.add("firststage");
 		boltsName.add("secondstage");
 		boltsName.add("thirdstage");
-		SystemStatus.bolts	=	boltsName;
+		singletons.SystemStatus.bolts	=	boltsName;
 		NewStormMonitor mon	=	new NewStormMonitor("http://160.80.97.147:9090",15000);
 		Thread aTh	=	new Thread(mon);
 		LOG.debug("starting test TH");
