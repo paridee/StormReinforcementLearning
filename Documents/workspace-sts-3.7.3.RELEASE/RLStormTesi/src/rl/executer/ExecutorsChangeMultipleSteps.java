@@ -186,7 +186,7 @@ public class ExecutorsChangeMultipleSteps implements ActionExecutor {
 		}
 		MainClass.PARALLELISM_VAL.set(totalExecutors);
 		singletons.SystemStatus.workerNumber	=	totalExecutors;
-		String command	=	singletons.Settings.stormPath+"storm rebalance "+this.topologyName+" -w 1 -n "+totalExecutors+execFlags;
+		String command	=	singletons.Settings.stormPath+"storm rebalance "+this.topologyName+" -n "+totalExecutors+execFlags;
 		logger.debug("sending command "+command);
 		Runtime rt 		= 	Runtime.getRuntime();
 		try {
