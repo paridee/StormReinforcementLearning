@@ -87,7 +87,6 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			System.out.println("feat length "+features.length);
 			for(int i=0;i<features.length;i++){
 				if(features[i]==1){
 					eVector[i]	=	1;
@@ -105,13 +104,13 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				e.printStackTrace();
 			}		
 			mainClasses.MainClass.REWARD_VAL.set(reward);
-			logger.debug("reward obtained "+reward);
 			double delta	=	reward;
 			for(int i=0;i<features.length;i++){
 				if(features[i]==1){
 					delta		=	delta	-	omega[i];	
 				}
 			}
+			logger.debug("reward obtained "+reward);
 			logger.debug("delta value "+delta);
 			currentState	=	reader.getCurrentState();
 			double qActionChoosen	=	0;

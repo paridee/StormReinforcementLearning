@@ -167,7 +167,7 @@ public class MainClass {
 		*/
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		sarsaTh.start();
+		//sarsaTh.start();
 	}
 	
 	public static void nonDynamicSteps(){
@@ -208,7 +208,8 @@ public class MainClass {
 		StateReader								reader		=	new ProcessTimeStateReader(3000,0.5,1.5);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
-		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
+		//rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(0.2);//EpsilonGreedyChooser(0.1);
+		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(1);//EpsilonGreedyChooser(0.1);
 		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.8);
 		//Thread sarsaThread									=	new Thread(sarsa);
 		//sarsaThread.start();
