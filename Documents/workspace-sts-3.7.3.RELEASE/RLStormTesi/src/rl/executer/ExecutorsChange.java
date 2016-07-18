@@ -185,7 +185,6 @@ public class ExecutorsChange implements ActionExecutor {
 					}
 				}
 				//logger.debug("action choosen: "+action+" decrease level for bolt "+boltN+" to "+bolts.get(boltN).level);
-				applyLevel();
 			}
 			else if(actionF==1){
 				if(executorLevel[boltN]<this.maxExecutorNumber){
