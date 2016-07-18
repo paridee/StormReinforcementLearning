@@ -37,13 +37,13 @@ public class ProcessTimeStateReaderEvo implements StateReader {
 		}
 		do{
 			feat[1]	=	(int)singletons.SystemStatus.completeUtilization;
-			MainClass.SYST_UTIL.set(feat[1]);
 		}while(feat[1]==-1.0);
 		
 		if(feat[1]>this.maxParallelism){
 			feat[1]=this.maxParallelism;
 		}
-		System.out.println("TEST READER "+feat[1]);
+		MainClass.SYST_UTIL.set(feat[1]);
+		System.out.println("Livello utilizzazione elaborato "+feat[1]);
 		for(int i=0;i<bolts.size();i++){
 			feat[2+i]	=	singletons.SystemStatus.executors.get(bolts.get(i));
 		}

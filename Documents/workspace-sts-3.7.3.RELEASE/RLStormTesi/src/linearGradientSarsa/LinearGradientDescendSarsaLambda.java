@@ -129,6 +129,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				if(feasible==false){
 					Q[i]	=	Double.NEGATIVE_INFINITY;
 				}
+				logger.debug("Q["+printstate+"]["+i+"] = "+Q[i]);
 			}
 			//TODO ONLY FOR DEBUG
 			int printstate	=	-1;
