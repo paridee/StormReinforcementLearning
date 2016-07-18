@@ -113,7 +113,22 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			logger.debug("reward obtained "+reward);
 			logger.debug("delta value "+delta);
 			currentState	=	reader.getCurrentState();
-			double Q[]	=	this.getUpdatedQMatrix();
+			double Q[]	=	this.getUpdatedQMatrix();			
+			double[] policyR	=	this.chooser.policyForState(currentState,Q);
+			double temp			=	0;
+			for(int i=0;i<actions;i++){
+				temp			=	temp	+	(policyR[i]*Q[i]);
+			}
+			double V			=	temp;
+			delta	=	delta	+	(yota*V);
+			for(int i=0;i<featuresN;i++){
+				//System.out.println("updating values for feature "+i+" omega "+omega[i]);
+				//System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
+				omega[i]	=	omega[i]+(alphaCalculator.getAlpha(action)*delta*eVector[i]);
+				//System.out.println("updated values for feature "+i+" omega "+omega[i]);
+				eVector[i]	=	yota*lambda*eVector[i];
+			}
+			Q	=	this.getUpdatedQMatrix();
 			//TODO ONLY FOR DEBUG
 			int printstate	=	-1;
 			double currentLatency	=	singletons.SystemStatus.processLatency;
@@ -131,22 +146,6 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 				logger.debug("Q["+printstate+"]["+i+"] = "+Q[i]);
 			}	
 			//TODO END DEBUG
-			
-			double[] policyR	=	this.chooser.policyForState(currentState,Q);
-			double temp			=	0;
-			for(int i=0;i<actions;i++){
-				temp			=	temp	+	(policyR[i]*Q[i]);
-			}
-			double V			=	temp;
-			delta	=	delta	+	(yota*V);
-			for(int i=0;i<featuresN;i++){
-				//System.out.println("updating values for feature "+i+" omega "+omega[i]);
-				//System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
-				omega[i]	=	omega[i]+(alphaCalculator.getAlpha(action)*delta*eVector[i]);
-				//System.out.println("updated values for feature "+i+" omega "+omega[i]);
-				eVector[i]	=	yota*lambda*eVector[i];
-			}
-			Q	=	this.getUpdatedQMatrix();
 			action				=	chooser.actionForState(currentState, Q);
 			logger.debug("Action choosen "+action);
 			this.saveVectors(filename);
