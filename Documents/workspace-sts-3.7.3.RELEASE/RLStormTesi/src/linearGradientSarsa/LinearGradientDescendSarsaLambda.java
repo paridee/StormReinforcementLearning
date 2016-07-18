@@ -129,8 +129,11 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				if(feasible==false){
 					Q[i]	=	Double.NEGATIVE_INFINITY;
 				}
-				logger.debug("Q["+printstate+"]["+i+"] = "+Q[i]);
+				logger.debug("Q["+i+"] = "+Q[i]);
 			}
+			
+			
+			
 			//TODO ONLY FOR DEBUG
 			int printstate	=	-1;
 			double currentLatency	=	singletons.SystemStatus.processLatency;
@@ -148,6 +151,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 				logger.debug("Q["+printstate+"]["+i+"] = "+Q[i]);
 			}	
 			//TODO END DEBUG
+			
 			
 			action				=	chooser.actionForState(currentState, Q);
 			qActionChoosen			=	Q[action];
