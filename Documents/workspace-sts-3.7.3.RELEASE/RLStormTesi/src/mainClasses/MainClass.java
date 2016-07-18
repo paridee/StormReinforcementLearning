@@ -22,6 +22,7 @@ import features.SimpleFeaturesEvaluatorMultilevel;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.MetricsServlet;
 import linearGradientSarsa.LinearGradientDescendSarsaLambda;
+import linearGradientSarsa.LinearGrandientDescendExpectedSarsa;
 import monitors.NewStormMonitor;
 import monitors.StormMonitor;
 import redis.clients.jedis.Jedis;
@@ -133,7 +134,8 @@ public class MainClass {
 		
 		
 		FeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluatorMultilevel(boltsName,3,6,maxParallelism,translator,executor);
-		LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
+		//LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
+		LinearGrandientDescendExpectedSarsa sarsa	=	new LinearGrandientDescendExpectedSarsa(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
 		/*
 		
 		//TODO TEST
