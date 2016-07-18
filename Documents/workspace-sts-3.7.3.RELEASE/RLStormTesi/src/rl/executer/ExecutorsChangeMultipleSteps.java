@@ -127,8 +127,8 @@ public class ExecutorsChangeMultipleSteps implements ActionExecutor {
 
 	@Override
 	public int[] newConfigurationPreview(int action, int state) {
-		int boltN	=	action/2;
-		int actionF	=	action-(2*boltN);
+		int boltN	=	action/6;
+		int actionF	=	action-(6*boltN);
 		int[] preview	=	new int[executorLevel.length];
 		if(boltN<boltsName.size()){
 			if(actionF<3){
