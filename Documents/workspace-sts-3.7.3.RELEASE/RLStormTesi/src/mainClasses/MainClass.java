@@ -19,6 +19,7 @@ import expectedSarsa.storm.StateTranslator;
 import features.FeaturesEvaluator;
 import features.SimpleFeaturesEvaluator;
 import features.SimpleFeaturesEvaluatorMultilevel;
+import io.prometheus.client.Counter;
 import io.prometheus.client.Gauge;
 import io.prometheus.client.exporter.MetricsServlet;
 import linearGradientSarsa.LinearGradientDescendSarsaLambda;
@@ -54,6 +55,7 @@ public class MainClass {
 	public static final	Gauge	LATENCY_VAL			=	Gauge.build().name("bench_latencyRead").help("Latency read by decisor").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	PARALLELISM_VAL		=	Gauge.build().name("bench_parallelism").help("Parallelism level decided").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	SYST_UTIL			=	Gauge.build().name("bench_utilization").help("System utilization").register();	//prometheus metric to be monitored on Graphana
+	public static final Counter EMITTED_T_IND		=	Counter.build().name("emitted_second_source").help("Second monitor").register();
 	public static final int 	STATES_NUM			=	3;		//states
 	public static int			ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables

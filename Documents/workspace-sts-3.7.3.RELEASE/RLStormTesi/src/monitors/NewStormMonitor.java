@@ -28,6 +28,7 @@ public class NewStormMonitor implements Runnable {
 	int window			=	-1;
 	int acked			=	-1;
 	long rebalanceTime	=	0L;
+	double lastEmittedValue;
 	public NewStormMonitor(String promUrl,int pollingInt){
 		//interval			=	intervalM;
 		this.promUrl		=	promUrl;
@@ -317,6 +318,12 @@ public class NewStormMonitor implements Runnable {
 									emitted	=	(int)value.getDouble(1);
 									if(emitted==0||(emitted<oldEmitted)){
 										rebalanceTime	=	System.currentTimeMillis();
+										lastEmittedValue	=	emitted;
+									}
+									else{
+										MainClass.EMITTED_T_IND.inc(emitted-lastEmittedValue);
+										lastEmittedValue	=	emitted;
+										
 									}
 								}
 							}
