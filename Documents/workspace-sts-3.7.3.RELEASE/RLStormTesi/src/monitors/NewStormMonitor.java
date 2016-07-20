@@ -44,7 +44,7 @@ public class NewStormMonitor implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		LOG.debug("TH started");
+		//LOG.debug("TH started");
 		while(continueEx==true){
 			try {
 				//String query	=	"rate(node_cpu{job=\""+this.subj.promName+"\",mode=\"idle\",instance=\""+this.subj.promInstance+"\"}["+interval/1000+"s])";
@@ -328,7 +328,7 @@ public class NewStormMonitor implements Runnable {
 									else{
 										if(oldEmitted!=-1){
 											double increase	=	emitted-oldEmitted;
-											LOG.debug("increasing emitted");
+											//LOG.debug("increasing emitted");
 											MainClass.BENCH_EMITTED.inc(increase);
 										}
 									}
@@ -342,7 +342,7 @@ public class NewStormMonitor implements Runnable {
 				query	=	"delta(emitted_second_source[2m])";
 				//System.out.println("Query "+query);
 				urlString=promUrl+"/api/v1/query?query="+query;
-				LOG.debug("fetching metrics "+urlString);
+				//LOG.debug("fetching metrics "+urlString);
 				//System.out.println(urlString);
 				oracle = new URL(urlString);
 				con = (HttpURLConnection) oracle.openConnection();
@@ -361,7 +361,7 @@ public class NewStormMonitor implements Runnable {
 						JSONArray results	=	jObj.getJSONArray("result");
 						for(int i=0;i<results.length();i++){
 							JSONObject 	result	=	results.getJSONObject(i);
-							LOG.debug("emint res "+result);
+							//LOG.debug("emint res "+result);
 							JSONArray	value	=	result.getJSONArray("value");
 							JSONObject  innerMet=	result.getJSONObject("metric");
 							//if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
