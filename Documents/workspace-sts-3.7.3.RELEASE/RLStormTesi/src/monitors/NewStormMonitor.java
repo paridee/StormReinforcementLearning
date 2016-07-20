@@ -328,7 +328,7 @@ public class NewStormMonitor implements Runnable {
 									else{
 										if(oldEmitted!=-1){
 											double increase	=	emitted-oldEmitted;
-											LOG.debug("increasing emitted "+increase);
+											//LOG.debug("increasing emitted "+increase);
 											MainClass.BENCH_EMITTED.inc(increase);
 										}
 									}
@@ -460,7 +460,7 @@ public class NewStormMonitor implements Runnable {
 				double utilLevel2	=	((double)emittedInPollingInterval/120000)*totalServTime;
 				MainClass.SYST_UTIL_FINE.set(utilLevel2);
 				MainClass.SYST_UTIL.set(utilLevel);
-				LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2);
+				//LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2);
 				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
 				singletons.SystemStatus.completeUtilization	=	utilLevel2;
 				//this.LOG.debug("Calculated Processor Equivalent number "+utilLevel+" emitted "+emitted+" read interval "+readInterval+" total service time "+totalServTime);
