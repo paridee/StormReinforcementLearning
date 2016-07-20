@@ -329,7 +329,9 @@ public class NewStormMonitor implements Runnable {
 										if(oldEmitted!=-1){
 											double increase	=	emitted-oldEmitted;
 											//LOG.debug("increasing emitted "+increase);
-											MainClass.BENCH_EMITTED.inc(increase);
+											if(increase>0){
+												MainClass.BENCH_EMITTED.inc(increase);
+											}
 										}
 									}
 								}
