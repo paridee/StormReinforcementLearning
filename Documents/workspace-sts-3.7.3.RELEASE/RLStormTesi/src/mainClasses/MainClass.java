@@ -55,7 +55,8 @@ public class MainClass {
 	public static final	Gauge	LATENCY_VAL			=	Gauge.build().name("bench_latencyRead").help("Latency read by decisor").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	PARALLELISM_VAL		=	Gauge.build().name("bench_parallelism").help("Parallelism level decided").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	SYST_UTIL			=	Gauge.build().name("bench_utilization").help("System utilization").register();	//prometheus metric to be monitored on Graphana
-	public static final Counter EMITTED_T_IND		=	Counter.build().name("emitted_second_source").help("Second monitor").register();
+	public static final Counter BENCH_EMITTED		=	Counter.build().name("bench_emitted").help("Emitted tuples fine source").register();
+	public static final	Gauge	SYST_UTIL_FINE		=	Gauge.build().name("bench_utilization_fine").help("System utilization at fine grain").register();	//prometheus metric to be monitored on Graphana
 	public static final int 	STATES_NUM			=	3;		//states
 	public static int			ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
@@ -172,7 +173,7 @@ public class MainClass {
 		*/
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		sarsaTh.start();
+		//sarsaTh.start();
 	}
 	
 	public static void nonDynamicSteps(){

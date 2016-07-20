@@ -28,7 +28,8 @@ public class NewStormMonitor implements Runnable {
 	int window			=	-1;
 	int acked			=	-1;
 	long rebalanceTime	=	0L;
-	double lastEmittedValue;
+	long totalEmitted	=	-1;
+	int emittedInPollingInterval;
 	public NewStormMonitor(String promUrl,int pollingInt){
 		//interval			=	intervalM;
 		this.promUrl		=	promUrl;
@@ -136,6 +137,7 @@ public class NewStormMonitor implements Runnable {
 						}
 					}
 				}
+				
 				query	=	"executed";
 				//System.out.println("Query "+query);
 		
@@ -244,7 +246,7 @@ public class NewStormMonitor implements Runnable {
 							}
 						}
 					}
-				}
+				}		
 				
 				query	=	"executors";
 				//System.out.println("Query "+query);
@@ -316,17 +318,62 @@ public class NewStormMonitor implements Runnable {
 									//LOG.debug("emitted metric "+innerMet.getString("operatorName")+" "+value.getDouble(1));
 									int oldEmitted	=	emitted;
 									emitted	=	(int)value.getDouble(1);
+									if(this.totalEmitted==-1){
+										this.totalEmitted	=	0;
+										
+									}
 									if(emitted==0||(emitted<oldEmitted)){
 										rebalanceTime	=	System.currentTimeMillis();
-										lastEmittedValue	=	emitted;
 									}
 									else{
-										MainClass.EMITTED_T_IND.inc(emitted-lastEmittedValue);
-										lastEmittedValue	=	emitted;
-										
+										if(oldEmitted!=-1){
+											double increase	=	emitted-oldEmitted;
+											LOG.debug("increasing emitted");
+											MainClass.BENCH_EMITTED.inc(increase);
+										}
 									}
 								}
 							}
+						}
+					}
+				}
+				
+				int seconds	=	this.pollingInt/1000;
+				query	=	"delta(emitted_second_source[2m])";
+				//System.out.println("Query "+query);
+				urlString=promUrl+"/api/v1/query?query="+query;
+				LOG.debug("fetching metrics "+urlString);
+				//System.out.println(urlString);
+				oracle = new URL(urlString);
+				con = (HttpURLConnection) oracle.openConnection();
+				con.setRequestMethod("GET");
+				responseCode = con.getResponseCode();
+				//LOG.debug("\nSending 'GET' request to URL : " + urlString+" response code "+responseCode);
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				outl=null;
+				while ((inputLine = in.readLine()) != null){
+					//LOG.info("Metric query result "+inputLine);
+					outl	=	inputLine;
+					if(outl!=null){
+						//LOG.debug("fetched metrics JSON: "+outl);
+						JSONObject jObj		=	new JSONObject(outl);
+						jObj				=	jObj.getJSONObject("data");
+						JSONArray results	=	jObj.getJSONArray("result");
+						for(int i=0;i<results.length();i++){
+							JSONObject 	result	=	results.getJSONObject(i);
+							LOG.debug("emint res "+result);
+							JSONArray	value	=	result.getJSONArray("value");
+							JSONObject  innerMet=	result.getJSONObject("metric");
+							//if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
+								//singletons.SystemStatus.processLatency	=	value.getDouble(1);
+								//LOG.debug("set system latency to "+singletons.SystemStatus.processLatency);
+								//if((innerMet.getString("name").equals(singletons.Settings.topologyName))){
+									//LOG.debug("capacity metric "+innerMet.getString("operatorName")+" "+value.getDouble(1));
+									//singletons.SystemStatus.operatorCapacity.put(innerMet.getString("operatorName"), value.getDouble(1));
+									emittedInPollingInterval	=	(int) value.getDouble(1);
+									System.out.println("emitted in polling interval "+emittedInPollingInterval);
+								//}
+							//}
 						}
 					}
 				}
@@ -410,8 +457,11 @@ public class NewStormMonitor implements Runnable {
 				}
 				double totalServTime=	this.getServiceTime();
 				double utilLevel	=	((double)emitted/window)*totalServTime;
+				double utilLevel2	=	((double)emittedInPollingInterval/120000)*totalServTime;
+				MainClass.SYST_UTIL_FINE.set(utilLevel2);
+				MainClass.SYST_UTIL.set(utilLevel);
 				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
-				singletons.SystemStatus.completeUtilization	=	utilLevel;
+				singletons.SystemStatus.completeUtilization	=	utilLevel2;
 				//this.LOG.debug("Calculated Processor Equivalent number "+utilLevel+" emitted "+emitted+" read interval "+readInterval+" total service time "+totalServTime);
 				
 				
@@ -442,6 +492,7 @@ public class NewStormMonitor implements Runnable {
 	}
 	public static void main(String[] args) {
 		BasicConfigurator.configure();			//default logging configuration
+		MainClass.launchWebServerForPrometheus();
 		ArrayList<String> boltsName	=	new ArrayList<String>();
 		boltsName.add("firststage");
 		boltsName.add("secondstage");
