@@ -373,7 +373,7 @@ public class NewStormMonitor implements Runnable {
 									//LOG.debug("capacity metric "+innerMet.getString("operatorName")+" "+value.getDouble(1));
 									//singletons.SystemStatus.operatorCapacity.put(innerMet.getString("operatorName"), value.getDouble(1));
 									emittedInPollingInterval	=	(int) value.getDouble(1);
-									System.out.println("emitted in polling interval "+emittedInPollingInterval);
+									//System.out.println("emitted in polling interval "+emittedInPollingInterval);
 								//}
 							//}
 						}
