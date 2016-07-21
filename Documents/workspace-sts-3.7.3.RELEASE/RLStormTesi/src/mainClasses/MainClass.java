@@ -176,7 +176,7 @@ public class MainClass {
 		*/
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		//sarsaTh.start();
+		sarsaTh.start();
 	}
 	
 	public static void nonDynamicSteps(){
