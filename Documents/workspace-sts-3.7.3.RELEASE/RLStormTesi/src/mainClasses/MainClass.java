@@ -51,6 +51,7 @@ public class MainClass {
 	public static int 	 		monitoringInterval	=	Settings.decisionInterval;							//storm monitoring interval (>=60000)
 	public static final String	PROMETHEUS_URL		=	"http://160.80.97.147:9090";	//prometheus server url
 	public static final String	PROMETHEUS_PUSHG	=	"http://160.80.97.147:9091";	//prometheus push gateway
+	public static final String	STORMUI_URL			=	"http://160.80.97.147:8090";	//storm UI url
 	public static final	Gauge	REWARD_VAL			=	Gauge.build().name("bench_rewardVal").help("Reward received value").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	LATENCY_VAL			=	Gauge.build().name("bench_latencyRead").help("Latency read by decisor").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	PARALLELISM_VAL		=	Gauge.build().name("bench_parallelism").help("Parallelism level decided").register();	//prometheus metric to be monitored on Graphana
@@ -73,12 +74,7 @@ public class MainClass {
 	
 	public static void dynamicSteps(){
 		int maxParallelism	=	32;
-		ArrayList<String> boltsName	=	new ArrayList<String>();
-		boltsName.add("firststage");
-		boltsName.add("secondstage");
-		boltsName.add("thirdstage");
-		SystemStatus.bolts	=	boltsName;
-	    Jedis jedis = new Jedis("127.0.0.1",6379);
+		Jedis jedis = new Jedis("127.0.0.1",6379);
 	    jedis.flushAll();	    
 	    StateTranslator translator	=	new StateTranslator(3, 3, 32, jedis);
 	    
@@ -86,8 +82,15 @@ public class MainClass {
 		Thread			sm_th	=	new Thread(sm);
 		sm_th.start();
 		
-		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,10000);
+		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,STORMUI_URL,10000);
 		Thread			rm_th	=	new Thread(rm);
+		ArrayList<String> boltsName	=	new ArrayList();
+		while(boltsName.size()==0){
+			boltsName	=	rm.getBoltsName();	
+		}
+		
+		SystemStatus.bolts	=	boltsName;
+	    
 		rm_th.start();
 		while(SystemStatus.executors.size()==0){
 			try {
@@ -173,24 +176,25 @@ public class MainClass {
 		*/
 		Thread									sarsaTh		=	new Thread(sarsa);
 		launchWebServerForPrometheus();			//launches a web server for prometheus monitoring
-		sarsaTh.start();
+		//sarsaTh.start();
 	}
 	
 	public static void nonDynamicSteps(){
-
-		ArrayList<String> boltsName	=	new ArrayList<String>();
-		boltsName.add("firststage");
-		boltsName.add("secondstage");
-		boltsName.add("thirdstage");
-		SystemStatus.bolts	=	boltsName;
 		
 		StormMonitor 		sm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
 		Thread			sm_th	=	new Thread(sm);
 		sm_th.start();
 		
-		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,20000);
+		NewStormMonitor 	rm		=	new NewStormMonitor(PROMETHEUS_URL,STORMUI_URL,20000);
 		Thread			rm_th	=	new Thread(rm);
 		rm_th.start();
+
+		ArrayList<String> boltsName	=	new ArrayList<String>();
+		boltsName.add("firststage");
+		boltsName.add("secondstage");
+		boltsName.add("thirdstage");
+		boltsName	=	rm.getBoltsName();
+		SystemStatus.bolts	=	boltsName;
 		while(SystemStatus.executors.size()==0){
 			try {
 				Thread.sleep(1000);

@@ -50,7 +50,7 @@ public class DeltaNonNegativeRewarderRelativeSteps implements RewardCalculator {
 		}
 		else if(oldDistance-currentDist>-this.distThreshold){	//se non mi sono allontanato oltre la soglia
 			if(machineDelta>0){
-				reward	=	reward+(0.4*machineDelta);
+				reward	=	reward+(machineDelta);
 				logger.debug("Instances number decreased, reward "+reward);
 			}
 		}

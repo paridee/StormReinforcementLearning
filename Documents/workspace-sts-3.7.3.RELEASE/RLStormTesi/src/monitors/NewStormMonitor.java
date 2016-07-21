@@ -1,8 +1,10 @@
 package monitors;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ public class NewStormMonitor implements Runnable {
 	long latestLatencyRead=0;
 	double latestLatencyValueRead=0;
 	private String promUrl;
+	private String stormUIUrl;
 	private int pollingInt;
 	private HashMap<String,Double> executeLatencyBolt	=	new HashMap();
 	private HashMap<String,Double> executedBolt			=	new HashMap();
@@ -30,8 +33,10 @@ public class NewStormMonitor implements Runnable {
 	long rebalanceTime	=	0L;
 	long totalEmitted	=	-1;
 	int emittedInPollingInterval;
-	public NewStormMonitor(String promUrl,int pollingInt){
+	String idT	=	null;
+	public NewStormMonitor(String promUrl,String stormUIUrl,int pollingInt){
 		//interval			=	intervalM;
+		this.stormUIUrl		=	stormUIUrl;
 		this.promUrl		=	promUrl;
 		this.pollingInt		=	pollingInt;
 		this.latestLatencyRead	=	System.currentTimeMillis();
@@ -461,7 +466,7 @@ public class NewStormMonitor implements Runnable {
 				double utilLevel	=	((double)emitted/window)*totalServTime;
 				double utilLevel2	=	((double)emittedInPollingInterval/120000)*totalServTime;
 				MainClass.SYST_UTIL_FINE.set(utilLevel2);
-				MainClass.SYST_UTIL.set(utilLevel);
+				//MainClass.SYST_UTIL.set(utilLevel);
 				//LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2);
 				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
 				singletons.SystemStatus.completeUtilization	=	utilLevel2;
@@ -493,6 +498,100 @@ public class NewStormMonitor implements Runnable {
 		}
 		return st;
 	}
+	
+
+	public ArrayList<String> getBoltsName() {
+		ArrayList<String> names	=	new ArrayList<String>();
+		String urlString=this.stormUIUrl+"/api/v1/topology/summary";
+		//LOG.debug("fetching metrics "+urlString);
+		//System.out.println(urlString);
+		URL oracle;
+		try {
+			oracle = new URL(urlString);
+		HttpURLConnection con = (HttpURLConnection) oracle.openConnection();
+		con.setRequestMethod("GET");
+		int responseCode = con.getResponseCode();
+		//LOG.debug("\nSending 'GET' request to URL : " + urlString+" response code "+responseCode);
+		BufferedReader in;
+		in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+		String inputLine;
+		String outl=null;
+		while ((inputLine = in.readLine()) != null){
+			//LOG.info("Metric query result "+inputLine);
+			outl	=	inputLine;
+			if(outl!=null){
+				//LOG.debug("fetched metrics JSON: "+outl);
+				JSONObject jObj		=	new JSONObject(outl);
+				//LOG.debug("has topologies? "+jObj.has("topologies"));
+				if(jObj.has("topologies")){
+					JSONArray topologies	=	jObj.getJSONArray("topologies");
+					for(int i=0;i<topologies.length();i++){
+						JSONObject topology	=	topologies.getJSONObject(i);
+						if(topology.has("name")){
+							String topName	=	topology.getString("name");
+							//LOG.debug("TOP NAME "+topName);
+							if(topName.equals(singletons.Settings.topologyName)){
+								if(topology.has("encodedId")){
+									idT	=	topology.getString("encodedId");
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(idT!=null){
+			urlString=this.stormUIUrl+"/api/v1/topology/"+idT;
+			//LOG.debug("fetching metrics "+urlString);
+			//System.out.println(urlString);
+			try {
+				oracle = new URL(urlString);
+			HttpURLConnection con = (HttpURLConnection) oracle.openConnection();
+			con.setRequestMethod("GET");
+			int responseCode = con.getResponseCode();
+			//LOG.debug("\nSending 'GET' request to URL : " + urlString+" response code "+responseCode);
+			BufferedReader in;
+			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			String outl=null;
+			while ((inputLine = in.readLine()) != null){
+				outl	=	inputLine;
+				if(outl!=null){
+					//LOG.debug("fetched metrics JSON: "+outl);
+					JSONObject jObj		=	new JSONObject(outl);
+					//LOG.debug("has topologies? "+jObj.has("topologies"));
+					if(jObj.has("bolts")){
+						JSONArray bolts	=	jObj.getJSONArray("bolts");
+						for(int i=0;i<bolts.length();i++){
+							JSONObject bolt	=	bolts.getJSONObject(i);
+							if(bolt.has("encodedBoltId")){
+								String boltName	=	bolt.getString("encodedBoltId");
+								names.add(boltName);
+								//LOG.debug("BOLT NAME "+boltName);
+							}
+						}
+					}
+				}
+			}
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return names;
+	}
+	
 	public static void main(String[] args) {
 		BasicConfigurator.configure();			//default logging configuration
 		MainClass.launchWebServerForPrometheus();
@@ -501,9 +600,10 @@ public class NewStormMonitor implements Runnable {
 		boltsName.add("secondstage");
 		boltsName.add("thirdstage");
 		singletons.SystemStatus.bolts	=	boltsName;
-		NewStormMonitor mon	=	new NewStormMonitor("http://160.80.97.147:9090",15000);
+		NewStormMonitor mon	=	new NewStormMonitor("http://160.80.97.147:9090","http://160.80.97.147:8090",15000);
+		mon.getBoltsName();
 		Thread aTh	=	new Thread(mon);
-		LOG.debug("starting test TH");
+		//LOG.debug("starting test TH");
 		aTh.start();
 	}
 }
