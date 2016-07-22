@@ -132,7 +132,7 @@ public class MainClass {
 		steps[0]	=	1;
 		steps[1]	=	maxParallelism/16;
 		steps[2]	=	maxParallelism/8;
-		ActionExecutor							executor	=	new ExecutorsChangeMultipleSteps(boltsName,steps, maxParallelism, singletons.Settings.topologyName,intManager,rewarder);
+		ActionExecutor							executor	=	new ExecutorsChangeMultipleSteps(boltsName,actionsN, steps, maxParallelism, singletons.Settings.topologyName,intManager,rewarder);
 		//BottleneckExecutor							executor	=	new BottleneckExecutor(rewarder,intManager,32);
 		//chooser	=	new EpsilonGreedyWithFeasibilityCheck(executor,0.1);
 		
@@ -140,7 +140,7 @@ public class MainClass {
 		//Thread									sarsaTh		=	new Thread(sarsa);
 		
 		
-		FeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluatorMultilevel(boltsName,3,6,maxParallelism,translator,executor);
+		FeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluatorMultilevel(boltsName,steps, 3,6,maxParallelism,translator,executor);
 		//LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
 		LinearGrandientDescendExpectedSarsa sarsa	=	new LinearGrandientDescendExpectedSarsa(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
 		/*
