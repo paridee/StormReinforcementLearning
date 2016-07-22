@@ -44,7 +44,7 @@ public class ProcessTimeStateReaderEvo implements StateReader {
 			double orig	=	singletons.SystemStatus.completeUtilization;
 			feat[1]		=	(int)orig;
 			LOG.debug("reading level "+feat[1]+" original ");
-		}while(feat[1]==-1.0);
+		}while(feat[1]<=-1.0);
 		
 		if(feat[1]>this.maxParallelism){
 			feat[1]=this.maxParallelism;
