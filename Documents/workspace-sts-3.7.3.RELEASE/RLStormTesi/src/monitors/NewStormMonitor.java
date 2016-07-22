@@ -475,14 +475,14 @@ public class NewStormMonitor implements Runnable {
 						if(temp<Double.MAX_VALUE){
 							MainClass.SYST_UTIL_FINE.set(temp);
 							singletons.SystemStatus.completeUtilization	=	temp;
-							LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);					
+							//LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);					
 						}
 					}
 					else if(temp<0){
 						temp	=	0;
 						MainClass.SYST_UTIL_FINE.set(temp);
 						singletons.SystemStatus.completeUtilization	=	temp;
-						LOG.debug("Reset: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);					
+						//LOG.debug("Reset: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);					
 					}
 				}
 				

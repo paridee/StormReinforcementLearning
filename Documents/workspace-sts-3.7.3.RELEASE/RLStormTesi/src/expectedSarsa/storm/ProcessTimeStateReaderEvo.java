@@ -50,7 +50,7 @@ public class ProcessTimeStateReaderEvo implements StateReader {
 			feat[1]=this.maxParallelism;
 		}
 		MainClass.SYST_UTIL.set(feat[1]);
-		System.out.println("Livello utilizzazione elaborato "+feat[1]);
+		//System.out.println("Livello utilizzazione elaborato "+feat[1]);
 		for(int i=0;i<bolts.size();i++){
 			feat[2+i]	=	singletons.SystemStatus.executors.get(bolts.get(i));
 		}

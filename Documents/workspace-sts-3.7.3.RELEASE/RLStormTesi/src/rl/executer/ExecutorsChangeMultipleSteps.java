@@ -178,7 +178,7 @@ public class ExecutorsChangeMultipleSteps implements ActionExecutor {
 			totalExecutors	=	totalExecutors	+	executorLevel[i];
 			execFlags		=	execFlags+" -e "+this.boltsName.get(i)+"="+this.executorLevel[i];
 			singletons.SystemStatus.setExecutorLevel(this.boltsName.get(i), this.executorLevel[i]);
-			logger.debug("Executor level increase "+executorLevel[i]+" total "+totalExecutors);
+			//logger.debug("Executor level increase "+executorLevel[i]+" total "+totalExecutors);
 		}
 		if(totalExecutors%coresPerMachine==0){
 			totalExecutors	=	totalExecutors/coresPerMachine;
