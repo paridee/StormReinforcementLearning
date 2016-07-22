@@ -469,10 +469,12 @@ public class NewStormMonitor implements Runnable {
 				//LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2);
 				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
 				double temp	=	singletons.SystemStatus.completeUtilization;
-				temp	=	(0.9*temp)+(0.1*utilLevel2);
-				MainClass.SYST_UTIL_FINE.set(temp);
-				singletons.SystemStatus.completeUtilization	=	temp;
-				LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);
+				if(temp!=Double.NaN){
+					temp	=	(0.9*temp)+(0.1*utilLevel2);
+					MainClass.SYST_UTIL_FINE.set(temp);
+					singletons.SystemStatus.completeUtilization	=	temp;
+				}
+				//LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);
 				//this.LOG.debug("Calculated Processor Equivalent number "+utilLevel+" emitted "+emitted+" read interval "+readInterval+" total service time "+totalServTime);
 				
 				
