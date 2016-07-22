@@ -54,7 +54,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 		if(operator==opName.size()&&actionV==0){
 			features[(state*this.featuresPerState)+5]	=	1;
 			offset	=	this.featuresPerState-1;
-			logger.debug("Feature leave unchanged");
+			logger.debug("Feature leave unchanged loaded in state load "+state);
 		}
 		else if(operator>opName.size()||(operator==opName.size()&&actionV>0)){
 			//System.out.print(" not allowed\n");
@@ -65,18 +65,18 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 				if(singletons.SystemStatus.isLeastLoaded(op)){
 					features[(state*this.featuresPerState)+0]	=	1; 
 					offset	=	0;
-					logger.debug("Feature decrease least loaded");
+					logger.debug("Feature decrease least loaded in state load "+state);
 				//	System.out.print(" least loaded\n");
 				}
 				else if(singletons.SystemStatus.isBottleneck(op)){
 					features[(state*this.featuresPerState)+2]	=	1;
 					offset	=	2;
-					logger.debug("Feature decrease bottleneck");
+					logger.debug("Feature decrease bottleneck loaded in state load "+state);
 					//System.out.print(" bottleneck\n");
 				}
 				else{
 					features[(state*this.featuresPerState)+4]	=	1;
-					logger.debug("Feature decrease intermediate");
+					logger.debug("Feature decrease intermediate loaded in state load "+state);
 					offset	=	4;
 				}
 			}
@@ -85,12 +85,12 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 				if(singletons.SystemStatus.isBottleneck(op)){
 					logger.debug("operator "+op+" is bottleneck increase action "+action);
 					features[(state*this.featuresPerState)+1]	=	1;
-					logger.debug("Feature increase bottleneck");
+					logger.debug("Feature increase bottleneck loaded in state load "+state);
 					offset	=	1;
 				}
 				else{
 					features[(state*this.featuresPerState)+3]	=	1;
-					logger.debug("Feature increase another");
+					logger.debug("Feature increase another loaded in state load "+state);
 					offset	=	3;
 				}
 			}
