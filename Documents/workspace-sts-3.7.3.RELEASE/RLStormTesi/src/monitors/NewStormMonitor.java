@@ -470,7 +470,7 @@ public class NewStormMonitor implements Runnable {
 				//this.LOG.debug("Calculated utilization emitted: "+emitted+" interval: "+readInterval+" latency: "+latency+" VALUE: "+utilLevel);
 				double temp	=	singletons.SystemStatus.completeUtilization;
 				if(utilLevel2!=Double.NaN){
-					temp	=	(0.99*temp)+(0.01*utilLevel2);
+					temp	=	(0.95*temp)+(0.05*utilLevel2);
 					if(temp>=0){
 						if(temp<Double.MAX_VALUE){
 							MainClass.SYST_UTIL_FINE.set(temp);
