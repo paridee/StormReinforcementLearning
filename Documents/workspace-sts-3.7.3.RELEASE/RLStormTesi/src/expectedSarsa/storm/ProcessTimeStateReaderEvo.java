@@ -2,14 +2,19 @@ package expectedSarsa.storm;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import expectedSarsa.StateReader;
 import mainClasses.MainClass;
+import monitors.NewStormMonitor;
 
 public class ProcessTimeStateReaderEvo implements StateReader {
 	int lowerBound;
 	int upperBound;
 	StateTranslator translator;
 	int maxParallelism;
+	private static final Logger LOG = LoggerFactory.getLogger(ProcessTimeStateReaderEvo.class);
 	
 	public ProcessTimeStateReaderEvo(int lowerBound, int upperBound, StateTranslator translator,int maxParallelism) {
 		super();
@@ -36,7 +41,9 @@ public class ProcessTimeStateReaderEvo implements StateReader {
 			feat[0]		=	2;
 		}
 		do{
-			feat[1]	=	(int)singletons.SystemStatus.completeUtilization;
+			double orig	=	singletons.SystemStatus.completeUtilization;
+			feat[1]		=	(int)orig;
+			LOG.debug("reading level "+feat[1]+" original ");
 		}while(feat[1]==-1.0);
 		
 		if(feat[1]>this.maxParallelism){

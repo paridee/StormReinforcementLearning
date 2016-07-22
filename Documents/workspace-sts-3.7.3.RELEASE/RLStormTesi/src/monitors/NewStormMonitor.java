@@ -474,7 +474,7 @@ public class NewStormMonitor implements Runnable {
 					MainClass.SYST_UTIL_FINE.set(temp);
 					singletons.SystemStatus.completeUtilization	=	temp;
 				}
-				//LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);
+				LOG.debug("Load levels: "+utilLevel+" fine: "+utilLevel2+" smoothed "+temp);
 				//this.LOG.debug("Calculated Processor Equivalent number "+utilLevel+" emitted "+emitted+" read interval "+readInterval+" total service time "+totalServTime);
 				
 				
