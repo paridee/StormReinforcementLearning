@@ -15,21 +15,23 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 	int maxParallelism;
 	StateTranslator translator;
 	ActionExecutor  executor;
+	int[] steps;
 	int totalSize;
 	public final static Logger logger	=	LogManager.getLogger(SimpleFeaturesEvaluatorMultilevel.class);
 	
 	
 	
-	public SimpleFeaturesEvaluatorMultilevel(ArrayList<String> opName, int states, int featuresPerState,
+	public SimpleFeaturesEvaluatorMultilevel(ArrayList<String> opName,int[] steps, int states, int featuresPerState,
 			int maxParallelism, StateTranslator translator, ActionExecutor executor) {
 		super();
 		this.opName = opName;
+		this.steps	= steps;
 		this.states = states;
 		this.featuresPerState = featuresPerState;
 		this.maxParallelism = maxParallelism;
 		this.translator = translator;
 		this.executor = executor;
-		totalSize	=	(featuresPerState*states)+((maxParallelism+1)*this.states*3*this.featuresPerState)+((maxParallelism+1)*(maxParallelism+1)*opName.size());
+		totalSize	=	(featuresPerState*states)+((maxParallelism+1)*this.states*steps.length*this.featuresPerState)+((maxParallelism+1)*(maxParallelism+1)*opName.size());
 		
 	}
 
@@ -45,9 +47,9 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 		int[] allFeatures	=	new int[totalSize];
 		int[] features	=	new int[featuresPerState*states];
 		//System.out.print("features number "+features.length);
-		int operator	=	action/6;
-		int actionV		=	action%6;
-		int changeStep	=	actionV%3;
+		int operator	=	action/(2*steps.length); //counts steps as increase + decrease
+		int actionV		=	action%(2*steps.length);
+		int changeStep	=	actionV%steps.length;
 		int offset		=	Integer.MAX_VALUE;
 		if(operator==opName.size()&&actionV==0){
 			features[(state*this.featuresPerState)+5]	=	1;
@@ -58,7 +60,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 			//System.out.print(" not allowed\n");
 		}
 		else{
-			if(actionV<3){
+			if(actionV<steps.length){
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isLeastLoaded(op)){
 					features[(state*this.featuresPerState)+0]	=	1; 
@@ -78,7 +80,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 					offset	=	4;
 				}
 			}
-			else if(actionV<6){
+			else if(actionV<2*steps.length){
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isBottleneck(op)){
 					logger.debug("operator "+op+" is bottleneck increase action "+action);
@@ -99,14 +101,14 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 			cursor++;
 		}
 
-		int[][][][] secondBlock	= 	new int[maxParallelism+1][this.states][3][this.featuresPerState];
+		int[][][][] secondBlock	= 	new int[maxParallelism+1][this.states][steps.length][this.featuresPerState];
 		if(offset<(this.featuresPerState)){
 			secondBlock[parallelismLevel][state][changeStep][offset]	=	1;
 			logger.debug("Second Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
 		}
 		for(int i=0;i<maxParallelism+1;i++){
 			for(int j=0;j<this.states;j++){
-				for(int k=0;k<3;k++){
+				for(int k=0;k<steps.length;k++){
 					for(int l=0;l<this.featuresPerState;l++){
 						allFeatures[cursor]	=	secondBlock[i][j][k][l];
 						cursor++;

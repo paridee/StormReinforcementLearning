@@ -22,12 +22,13 @@ public class ExecutorsChangeMultipleSteps implements ActionExecutor {
 	private IntervalManager intManager;
 	RewardCalculator rewCalculator;
 
-	public ExecutorsChangeMultipleSteps(ArrayList<String>boltsName,int[] steps,int maxExecutorNumber,String topologyName, IntervalManager intManager,RewardCalculator rewCalculator){
+	public ExecutorsChangeMultipleSteps(ArrayList<String>boltsName,int 	coresPerMachine,int[] steps,int maxExecutorNumber,String topologyName, IntervalManager intManager,RewardCalculator rewCalculator){
 		super();
 		executorLevel			=	new int[boltsName.size()];
 		this.boltsName			=	boltsName;
 		this.steps				=	steps;
 		this.maxExecutorNumber	=	maxExecutorNumber;
+		this.coresPerMachine	=	coresPerMachine;
 		this.topologyName		=	topologyName;
 		this.intManager			=	intManager;
 		this.rewCalculator		=	rewCalculator;
