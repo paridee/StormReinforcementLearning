@@ -31,7 +31,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		this.maxParallelism = maxParallelism;
 		this.translator = translator;
 		this.executor = executor;
-		totalSize	=	(featuresPerState*states)+((maxParallelism+1)*this.states*steps.length*this.featuresPerState)+(this.states*3*this.featuresPerState)+(3*this.states*steps.length*this.featuresPerState)+(this.states*(this.maxParallelism+1)*this.featuresPerState)+((maxParallelism+1)*(maxParallelism+1)*opName.size());
+		totalSize	=	(featuresPerState*states)+((maxParallelism+1)*this.states*steps.length*this.featuresPerState)+(this.states*steps.length*this.featuresPerState)+(this.states*3*this.featuresPerState)+(3*this.states*steps.length*this.featuresPerState)+(this.states*(this.maxParallelism+1)*this.featuresPerState)+((maxParallelism+1)*(maxParallelism+1)*opName.size());
 		
 	}
 
@@ -118,16 +118,32 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			}
 		}
 		
-		int[][][][] thirdBlock	= 	new int[3][this.states][steps.length][this.featuresPerState];
+
+		int[][][] thirdBlock	= 	new int[this.states][steps.length][this.featuresPerState];
 		if(offset<(this.featuresPerState)){
-			thirdBlock[loadMacroLevel][state][changeStep][offset]	=	1;
-			logger.debug("Third Block Feature offset "+offset+" for macrolevel "+loadMacroLevel+" state "+state+" step "+changeStep);
+			thirdBlock[state][changeStep][offset]	=	1;
+			logger.debug("Third Block Feature offset "+offset+" state "+state+" step "+changeStep);
+		}
+		for(int j=0;j<this.states;j++){
+			for(int k=0;k<steps.length;k++){
+				for(int l=0;l<this.featuresPerState;l++){
+					allFeatures[cursor]	=	thirdBlock[j][k][l];
+					cursor++;
+				}
+				
+			}
+		}
+		
+		int[][][][] fourthBlock	= 	new int[3][this.states][steps.length][this.featuresPerState];
+		if(offset<(this.featuresPerState)){
+			fourthBlock[loadMacroLevel][state][changeStep][offset]	=	1;
+			logger.debug("Fourth Block Feature offset "+offset+" for macrolevel "+loadMacroLevel+" state "+state+" step "+changeStep);
 		}
 		for(int i=0;i<3;i++){
 			for(int j=0;j<this.states;j++){
 				for(int k=0;k<steps.length;k++){
 					for(int l=0;l<this.featuresPerState;l++){
-						allFeatures[cursor]	=	thirdBlock[i][j][k][l];
+						allFeatures[cursor]	=	fourthBlock[i][j][k][l];
 						cursor++;
 					}
 					
@@ -135,28 +151,28 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			}
 		}
 		
-		int[][][]	fourthBlock	=	new int[this.states][this.maxParallelism+1][this.featuresPerState];	
-		fourthBlock[state][parallelismLevel][offset]	=	1;
-		logger.debug("Fourth Block Feature offset "+offset+" state "+state+" parallelism "+parallelismLevel);
+		int[][][]	fifth	=	new int[this.states][this.maxParallelism+1][this.featuresPerState];	
+		fifth[state][parallelismLevel][offset]	=	1;
+		logger.debug("Fifth Block Feature offset "+offset+" state "+state+" parallelism "+parallelismLevel);
 		for(int i=0;i<this.states;i++){
 			for(int j=0;j<this.maxParallelism+1;j++){
 				for(int k=0;k<this.featuresPerState;k++){
-					allFeatures[cursor]	=	fourthBlock[i][j][k];
+					allFeatures[cursor]	=	fifth[i][j][k];
 					cursor++;
 				}
 			}
 		}
 		
-		int[][][][] fifthBlock	= 	new int[maxParallelism+1][this.states][steps.length][this.featuresPerState];
+		int[][][][] sixthBlock	= 	new int[maxParallelism+1][this.states][steps.length][this.featuresPerState];
 		if(offset<(this.featuresPerState)){
-			fifthBlock[parallelismLevel][state][changeStep][offset]	=	1;
-			logger.debug("Fifth Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
+			sixthBlock[parallelismLevel][state][changeStep][offset]	=	1;
+			logger.debug("Sixth Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
 		}
 		for(int i=0;i<maxParallelism+1;i++){
 			for(int j=0;j<this.states;j++){
 				for(int k=0;k<steps.length;k++){
 					for(int l=0;l<this.featuresPerState;l++){
-						allFeatures[cursor]	=	fifthBlock[i][j][k][l];
+						allFeatures[cursor]	=	sixthBlock[i][j][k][l];
 						cursor++;
 					}
 					
@@ -164,17 +180,17 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			}
 		}
 		
-		int[][][] sixthBlock	=	new int[maxParallelism+1][opName.size()][maxParallelism+1];
+		int[][][] seventhBlock	=	new int[maxParallelism+1][opName.size()][maxParallelism+1];
 		if(state<2){
 			int[] preview		=	executor.newConfigurationPreview(action, stateRaw);
 			for(int i=0;i<preview.length;i++){
-				sixthBlock[parallelismLevel][i][preview[i]]=1;
-				logger.debug("Sixth block feature for parallelism level "+parallelismLevel+" operator "+i+" operator level "+preview[i]);
+				seventhBlock[parallelismLevel][i][preview[i]]=1;
+				logger.debug("Seventh block feature for parallelism level "+parallelismLevel+" operator "+i+" operator level "+preview[i]);
 			}
 			for(int i=0;i<maxParallelism+1;i++){
 				for(int j=0;j<this.opName.size();j++){
 					for(int k=0;k<maxParallelism+1;k++){
-						allFeatures[cursor]	=	sixthBlock[i][j][k];
+						allFeatures[cursor]	=	seventhBlock[i][j][k];
 						cursor++;					
 					}
 				}

@@ -118,7 +118,7 @@ public class MainClass {
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(1);//EpsilonGreedyChooser(0.1);
-		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.3);
+		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.1);
 		//Thread sarsaThread									=	new Thread(sarsa);
 		//sarsaThread.start();
 		
