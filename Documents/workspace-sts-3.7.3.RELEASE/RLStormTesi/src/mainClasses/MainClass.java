@@ -15,6 +15,7 @@ import expectedSarsa.FixedIntervalManager;
 import expectedSarsa.StateReader;
 import expectedSarsa.storm.ProcessTimeStateReader;
 import expectedSarsa.storm.ProcessTimeStateReaderEvo;
+import expectedSarsa.storm.ProcessTimeStateReaderEvoCapacity;
 import expectedSarsa.storm.StateTranslator;
 import features.FeaturesEvaluator;
 import features.SimpleFeaturesEvaluator;
@@ -114,7 +115,8 @@ public class MainClass {
 		RewardCalculator						rewarder	=	new DeltaNonNegativeRewarderRelativeStepsWithCapacity(300,3000,4500,maxParallelism);
 		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500,true);
 		//RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
-		StateReader								reader		=	new ProcessTimeStateReaderEvo(1500,4500,translator,maxParallelism);
+		//StateReader								reader		=	new ProcessTimeStateReaderEvo(1500,4500,translator,maxParallelism);
+		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacity(1500,4500,translator,maxParallelism,0.8);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(1);//EpsilonGreedyChooser(0.1);

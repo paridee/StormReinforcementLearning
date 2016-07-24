@@ -71,7 +71,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 			int repLevel	=	singletons.SystemStatus.executors.get(boltName);
 			if(repLevel>1){
 				double capacity	=	singletons.SystemStatus.operatorCapacity.get(boltName);
-				if(capacity<0.7){
+				if(capacity<0.8){	//TODO remove from here...
 					return false;
 				}
 			}
