@@ -55,6 +55,11 @@ public class ProcessTimeStateReaderEvoCapacity implements StateReader {
 				opLevel	=	9;
 			}
 			feat[2+bolts.size()+i]	=	opLevel;
+			if(singletons.SystemStatus.executors.get(bolts.get(i))>1){
+				if(opLevel<this.correctLoadThreshold){
+					underloaded	=	true;
+				}
+			}
 		}
 		if(latency>upperBound){
 			feat[0]		=	2;
