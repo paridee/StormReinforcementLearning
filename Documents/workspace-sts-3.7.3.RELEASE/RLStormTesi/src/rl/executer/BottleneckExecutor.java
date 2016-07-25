@@ -123,6 +123,7 @@ public class BottleneckExecutor implements ActionExecutor{
 			totalExecutors	=	(totalExecutors/coresPerMachine)+1;
 		}
 		MainClass.PARALLELISM_VAL.set(totalExecutors);
+		singletons.SystemStatus.rebalanceTime	=	System.currentTimeMillis();
 		singletons.SystemStatus.workerNumber	=	totalExecutors;
 		String command	=	singletons.Settings.stormPath+"storm rebalance "+this.topologyName+" -n "+totalExecutors+execFlags;
 		logger.debug("sending command "+command);

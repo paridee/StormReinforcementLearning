@@ -291,7 +291,7 @@ public class NewStormMonitor implements Runnable {
 					}
 				}
 				
-				query	=	"emitted";
+				query	=	"allTimeemitted";
 				//System.out.println("Query "+query);
 		
 				urlString=promUrl+"/api/v1/query?query="+query;

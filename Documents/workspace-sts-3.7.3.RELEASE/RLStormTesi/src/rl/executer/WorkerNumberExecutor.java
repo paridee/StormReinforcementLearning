@@ -31,6 +31,7 @@ public class WorkerNumberExecutor implements ActionExecutor {
 				String command	=	singletons.Settings.stormPath+"storm rebalance "+Settings.topologyName+" -n "+nWorker;
 				LOG.info("Sending command to rebalance "+command);
 				singletons.SystemStatus.workerNumber	=	nWorker;
+				singletons.SystemStatus.rebalanceTime	=	System.currentTimeMillis();
 				MainClass.PARALLELISM_VAL.set(nWorker);
 				Process pr 		= rt.exec(command);
 			} catch (IOException e) {

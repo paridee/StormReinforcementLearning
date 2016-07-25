@@ -119,6 +119,7 @@ public class ExecutorsChange implements ActionExecutor {
 		else{
 			totalExecutors	=	(totalExecutors/coresPerMachine)+1;
 		}
+		singletons.SystemStatus.rebalanceTime	=	System.currentTimeMillis();
 		MainClass.PARALLELISM_VAL.set(totalExecutors);
 		singletons.SystemStatus.workerNumber	=	totalExecutors;
 		String command	=	singletons.Settings.stormPath+"storm rebalance "+this.topologyName+" -n "+totalExecutors+execFlags;
