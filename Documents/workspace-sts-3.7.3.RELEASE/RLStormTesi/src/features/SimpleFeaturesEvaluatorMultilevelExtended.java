@@ -43,6 +43,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		arraySizes[8]	=	(this.states)*(this.opName.size())*(11)*(this.featuresPerState)*(this.steps.length);
 		arraySizes[9]	=	(this.states)*(this.maxParallelism)*(this.opName.size())*(11)*(this.featuresPerState);
 		arraySizes[10]	=	(this.states)*(this.maxParallelism)*(this.opName.size())*(11)*(this.featuresPerState)*(this.steps.length);
+		arraySizes[11]	=	(states)*(this.opName.size())*(11)*(this.featuresPerState);
 		totalSize	=	0;
 		for(int i=0;i<arraySizes.length;i++){
 			totalSize	=	totalSize	+	arraySizes[i];

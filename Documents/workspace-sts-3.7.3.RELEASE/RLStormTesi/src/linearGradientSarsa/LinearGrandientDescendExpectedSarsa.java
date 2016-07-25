@@ -133,20 +133,8 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			logger.debug("updated matrix");
 			Q	=	this.getUpdatedQMatrix();
 			//TODO ONLY FOR DEBUG
-			int printstate	=	-1;
-			double currentLatency	=	singletons.SystemStatus.processLatency;
-			if(currentLatency<1500){
-				printstate	=	0;
-			}
-			else if(currentLatency<4500){
-				printstate	=	1;
-			}
-			else{
-				printstate	=	2;
-			}
-			logger.debug("CurrentLatency "+currentLatency);
 			for(int i=0;i<Q.length;i++){
-				logger.debug("Q["+printstate+"]["+i+"] = "+Q[i]);
+				logger.debug("Q["+currentState+"]["+i+"] = "+Q[i]);
 			}	
 			//TODO END DEBUG
 			action				=	chooser.actionForState(currentState, Q);
