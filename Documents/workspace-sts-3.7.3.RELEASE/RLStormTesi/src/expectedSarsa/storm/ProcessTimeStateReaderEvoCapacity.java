@@ -51,8 +51,8 @@ public class ProcessTimeStateReaderEvoCapacity implements StateReader {
 		}
 		for(int i=0;i<bolts.size();i++){
 			int opLevel	=	(int)(singletons.SystemStatus.operatorCapacity.get(bolts.get(i))*10);
-			if(opLevel>10){
-				opLevel	=	9;
+			if(opLevel>11){
+				opLevel	=	10;
 			}
 			feat[2+bolts.size()+i]	=	opLevel;
 			if(singletons.SystemStatus.executors.get(bolts.get(i))>1){

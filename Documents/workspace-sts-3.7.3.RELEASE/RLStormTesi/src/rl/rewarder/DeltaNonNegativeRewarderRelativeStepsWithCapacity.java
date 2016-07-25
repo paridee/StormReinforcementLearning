@@ -32,7 +32,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	@Override
 	public double giveReward() {
 		double reward		=	0;
-		double currentDist	=	singletons.SystemStatus.processLatency-obj;
+		double currentDist	=	singletons.SystemStatus.processLatency;//-obj;
 		if(currentDist<0){
 			currentDist	=	-currentDist;
 		}

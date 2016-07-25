@@ -17,12 +17,13 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 	ActionExecutor  executor;
 	int[] steps;
 	int totalSize;
+	int actionN;
 	public final static Logger logger	=	LogManager.getLogger(SimpleFeaturesEvaluatorMultilevelExtended.class);
 	
 	
 	
 	public SimpleFeaturesEvaluatorMultilevelExtended(ArrayList<String> opName,int[] steps, int states, int featuresPerState,
-			int maxParallelism, StateTranslator translator, ActionExecutor executor) {
+			int maxParallelism, StateTranslator translator, ActionExecutor executor,int actionN) {
 		super();
 		this.opName = opName;
 		this.steps	= steps;
@@ -30,8 +31,24 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		this.featuresPerState = featuresPerState;
 		this.maxParallelism = maxParallelism;
 		this.translator = translator;
+		this.actionN	=	actionN;
 		this.executor = executor;
-		totalSize	=	(featuresPerState*states)+((maxParallelism+1)*this.states*steps.length*this.featuresPerState)+(this.states*steps.length*this.featuresPerState)+(this.states*3*this.featuresPerState)+(3*this.states*steps.length*this.featuresPerState)+(this.states*(this.maxParallelism+1)*this.featuresPerState)+((maxParallelism+1)*(maxParallelism+1)*opName.size());
+		int[] arraySizes	=	new int[11];
+		arraySizes[0]	=	featuresPerState*states;
+		arraySizes[1]	=	(maxParallelism+1)*this.states*steps.length*this.featuresPerState;	
+		arraySizes[2]	=	this.states*3*this.featuresPerState;
+		arraySizes[3]	=	this.states*steps.length*this.featuresPerState;
+		arraySizes[4]	=	3*this.states*steps.length*this.featuresPerState;	
+		arraySizes[5]	=	this.states*(this.maxParallelism+1)*this.featuresPerState;
+		arraySizes[6]	=	(maxParallelism+1)*(maxParallelism+1)*opName.size();
+		arraySizes[7]	=	(this.states)*(this.opName.size())*(11)*(this.actionN);
+		arraySizes[8]	=	(this.states)*(this.opName.size())*(11)*(this.actionN)*(this.steps.length);
+		arraySizes[9]	=	(this.states)*(this.maxParallelism)*(this.opName.size())*(11)*(this.actionN);
+		arraySizes[10]	=	(this.states)*(this.maxParallelism)*(this.opName.size())*(11)*(this.actionN)*(this.steps.length);
+		totalSize	=	0;
+		for(int i=0;i<arraySizes.length;i++){
+			totalSize	=	totalSize	+	arraySizes[i];
+		}
 		
 	}
 
@@ -196,6 +213,97 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 				}
 			}
 		}
+		int[][][][] eightthBlock	=	new int[this.states][this.opName.size()][11][this.actionN];
+		if(operator<=opName.size()){//if is not do nothing	
+			int opUtilLevel										=	feats[2+(opName.size())+operator];
+			eightthBlock[state][operator][opUtilLevel][action]	=	1;			
+		}
+		for(int i=0;i<this.states;i++){
+			for(int j=0;j<this.opName.size();j++){
+				for(int k=0;k<11;k++){
+					for(int l=0;l<this.actionN;l++){
+						allFeatures[cursor]	=	eightthBlock[i][j][k][l];
+						cursor++;
+					}
+				}
+			}
+		}
+		int[][][][][] ninethBlock	=	new int[this.states][this.opName.size()][11][this.actionN][this.steps.length];
+		if(operator<=opName.size()){//if is not do nothing
+			int opUtilLevel										=	feats[2+(opName.size())+operator];
+			ninethBlock[state][operator][opUtilLevel][action][changeStep]	=	1;
+		}
+		for(int i=0;i<this.states;i++){
+			for(int j=0;j<this.opName.size();j++){
+				for(int k=0;k<11;k++){
+					for(int l=0;l<this.actionN;l++){
+						for(int m=0;m<this.steps.length;m++){
+							allFeatures[cursor]	=	ninethBlock[i][j][k][l][m];
+							cursor++;	
+						}
+					}
+				}
+			}
+		}		
+		
+		int[][][][][] tenthBlock	=	new int[this.states][this.maxParallelism][this.opName.size()][11][this.actionN];
+		if(operator<=opName.size()){
+			int opUtilLevel										=	feats[2+(opName.size())+operator];
+			tenthBlock[state][parallelismLevel][operator][opUtilLevel][offset]	=	1;
+			
+		}
+		for(int i=0;i<this.states;i++){
+			for(int j=0;j<this.maxParallelism;j++){
+				for(int k=0;k<this.opName.size();k++){
+					for(int l=0;l<11;l++){
+						for(int m=0;m<this.actionN;m++){
+							allFeatures[cursor]	=	tenthBlock[i][j][k][l][m];
+							cursor++;	
+						}
+					}
+				}
+			}
+		}		
+		
+		
+		int[][][][][][] eleventhBlock	=	new int[this.states][this.maxParallelism][this.opName.size()][11][this.actionN][this.steps.length];
+		if(operator<=opName.size()){
+			int opUtilLevel										=	feats[2+(opName.size())+operator];
+			eleventhBlock[state][parallelismLevel][operator][opUtilLevel][offset][changeStep]	=	1;
+		}
+
+		for(int i=0;i<this.states;i++){
+			for(int j=0;j<this.maxParallelism;j++){
+				for(int k=0;k<this.opName.size();k++){
+					for(int l=0;l<11;l++){
+						for(int m=0;m<this.actionN;m++){
+							for(int n=0;n<this.steps.length;n++){
+								allFeatures[cursor]	=	eleventhBlock[i][j][k][l][m][n];
+								cursor++;	
+								
+							}
+						}
+					}
+				}
+			}
+		}	
+		
+		int[][][][] twelvethBlock			=	new int[states][this.opName.size()][11][this.actionN];
+		for(int i=0;i<opName.size();i++){
+			int opUtilLevel										=	feats[2+(opName.size())+i];	
+			twelvethBlock[state][operator][opUtilLevel][offset]	=	1;
+		}
+		
+		for(int i=0;i<this.states;i++){
+			for(int k=0;k<this.opName.size();k++){
+				for(int l=0;l<11;l++){
+					for(int m=0;m<this.actionN;m++){
+							allFeatures[cursor]	=	twelvethBlock[i][k][l][m];
+							cursor++;			
+					}
+				}
+			}
+		}	
 		return allFeatures;
 	}
 
