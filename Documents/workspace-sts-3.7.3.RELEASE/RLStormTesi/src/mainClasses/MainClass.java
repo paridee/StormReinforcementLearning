@@ -144,7 +144,7 @@ public class MainClass {
 		//Thread									sarsaTh		=	new Thread(sarsa);
 		
 		
-		FeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluatorMultilevelExtended(boltsName,steps, 3,6,maxParallelism,translator,executor,actionsN);
+		FeaturesEvaluator evaluator	=	new SimpleFeaturesEvaluatorMultilevelExtended(boltsName,steps, 3,6,maxParallelism,translator,executor);
 		//LinearGradientDescendSarsaLambda sarsa	=	new LinearGradientDescendSarsaLambda(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
 		LinearGrandientDescendExpectedSarsa sarsa	=	new LinearGrandientDescendExpectedSarsa(chooser,evaluator.getFeaturesN(),0.1,0.2,0.01,reader,evaluator,executor,alpha,actionsN,actionsN-1);
 		/*
