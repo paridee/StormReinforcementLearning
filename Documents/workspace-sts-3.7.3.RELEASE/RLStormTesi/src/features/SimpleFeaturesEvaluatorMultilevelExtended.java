@@ -31,7 +31,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		this.maxParallelism = maxParallelism;
 		this.translator = translator;
 		this.executor = executor;
-		int[] arraySizes	=	new int[11];
+		int[] arraySizes	=	new int[12];
 		arraySizes[0]	=	featuresPerState*states;
 		arraySizes[1]	=	(maxParallelism+1)*this.states*steps.length*this.featuresPerState;	
 		arraySizes[2]	=	this.states*3*this.featuresPerState;
