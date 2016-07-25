@@ -212,8 +212,9 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			}
 		}
 		int[][][][] eightthBlock	=	new int[this.states][this.opName.size()][11][this.featuresPerState];
-		if(operator<=opName.size()){//if is not do nothing	
+		if(operator<opName.size()){//if is not do nothing	
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
+			logger.debug("DEBUG block 8 "+state+" "+operator+" "+opUtilLevel+" "+offset);
 			eightthBlock[state][operator][opUtilLevel][offset]	=	1;			
 			logger.debug("Block feature 8 for state "+state+" operator "+operator+" operator util level "+opUtilLevel);
 		}
@@ -228,7 +229,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			}
 		}
 		int[][][][][] ninethBlock	=	new int[this.states][this.opName.size()][11][this.featuresPerState][this.steps.length];
-		if(operator<=opName.size()){//if is not do nothing
+		if(operator<opName.size()){//if is not do nothing
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
 			ninethBlock[state][operator][opUtilLevel][offset][changeStep]	=	1;
 			logger.debug("Block feature 9 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset+" step "+changeStep);
@@ -247,7 +248,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		}		
 		
 		int[][][][][] tenthBlock	=	new int[this.states][this.maxParallelism][this.opName.size()][11][this.featuresPerState];
-		if(operator<=opName.size()){
+		if(operator<opName.size()){
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
 			tenthBlock[state][parallelismLevel][operator][opUtilLevel][offset]	=	1;
 			logger.debug("Block feature 10 for state "+state+" level "+parallelismLevel+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
@@ -267,7 +268,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		
 		
 		int[][][][][][] eleventhBlock	=	new int[this.states][this.maxParallelism][this.opName.size()][11][this.featuresPerState][this.steps.length];
-		if(operator<=opName.size()){
+		if(operator<opName.size()){
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
 			eleventhBlock[state][parallelismLevel][operator][opUtilLevel][offset][changeStep]	=	1;
 			logger.debug("Block feature 11 for state "+state+" level "+parallelismLevel+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset+" step "+changeStep);
@@ -290,10 +291,11 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		}	
 		
 		int[][][][] twelvethBlock			=	new int[states][this.opName.size()][11][this.featuresPerState];
+		
 		for(int i=0;i<opName.size();i++){
 			int opUtilLevel										=	feats[2+(opName.size())+i];	
-			twelvethBlock[state][operator][opUtilLevel][offset]	=	1;
-			logger.debug("Block feature 12 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
+			twelvethBlock[state][i][opUtilLevel][offset]	=	1;
+			logger.debug("Block feature 12 for state "+state+" operator "+i+" operator util level "+opUtilLevel+" offset "+offset);
 		}
 		
 		for(int i=0;i<this.states;i++){
