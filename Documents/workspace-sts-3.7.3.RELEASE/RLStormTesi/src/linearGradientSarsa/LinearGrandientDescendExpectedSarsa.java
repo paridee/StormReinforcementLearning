@@ -163,6 +163,9 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			}
 			for(int j=0;j<features.length;j++){
 				Q[i]	=	Q[i]	+	(omega[j]*features[j]);
+				if(features[j]>=1){
+					logger.debug("feature "+j+" omega "+omega[j]);
+				}
 				if(Q[i]==Double.NaN){
 					logger.debug("NaN value omega "+omega[j]+" features "+features[j]);
 				}
