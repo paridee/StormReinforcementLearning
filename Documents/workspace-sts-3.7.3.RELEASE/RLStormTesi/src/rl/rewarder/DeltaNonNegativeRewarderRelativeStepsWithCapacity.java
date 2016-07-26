@@ -49,7 +49,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 			reward	=	reward+1;
 			reward	=	reward + (distDelta/1000);
 			if(machineDelta<0){	//ho aumentato il numero di thread
-				reward	=	reward+((machineDelta*(1/(maxStep)*2)*reward));
+				reward	=	reward+((machineDelta*(1/(maxStep*2))*reward));
 			}
 			logger.debug("Distance shortened, reward "+reward);
 		}
