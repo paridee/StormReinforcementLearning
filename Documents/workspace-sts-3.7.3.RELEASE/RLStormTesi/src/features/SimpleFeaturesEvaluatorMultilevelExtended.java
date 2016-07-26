@@ -31,7 +31,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		this.maxParallelism = maxParallelism;
 		this.translator = translator;
 		this.executor = executor;
-		int[] arraySizes	=	new int[12];
+		int[] arraySizes	=	new int[15];
 		arraySizes[0]	=	featuresPerState*states;
 		arraySizes[1]	=	(maxParallelism+1)*this.states*steps.length*this.featuresPerState;	
 		arraySizes[2]	=	this.states*3*this.featuresPerState;
@@ -44,6 +44,9 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		arraySizes[9]	=	(this.states)*(this.maxParallelism+1)*(this.opName.size())*(11)*(this.featuresPerState);
 		arraySizes[10]	=	(this.states)*(this.maxParallelism+1)*(this.opName.size())*(11)*(this.featuresPerState)*(this.steps.length);
 		arraySizes[11]	=	(states)*(this.opName.size())*(11)*(this.featuresPerState);
+		arraySizes[12]	=	(states)*(2)*(this.featuresPerState);
+		arraySizes[13]	=	(states)*(6)*(this.featuresPerState);
+		arraySizes[14]	=	(states)*(6)*(this.featuresPerState)*(this.steps.length);
 		totalSize	=	0;
 		for(int i=0;i<arraySizes.length;i++){
 			totalSize	=	totalSize	+	arraySizes[i];
@@ -238,7 +241,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
 			logger.debug("DEBUG block 8 "+state+" "+operator+" "+opUtilLevel+" "+offset);
 			eightthBlock[state][operator][opUtilLevel][offset]	=	1;			
-			logger.debug("Block feature 8 for state "+state+" operator "+operator+" operator util level "+opUtilLevel);
+			logger.debug("Block feature 8 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
 		}
 		for(int i=0;i<this.states;i++){
 			for(int j=0;j<this.opName.size();j++){
@@ -345,6 +348,57 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 				}
 			}
 		}	
+		
+		int[][][] thirteenthBlock	=	new int[states][2][this.featuresPerState];
+		if(operator<opName.size()){//if is not do nothing
+			int opUtilLevel	=	feats[2+(opName.size())+operator];
+			int ind	=	0;
+			if(opUtilLevel>5){
+				ind	=	1;
+			}
+			thirteenthBlock[state][ind][offset]	=	1;
+			logger.debug("Block feature 13 for state "+state+" high utilization "+ind+" offset "+offset);
+		}
+		for(int i=0;i<states;i++){
+			for(int j=0;j<2;j++){
+				for(int k=0;k<this.featuresPerState;k++){
+					allFeatures[cursor]	=	thirteenthBlock[i][j][k];
+					cursor++;
+				}
+			}
+		}
+		int[][][] fourteenthBlock = new int[states][6][this.featuresPerState];	
+		if(operator<opName.size()){//if is not do nothing
+			int opUtilLevel	=	feats[2+(opName.size())+operator];
+			int ind	=	opUtilLevel/2;
+			fourteenthBlock[state][ind][offset]	=	1;
+			logger.debug("Block feature 14 for state "+state+" utilization/5 "+ind+" offset "+offset);
+		}
+		for(int i=0;i<states;i++){
+			for(int j=0;j<6;j++){
+				for(int k=0;k<this.featuresPerState;k++){
+					allFeatures[cursor]	=	fourteenthBlock[i][j][k];
+					cursor++;
+				}
+			}
+		}
+		int[][][][] fifteenthBlock = new int[states][6][this.featuresPerState][this.steps.length];	
+		if(operator<opName.size()){//if is not do nothing
+			int opUtilLevel	=	feats[2+(opName.size())+operator];
+			int ind	=	opUtilLevel/2;
+			fifteenthBlock[state][ind][offset][changeStep]	=	1;
+			logger.debug("Block feature 15 for state "+state+" utilization/5 "+ind+" offset "+offset+" step "+changeStep);
+		}
+		for(int i=0;i<states;i++){
+			for(int j=0;j<6;j++){
+				for(int k=0;k<this.featuresPerState;k++){
+					for(int l=0;l<steps.length;l++){
+						allFeatures[cursor]	=	fifteenthBlock[i][j][k][l];
+						cursor++;
+					}
+				}
+			}
+		}
 		return allFeatures;
 	}
 
