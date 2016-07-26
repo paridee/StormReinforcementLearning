@@ -43,8 +43,8 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 		this.featuresN 			= 	featuresN;
 		this.eVector			=	new double[featuresN];
 		this.omega				=	new double[featuresN];
-		for(int i=0;i<featuresN;i++){
-			omega[i]			=	0;
+		for(int i=0;i<18;i++){
+			omega[i]			=	3;
 			System.out.println("Omega "+i+" "+omega[i]);
 		}
 		this.epsilon 			=	epsilon;
