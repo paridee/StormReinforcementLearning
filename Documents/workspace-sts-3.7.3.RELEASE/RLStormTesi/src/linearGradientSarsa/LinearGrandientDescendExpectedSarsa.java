@@ -49,9 +49,9 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			System.out.println("Omega "+i+" "+omega[i]);
 		}*/
 		//TODO test initialization
-		omega[0]	=	5;
-		omega[11]	=	5;
-		omega[13]	=	5;		
+		omega[0]	=	1;
+		omega[11]	=	1;
+		omega[13]	=	1;		
 		//END TEST
 		
 		
