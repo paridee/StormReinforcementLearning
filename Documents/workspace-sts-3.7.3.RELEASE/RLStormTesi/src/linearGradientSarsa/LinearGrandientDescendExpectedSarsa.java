@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import mainClasses.MainClass;
 import rl.policies.PolicyChooser;
 
 public class LinearGrandientDescendExpectedSarsa implements Runnable {
@@ -132,7 +133,8 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 				}
 			}
 			double V			=	tempP;
-			delta	=	delta	+	(yota*V);			
+			delta	=	delta	+	(yota*V);		
+			MainClass.GRADIENT_DELTA.set(delta);
 			for(int i=0;i<featuresN;i++){
 				//System.out.println("updating values for feature "+i+" omega "+omega[i]);
 				//System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);

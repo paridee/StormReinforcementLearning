@@ -61,6 +61,7 @@ public class MainClass {
 	public static final	Gauge	SYST_UTIL			=	Gauge.build().name("bench_utilization").help("System utilization").register();	//prometheus metric to be monitored on Graphana
 	public static final Counter BENCH_EMITTED		=	Counter.build().name("bench_emitted").help("Emitted tuples fine source").register();
 	public static final	Gauge	SYST_UTIL_FINE		=	Gauge.build().name("bench_utilization_fine").help("System utilization at fine grain").register();	//prometheus metric to be monitored on Graphana
+	public static final	Gauge	GRADIENT_DELTA		=	Gauge.build().name("bench_gradient_desc_delta").help("Delta from predicted value").register();
 	public static final int 	STATES_NUM			=	3;		//states
 	public static int			ACTIONS_NUM			=	4;		//actions
 	public static Gauge.Child[][]	qMatrix;				//prometheus variables
