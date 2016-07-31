@@ -15,8 +15,9 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	double maxStep;
 	double oldDistance;
 	int obj;
+	double loadCheck;
 	
-	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep) {
+	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck) {
 		super();
 		this.distThreshold = distThreshold;
 		this.obj = obj;
@@ -25,6 +26,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		this.upperBound		=	upperBound;
 		lowerBound			=	obj-(upperBound-obj);
 		this.maxStep		=	maxStep;
+		this.loadCheck		=	loadCheck;
 	}
 
 
@@ -71,7 +73,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 			int repLevel	=	singletons.SystemStatus.executors.get(boltName);
 			if(repLevel>1){
 				double capacity	=	singletons.SystemStatus.operatorCapacity.get(boltName);
-				if(capacity<0.8){	//TODO remove from here...
+				if(capacity<this.loadCheck){
 					return false;
 				}
 			}

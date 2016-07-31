@@ -78,6 +78,7 @@ public class MainClass {
 	
 	public static void dynamicSteps(){
 		int maxParallelism	=	32;
+		double loadOKTh		=	0.7;
 		Jedis jedis = new Jedis("127.0.0.1",6379);
 	    jedis.flushAll();	    
 	    StateTranslator translator	=	new StateTranslator(3, 3, 32, jedis);
@@ -109,15 +110,15 @@ public class MainClass {
 		
 		//TEST
 
-
+		
 		
 		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
 		//RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,4500,15,0.2);
-		RewardCalculator						rewarder	=	new DeltaNonNegativeRewarderRelativeStepsWithCapacity(300,3000,4500,maxParallelism);
+		RewardCalculator						rewarder	=	new DeltaNonNegativeRewarderRelativeStepsWithCapacity(300,3000,4500,maxParallelism,loadOKTh);
 		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500,true);
 		//RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
 		//StateReader								reader		=	new ProcessTimeStateReaderEvo(1500,4500,translator,maxParallelism);
-		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacity(1500,4500,translator,maxParallelism,0.8);
+		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacity(1500,4500,translator,maxParallelism,loadOKTh);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(1);//EpsilonGreedyChooser(0.1);
