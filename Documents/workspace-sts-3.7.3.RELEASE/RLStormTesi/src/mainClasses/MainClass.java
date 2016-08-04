@@ -81,7 +81,6 @@ public class MainClass {
 		double loadOKTh		=	0.7;
 		Jedis jedis = new Jedis("127.0.0.1",6379);
 	    jedis.flushAll();	    
-	    StateTranslator translator	=	new StateTranslator(3, 3, 32, jedis);
 	    
 		StormMonitor 		sm		=	new StormMonitor(PROMETHEUS_URL,PROMETHEUS_PUSHG);
 		Thread			sm_th	=	new Thread(sm);
@@ -95,7 +94,7 @@ public class MainClass {
 		}
 		
 		SystemStatus.bolts	=	boltsName;
-	    
+		StateTranslator translator	=	new StateTranslator(boltsName.size(), 3, 32, jedis);
 		rm_th.start();
 		while(SystemStatus.executors.size()==0){
 			try {
