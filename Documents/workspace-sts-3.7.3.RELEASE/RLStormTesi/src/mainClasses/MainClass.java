@@ -137,6 +137,9 @@ public class MainClass {
 		steps[0]	=	1;
 		steps[1]	=	maxParallelism/16;
 		steps[2]	=	maxParallelism/8;
+		for(int i=0;i<steps.length;i++){
+			System.out.println("steps "+i+" = "+steps[i]);
+		}
 		ActionExecutor							executor	=	new ExecutorsChangeMultipleSteps(boltsName,8, steps, maxParallelism, singletons.Settings.topologyName,intManager,rewarder);
 		//BottleneckExecutor							executor	=	new BottleneckExecutor(rewarder,intManager,32);
 		//chooser	=	new EpsilonGreedyWithFeasibilityCheck(executor,0.1);
