@@ -330,9 +330,9 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		int[][][][] twelvethBlock			=	new int[states][this.opName.size()][11][this.featuresPerState];
 		
 		for(int i=0;i<opName.size();i++){
-			int opUtilLevel										=	feats[2+(opName.size())+i];	
-			twelvethBlock[state][i][opUtilLevel][offset]	=	1;
+			int opUtilLevel										=	feats[2+(opName.size())+i];
 			logger.debug("Block feature 12 for state "+state+" operator "+i+" operator util level "+opUtilLevel+" offset "+offset);
+			twelvethBlock[state][i][opUtilLevel][offset]	=	1;
 		}
 		
 		for(int i=0;i<this.states;i++){
