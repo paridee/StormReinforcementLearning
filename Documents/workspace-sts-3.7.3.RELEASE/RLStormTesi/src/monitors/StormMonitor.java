@@ -192,8 +192,10 @@ public class StormMonitor implements Runnable{
 					}
 				}
 				if(System.currentTimeMillis()-triggerMillis>60000){
-					SystemStatus.losingTuples	=	false;
-					LOG.info("triggering off losing tuples");
+					if(SystemStatus.losingTuples==true){
+						SystemStatus.losingTuples	=	false;
+						LOG.info("triggering off losing tuples");
+					}
 				}
 				Thread.sleep(10000);
 			}

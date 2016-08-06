@@ -118,7 +118,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		for(int i=0;i<features.length;i++){
 			allFeatures[i]	=	features[i];
 			if(allFeatures[cursor]>=1){
-				logger.debug("Feature number: "+cursor);
+				//logger.debug("Feature number: "+cursor);
 			}
 			cursor++;
 		}
@@ -136,7 +136,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 				for(int k=0;k<this.featuresPerState;k++){
 					allFeatures[cursor]	=	secondBlock[i][j][k];
 					if(allFeatures[cursor]>=1){
-						logger.debug("Feature number: "+cursor);
+						//logger.debug("Feature number: "+cursor);
 					}
 					cursor++;
 				}
@@ -154,7 +154,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 				for(int l=0;l<this.featuresPerState;l++){
 					allFeatures[cursor]	=	thirdBlock[j][k][l];
 					if(allFeatures[cursor]>=1){
-						logger.debug("Feature number: "+cursor);
+						//logger.debug("Feature number: "+cursor);
 					}
 					cursor++;
 				}
@@ -173,7 +173,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 					for(int l=0;l<this.featuresPerState;l++){
 						allFeatures[cursor]	=	fourthBlock[i][j][k][l];
 						if(allFeatures[cursor]>=1){
-							logger.debug("Feature number: "+cursor);
+							//logger.debug("Feature number: "+cursor);
 						}
 						cursor++;
 					}
@@ -190,7 +190,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 				for(int k=0;k<this.featuresPerState;k++){
 					allFeatures[cursor]	=	fifth[i][j][k];
 					if(allFeatures[cursor]>=1){
-						logger.debug("Feature number: "+cursor);
+						//logger.debug("Feature number: "+cursor);
 					}
 					cursor++;
 				}
@@ -208,7 +208,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 					for(int l=0;l<this.featuresPerState;l++){
 						allFeatures[cursor]	=	sixthBlock[i][j][k][l];
 						if(allFeatures[cursor]>=1){
-							logger.debug("Feature number: "+cursor);
+							//logger.debug("Feature number: "+cursor);
 						}
 						cursor++;
 					}
@@ -229,7 +229,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 					for(int k=0;k<maxParallelism+1;k++){
 						allFeatures[cursor]	=	seventhBlock[i][j][k];
 						if(allFeatures[cursor]>=1){
-							logger.debug("Feature number: "+cursor);
+							//logger.debug("Feature number: "+cursor);
 						}
 						cursor++;					
 					}
@@ -249,7 +249,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 					for(int l=0;l<this.featuresPerState;l++){
 						allFeatures[cursor]	=	eightthBlock[i][j][k][l];
 						if(allFeatures[cursor]>=1){
-							logger.debug("Feature number: "+cursor);
+							//logger.debug("Feature number: "+cursor);
 						}
 						cursor++;
 					}
@@ -269,7 +269,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 						for(int m=0;m<this.steps.length;m++){
 							allFeatures[cursor]	=	ninethBlock[i][j][k][l][m];
 							if(allFeatures[cursor]>=1){
-								logger.debug("Feature number: "+cursor);
+								//logger.debug("Feature number: "+cursor);
 							}
 							cursor++;	
 						}
@@ -291,7 +291,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 						for(int m=0;m<this.featuresPerState;m++){
 							allFeatures[cursor]	=	tenthBlock[i][j][k][l][m];
 							if(allFeatures[cursor]>=1){
-								logger.debug("Feature number: "+cursor);
+								//logger.debug("Feature number: "+cursor);
 							}
 							cursor++;	
 						}
@@ -316,7 +316,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 							for(int n=0;n<this.steps.length;n++){
 								allFeatures[cursor]	=	eleventhBlock[i][j][k][l][m][n];
 								if(allFeatures[cursor]>=1){
-									logger.debug("Feature number: "+cursor);
+									//logger.debug("Feature number: "+cursor);
 								}
 								cursor++;	
 								
@@ -341,7 +341,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 					for(int m=0;m<this.featuresPerState;m++){
 							allFeatures[cursor]	=	twelvethBlock[i][k][l][m];
 							if(allFeatures[cursor]>=1){
-								logger.debug("Feature number: "+cursor);
+								//logger.debug("Feature number: "+cursor);
 							}
 							cursor++;			
 					}
