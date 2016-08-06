@@ -77,7 +77,7 @@ public class StormMonitor implements Runnable{
 											if(this.count.containsKey(myKey)){
 												myCount	=	this.count.get(myKey)+1;
 											}
-											if(myCount%6==0){
+											if(myCount%12==0){
 												//LOG.info("Duplicate value found after 60 seconds, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
 												
 												URL url = null;
@@ -152,7 +152,7 @@ public class StormMonitor implements Runnable{
 											if(this.count.containsKey(myKey)){
 												myCount	=	this.count.get(myKey)+1;
 											}
-											if(myCount%6==0){
+											if(myCount%12==0){
 												//LOG.info("Duplicate value found after 60 seconds, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
 												
 												URL url = null;
