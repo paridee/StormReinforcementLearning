@@ -25,6 +25,7 @@ public class StormMonitor implements Runnable{
 	HashMap<String,Object>  latest	=	new HashMap<String,Object>();
 	HashMap<String,Integer> count	=	new HashMap<String,Integer>();
 	double topologyLatency	=	0;
+	long triggerMillis	=	0;
 	
 	public StormMonitor(String promUrl,String pushGatUrl){
 		//interval			=	intervalM;
@@ -126,7 +127,6 @@ public class StormMonitor implements Runnable{
 				oracle = new URL(urlString);
 				in = new BufferedReader(new InputStreamReader(oracle.openStream()));
 				outl=null;
-				long triggerMillis	=	0;
 				while ((inputLine = in.readLine()) != null){
 					//LOG.info("Metric query result "+inputLine);
 					outl	=	inputLine;
