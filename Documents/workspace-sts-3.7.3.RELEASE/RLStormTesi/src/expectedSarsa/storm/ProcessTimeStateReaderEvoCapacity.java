@@ -11,16 +11,14 @@ import mainClasses.MainClass;
 public class ProcessTimeStateReaderEvoCapacity implements StateReader {
 
 	
-	int lowerBound;
 	int upperBound;
 	StateTranslator translator;
 	int maxParallelism;
 	int correctLoadThreshold;
 	private static final Logger LOG = LoggerFactory.getLogger(ProcessTimeStateReaderEvoCapacity.class);
 	
-	public ProcessTimeStateReaderEvoCapacity(int lowerBound, int upperBound, StateTranslator translator,int maxParallelism,double correctLoadThreshold) {
+	public ProcessTimeStateReaderEvoCapacity(int upperBound, StateTranslator translator,int maxParallelism,double correctLoadThreshold) {
 		super();
-		this.lowerBound 			= 	lowerBound;
 		this.upperBound 			= 	upperBound;
 		this.translator 			= 	translator;
 		this.maxParallelism			=	maxParallelism;
