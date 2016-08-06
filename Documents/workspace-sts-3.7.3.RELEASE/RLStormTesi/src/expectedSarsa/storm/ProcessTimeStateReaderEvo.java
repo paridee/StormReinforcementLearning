@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import expectedSarsa.StateReader;
 import mainClasses.MainClass;
 import monitors.NewStormMonitor;
+import singletons.SystemStatus;
 
 public class ProcessTimeStateReaderEvo implements StateReader {
 	int lowerBound;
@@ -31,7 +32,11 @@ public class ProcessTimeStateReaderEvo implements StateReader {
 		Integer[] feat		=	new Integer[(2*(bolts.size()))+2];
 		double latency	=	singletons.SystemStatus.processLatency;
 		MainClass.LATENCY_VAL.set(latency);
-		if(latency<lowerBound){
+		if(SystemStatus.losingTuples==true){
+			feat[0]		=	2;
+			LOG.debug("losing tuples triggered");
+		}
+		else if(latency<lowerBound){
 			feat[0]		=	0;
 		}
 		else if(latency<upperBound){

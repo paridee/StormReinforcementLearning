@@ -62,7 +62,7 @@ public class SimpleFeaturesEvaluatorMultilevel implements FeaturesEvaluator {
 		else{
 			if(actionV<steps.length){
 				String op	=	opName.get(operator);
-				if(singletons.SystemStatus.isLeastLoaded(op)){
+				if(singletons.SystemStatus.isLeastLoadedWithMultipleExecutors(op)){
 					features[(state*this.featuresPerState)+0]	=	1; 
 					offset	=	0;
 					logger.debug("Feature decrease least loaded in state load "+state);

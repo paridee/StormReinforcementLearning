@@ -22,7 +22,8 @@ public class StormMonitor implements Runnable{
 	//int interval		=	10000;
 	String promUrl		=	"";
 	private String pushGatUrl;
-	HashMap<String,Object> latest	=	new HashMap<String,Object>();
+	HashMap<String,Object>  latest	=	new HashMap<String,Object>();
+	HashMap<String,Integer> count	=	new HashMap<String,Integer>();
 	double topologyLatency	=	0;
 	
 	public StormMonitor(String promUrl,String pushGatUrl){
@@ -35,9 +36,10 @@ public class StormMonitor implements Runnable{
 	//	return this.topologyLatency;
 	//}
 	
+	
+	
 	@Override
 	public void run() {
-		int count = 0; //each 60 seconds delete
 		while(continueEx == true){
 			try {
 				//String query	=	"rate(node_cpu{job=\""+this.subj.promName+"\",mode=\"idle\",instance=\""+this.subj.promInstance+"\"}["+interval/1000+"s])";
@@ -67,16 +69,21 @@ public class StormMonitor implements Runnable{
 								if(innerMet.has("__name__")){
 									String metricName	=	innerMet.getString("__name__");
 									double processTimeValue	=	value.getDouble(1);
-									if(this.latest.containsKey(metricName+""+innerMet.getString("exported_instance"))){										
-										if(this.latest.get(metricName+""+innerMet.getString("exported_instance")).equals(processTimeValue)){
-											discard	=	true;
-											if(count%6==0){
+									String myKey			=	metricName+""+innerMet.getString("exported_instance");
+									if(this.latest.containsKey(myKey)){										
+										if(this.latest.get(myKey).equals(processTimeValue)){
+											discard		=	true;
+											int myCount	=	1;
+											if(this.count.containsKey(myKey)){
+												myCount	=	this.count.get(myKey)+1;
+											}
+											if(myCount%6==0){
 												//LOG.info("Duplicate value found after 60 seconds, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
 												
 												URL url = null;
 												try {
 												    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
-												    //LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												    LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
 												} catch (MalformedURLException exception) {
 												    exception.printStackTrace();
 												}
@@ -94,8 +101,8 @@ public class StormMonitor implements Runnable{
 												        httpURLConnection.disconnect();
 												    }
 												}
-												count	= 0;
 											}
+											this.count.put(myKey, myCount);
 										}
 									}
 									if(discard==false&&processTimeValue>0){
@@ -110,9 +117,85 @@ public class StormMonitor implements Runnable{
 							}
 						}
 					}
-					count++;
-					Thread.sleep(10000);
 				}
+				
+				query	=	"_storm___fail_count_default";
+				//System.out.println("Query "+query);
+				urlString=promUrl+"/api/v1/query?query="+query;
+				//System.out.println(urlString);
+				oracle = new URL(urlString);
+				in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+				outl=null;
+				long triggerMillis	=	0;
+				while ((inputLine = in.readLine()) != null){
+					//LOG.info("Metric query result "+inputLine);
+					outl	=	inputLine;
+					if(outl!=null){
+						JSONObject jObj		=	new JSONObject(outl);
+						jObj				=	jObj.getJSONObject("data");
+						JSONArray results	=	jObj.getJSONArray("result");
+						for(int i=0;i<results.length();i++){
+							JSONObject 	result	=	results.getJSONObject(i);
+							JSONArray	value	=	result.getJSONArray("value");
+							JSONObject  innerMet=	result.getJSONObject("metric");
+							//LOG.info("STORM metric "+innerMet.toString()+" value "+value);
+							boolean discard	=	false;
+							if(innerMet.has("exported_instance")&&innerMet.has("job")){
+								if(innerMet.has("__name__")){
+									String metricName	=	innerMet.getString("__name__");
+									double failed		=	value.getDouble(1);
+									String myKey			=	metricName+""+innerMet.getString("exported_instance");
+									if(this.latest.containsKey(myKey)){										
+										if(this.latest.get(myKey).equals(failed)){
+											discard	=	true;
+											int myCount	=	1;
+											if(this.count.containsKey(myKey)){
+												myCount	=	this.count.get(myKey)+1;
+											}
+											if(myCount%6==0){
+												//LOG.info("Duplicate value found after 60 seconds, going to delete "+this.latest.get(metricName+""+innerMet.getString("exported_instance"))+" "+processTimeValue);
+												
+												URL url = null;
+												try {
+												    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												    LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												} catch (MalformedURLException exception) {
+												    exception.printStackTrace();
+												}
+												HttpURLConnection httpURLConnection = null;
+												try {
+												    httpURLConnection = (HttpURLConnection) url.openConnection();
+												    httpURLConnection.setRequestProperty("Content-Type",
+												                "application/x-www-form-urlencoded");
+												    httpURLConnection.setRequestMethod("DELETE");
+												    //LOG.info("Response code "+httpURLConnection.getResponseCode());
+												} catch (IOException exception) {
+												    exception.printStackTrace();
+												} finally {         
+												    if (httpURLConnection != null) {
+												        httpURLConnection.disconnect();
+												    }
+												}
+											}
+											this.count.put(myKey, myCount);
+										}
+									}
+									if(discard==false&&failed>0){
+										latest.put(metricName+""+innerMet.getString("exported_instance"), failed);
+										triggerMillis		=	System.currentTimeMillis();
+										SystemStatus.losingTuples	=	true;
+										LOG.info("triggering on losing tuples");
+									}
+								}
+							}
+						}
+					}
+				}
+				if(System.currentTimeMillis()-triggerMillis>60000){
+					SystemStatus.losingTuples	=	false;
+					LOG.info("triggering off losing tuples");
+				}
+				Thread.sleep(10000);
 			}
 			catch(Exception e){
 				e.printStackTrace();

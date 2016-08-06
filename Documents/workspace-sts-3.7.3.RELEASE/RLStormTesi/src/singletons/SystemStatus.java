@@ -12,6 +12,7 @@ public class SystemStatus {
 	public static ArrayList<String> bolts	=	new ArrayList<String>();
 	public static double completeUtilization	=	-1.0;
 	public static long rebalanceTime;
+	public static boolean losingTuples;
 	public static void setExecutorLevel(String exName,int value){
 		if(bolts.contains(exName)){
 			executors.put(exName, value);	
@@ -75,14 +76,20 @@ public class SystemStatus {
 		return true;
 	}
 	
-	public static boolean isLeastLoaded(String operator) throws Exception{
+	public static boolean isLeastLoadedWithMultipleExecutors(String operator) throws Exception{
 		if(bolts.contains(operator)){
+			if(executors.get(operator)<=1){
+				return false;
+			}
 			if(operatorCapacity.containsKey(operator)){
 				double capacity	=	operatorCapacity.get(operator);
 				for(int i=0;i<bolts.size();i++){
 					double opCapacity	=	operatorCapacity.get(bolts.get(i));
-					if(opCapacity<capacity){
-						return false;
+					int opExecutor		=	executors.get(bolts.get(i));
+					if(opExecutor>1){
+						if(opCapacity<capacity){
+							return false;
+						}
 					}
 				}
 			}

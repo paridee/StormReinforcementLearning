@@ -41,7 +41,7 @@ public class RelativeFeaturesEvaluator implements FeaturesEvaluator {
 		else{
 			if(actionV==0){
 				String op	=	opName.get(operator);
-				if(singletons.SystemStatus.isLeastLoaded(op)){
+				if(singletons.SystemStatus.isLeastLoadedWithMultipleExecutors(op)){
 					features[(state*this.featuresPerState)+0]	=	1; 
 					System.out.print(" least loaded\n");
 				}

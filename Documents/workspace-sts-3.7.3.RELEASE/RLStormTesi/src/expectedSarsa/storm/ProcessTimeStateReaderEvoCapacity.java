@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import expectedSarsa.StateReader;
 import mainClasses.MainClass;
+import singletons.SystemStatus;
 
 public class ProcessTimeStateReaderEvoCapacity implements StateReader {
 
@@ -60,6 +61,10 @@ public class ProcessTimeStateReaderEvoCapacity implements StateReader {
 			}
 		}
 		if(latency>upperBound){
+			feat[0]		=	2;
+		}
+		else if(SystemStatus.losingTuples==true){
+			LOG.debug("losing tuples triggered");
 			feat[0]		=	2;
 		}
 		else if(latency<=upperBound){
