@@ -16,6 +16,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	double oldDistance;
 	int obj;
 	double loadCheck;
+	boolean losing;
 	
 	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck) {
 		super();
@@ -27,6 +28,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		lowerBound			=	obj-(upperBound-obj);
 		this.maxStep		=	maxStep;
 		this.loadCheck		=	loadCheck;
+		this.losing			=	singletons.SystemStatus.losingTuples;
 	}
 
 
@@ -34,11 +36,24 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	@Override
 	public double giveReward() {
 		double reward		=	0;
+		boolean	losingNow	=	singletons.SystemStatus.losingTuples;
+		if(losing==true){	//like tcp loss are sign of congestion
+			if(losingNow==false){
+				reward	=	reward+10;
+			}
+		}
+		boolean beginToLose	=	false;
+		if(losing==false){	//if i begin to lose pkts
+			if(losingNow==true){
+				beginToLose	=	true;
+			}
+		}
+		losing	=	losingNow;
 		double currentDist	=	singletons.SystemStatus.processLatency;//-obj;
 		if(currentDist<0){
 			currentDist	=	-currentDist;
 		}
-		if(currentDist<upperBound){
+		if(currentDist<upperBound&&(beginToLose==false)){
 			if(this.operatorLoadCheckOK()==true){
 				reward	=	reward+30;
 				logger.debug("All operators loaded and latency compliant, reward+30");
@@ -47,7 +62,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		double distDelta	=	oldDistance-currentDist;
 		int machineDelta		=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();
 		logger.debug("distance delta "+(distDelta)+"threshold "+this.distThreshold+" positive means decreased "+" machine delta "+machineDelta);
-		if(distDelta>this.distThreshold){
+		if((distDelta>this.distThreshold)&&(beginToLose==false)){
 			reward	=	reward+1;
 			reward	=	reward + (distDelta/1000);
 			if(machineDelta<0){	//ho aumentato il numero di thread
@@ -55,7 +70,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 			}
 			logger.debug("Distance shortened, reward "+reward);
 		}
-		else if(oldDistance-currentDist>-this.distThreshold){	//se non mi sono allontanato oltre la soglia
+		else if((oldDistance-currentDist>-this.distThreshold)&&(beginToLose==false)){	//se non mi sono allontanato oltre la soglia
 			if(machineDelta>0){
 				reward	=	reward+(machineDelta);
 				logger.debug("Instances number decreased, reward "+reward);
