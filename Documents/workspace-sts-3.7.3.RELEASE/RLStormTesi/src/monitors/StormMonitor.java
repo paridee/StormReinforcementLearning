@@ -84,7 +84,7 @@ public class StormMonitor implements Runnable{
 												URL url = null;
 												try {
 												    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
-												    LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												    //LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
 												} catch (MalformedURLException exception) {
 												    exception.printStackTrace();
 												}
@@ -158,7 +158,7 @@ public class StormMonitor implements Runnable{
 												URL url = null;
 												try {
 												    url = new URL(pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
-												    LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
+												    //LOG.info("Going to DELETE @ "+pushGatUrl+"/metrics/job/"+innerMet.getString("exported_job")+"/instance/"+innerMet.getString("exported_instance"));
 												} catch (MalformedURLException exception) {
 												    exception.printStackTrace();
 												}

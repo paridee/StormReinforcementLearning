@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mainClasses.MainClass;
+
 public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements RewardCalculator {
 
 	private static final Logger logger = LoggerFactory.getLogger(DeltaNonNegativeRewarderRelativeSteps.class);
@@ -78,6 +80,15 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		}
 		this.oldDistance		=	currentDist;
 		this.oldInstanceNumber	= 	singletons.SystemStatus.getOperatorsLevel();
+		
+		//prometheus update
+		int loss	=	0;
+		if(losing==true){
+			loss	=	1;
+		}
+		MainClass.TUPLE_LOSS.set(loss);
+		//end prometheus update
+		
 		return reward;
 	
 	}

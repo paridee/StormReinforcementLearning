@@ -75,6 +75,7 @@ public class ProcessTimeStateReaderEvoCapacity implements StateReader {
 				feat[0]		=	0;
 			}
 		}
+		MainClass.STATE_READ.set(feat[0]);
 		return translator.getIntForState(feat);
 	}
 
