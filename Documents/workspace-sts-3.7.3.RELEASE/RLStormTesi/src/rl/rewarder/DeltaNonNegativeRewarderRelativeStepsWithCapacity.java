@@ -64,7 +64,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		logger.debug("distance delta "+(distDelta)+"threshold "+this.distThreshold+" positive means decreased "+" machine delta "+machineDelta);
 		if((distDelta>this.distThreshold)&&(beginToLose==false)){
 			reward	=	reward+1;
-			reward	=	reward + (distDelta/1000);
+			reward	=	reward + ((distDelta/this.distThreshold)*0.3);
 			if(machineDelta<0){	//ho aumentato il numero di thread
 				reward	=	reward+((machineDelta*(1/(maxStep*2))*reward));
 			}
