@@ -79,6 +79,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		this.oldDistance		=	currentDist;
 		this.oldInstanceNumber	= 	singletons.SystemStatus.getOperatorsLevel();
 		return reward;
+	
 	}
 	
 	boolean operatorLoadCheckOK(){	//if there are underloaded bolts return false
