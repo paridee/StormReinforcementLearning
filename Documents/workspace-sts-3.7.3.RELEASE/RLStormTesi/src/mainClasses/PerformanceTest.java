@@ -1,6 +1,11 @@
 package mainClasses;
+/**
+ * Performance test for CPU benchmarking
+ * @author Paride
+ *
+ */
 
-
+@Deprecated
 public class PerformanceTest {
     public static long fibonacci(long i) {
 	/* F(i) non e` definito per interi i negativi! */

@@ -9,6 +9,13 @@ import org.eclipse.jetty.util.log.Log;
 import linearGradientSarsa.LinearGradientDescendSarsaLambda;
 import rl.executer.ActionExecutor;
 
+/**
+ * Features evaluator with 5 features per state, 3 in decrease 2 in increase
+ * @author Paride Casulli
+ *
+ */
+
+@Deprecated
 public class RelativeFeaturesEvaluator implements FeaturesEvaluator {
 	ArrayList<String> opName;
 	int states;

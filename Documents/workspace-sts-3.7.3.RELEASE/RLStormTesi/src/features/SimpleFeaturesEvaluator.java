@@ -8,6 +8,12 @@ import org.eclipse.jetty.util.log.Log;
 
 import linearGradientSarsa.LinearGradientDescendSarsaLambda;
 
+/**
+ * Basic evaluator with 6 features per state, 3 in decrease, 2 in increase, 1 if no change is done
+ * @author paride
+ *
+ */
+
 public class SimpleFeaturesEvaluator implements FeaturesEvaluator {
 	ArrayList<String> opName;
 	int states;

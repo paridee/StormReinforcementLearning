@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import expectedSarsa.storm.StateTranslator;
 import rl.executer.ActionExecutor;
+import state.StateTranslator;
 
 public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvaluator {
 	ArrayList<String> opName;

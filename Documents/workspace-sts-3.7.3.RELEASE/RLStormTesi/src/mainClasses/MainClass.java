@@ -12,11 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import expectedSarsa.ExpectedSarsa;
 import expectedSarsa.FixedIntervalManager;
-import expectedSarsa.StateReader;
-import expectedSarsa.storm.ProcessTimeStateReader;
-import expectedSarsa.storm.ProcessTimeStateReaderEvo;
-import expectedSarsa.storm.ProcessTimeStateReaderEvoCapacity;
-import expectedSarsa.storm.StateTranslator;
 import features.FeaturesEvaluator;
 import features.SimpleFeaturesEvaluator;
 import features.SimpleFeaturesEvaluatorMultilevel;
@@ -48,13 +43,18 @@ import rl.rewarder.ParabolicProcessTimeRewardCalculator;
 import rl.rewarder.RewardCalculator;
 import singletons.Settings;
 import singletons.SystemStatus;
+import state.ProcessTimeStateReader;
+import state.ProcessTimeStateReaderEvo;
+import state.ProcessTimeStateReaderEvoCapacity;
+import state.StateReader;
+import state.StateTranslator;
 
 public class MainClass {
 	private static final Logger LOG = LoggerFactory.getLogger(MainClass.class);
 	public static int 	 		monitoringInterval	=	Settings.decisionInterval;							//storm monitoring interval (>=60000)
-	public static final String	PROMETHEUS_URL		=	"http://160.80.97.147:9090";	//prometheus server url
-	public static final String	PROMETHEUS_PUSHG	=	"http://160.80.97.147:9091";	//prometheus push gateway
-	public static final String	STORMUI_URL			=	"http://160.80.97.147:8090";	//storm UI url
+	public static final String	PROMETHEUS_URL		=	Settings.PROMETHEUS_URL;	//prometheus server url
+	public static final String	PROMETHEUS_PUSHG	=	Settings.PROMETHEUS_PUSHG;	//prometheus push gateway
+	public static final String	STORMUI_URL			=	Settings.STORMUI_URL;	//storm UI url
 	public static final	Gauge	REWARD_VAL			=	Gauge.build().name("bench_rewardVal").help("Reward received value").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	LATENCY_VAL			=	Gauge.build().name("bench_latencyRead").help("Latency read by decisor").register();	//prometheus metric to be monitored on Graphana
 	public static final	Gauge	PARALLELISM_VAL		=	Gauge.build().name("bench_parallelism").help("Parallelism level decided").register();	//prometheus metric to be monitored on Graphana
@@ -125,8 +125,8 @@ public class MainClass {
 		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacity(latMax,translator,maxParallelism,loadOKTh);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
-		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(1);//EpsilonGreedyChooser(0.1);
-		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(0.01);
+		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(Settings.softmaxTemperature);//EpsilonGreedyChooser(0.1);
+		StaticAlphaCalculator					alpha		=	new StaticAlphaCalculator(Settings.alpha);
 		//Thread sarsaThread									=	new Thread(sarsa);
 		//sarsaThread.start();
 		
@@ -310,6 +310,10 @@ public class MainClass {
 		  }
 	}
 	
+	/**
+	 * Auxiliary method in order to initialize Prometheus variable hierarchy
+	 * @param boltsName bolts name list
+	 */
 	public static void initializePromVariables(ArrayList<String> boltsName){
 		qMatrix			=	new Gauge.Child[STATES_NUM][ACTIONS_NUM];
 		operatorsLevel	=	new Gauge.Child[boltsName.size()];

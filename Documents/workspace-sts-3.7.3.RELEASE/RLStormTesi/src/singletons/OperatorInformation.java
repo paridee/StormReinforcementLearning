@@ -2,6 +2,11 @@ package singletons;
 
 import java.util.Comparator;
 
+/**
+ * Comparator to order operators by congestion
+ * @author Paride Casulli
+ *
+ */
 public class OperatorInformation implements Comparable<OperatorInformation> {
 	public String 	operatorName;
 	public Double	congestionLevel	=	-1.0;

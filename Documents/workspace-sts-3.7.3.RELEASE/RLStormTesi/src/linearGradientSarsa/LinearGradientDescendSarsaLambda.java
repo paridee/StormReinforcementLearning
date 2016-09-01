@@ -22,7 +22,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 	double 	epsilon			=	0.1;
 	double  yota			=	0.9;
 	double  lambda			=	0.5;
-	expectedSarsa.StateReader 		reader;
+	state.StateReader 		reader;
 	features.FeaturesEvaluator 	eval;
 	rl.executer.ActionExecutor		executor;
 	rl.alpha.AlphaCalculator		alphaCalculator;
@@ -36,7 +36,7 @@ public class LinearGradientDescendSarsaLambda implements Runnable {
 	String filename	=	"vectors.txt";
 	
 	public LinearGradientDescendSarsaLambda(PolicyChooser chooser,int featuresN, double epsilon, double yota, double lambda,
-			expectedSarsa.StateReader reader, features.FeaturesEvaluator eval, rl.executer.ActionExecutor executor, rl.alpha.AlphaCalculator alphaCalculator,
+			state.StateReader reader, features.FeaturesEvaluator eval, rl.executer.ActionExecutor executor, rl.alpha.AlphaCalculator alphaCalculator,
 			int actions,int initAction) {
 		super();
 		this.chooser			=	chooser;

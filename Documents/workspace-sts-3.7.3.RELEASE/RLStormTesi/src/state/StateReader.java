@@ -1,4 +1,4 @@
-package expectedSarsa;
+package state;
 
 public interface StateReader {
 	int getCurrentState();

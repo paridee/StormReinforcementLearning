@@ -1,9 +1,8 @@
-package expectedSarsa.storm;
+package state;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import expectedSarsa.StateReader;
 import mainClasses.MainClass;
 import monitors.StormMonitor;
 

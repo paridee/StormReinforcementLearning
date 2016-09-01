@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import rl.alpha.AlphaCalculator;
 import rl.executer.ActionExecutor;
 import rl.policies.PolicyChooser;
+import state.StateReader;
 
 public class ExpectedSarsa implements Runnable{
 	int states				=	1;

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import Jama.Matrix;
 
+@Deprecated
 public class ParabolicComplexResponseTimeRewarder implements RewardCalculator {
 	/**
 	 * This class gives a "parabolic" reward set by:

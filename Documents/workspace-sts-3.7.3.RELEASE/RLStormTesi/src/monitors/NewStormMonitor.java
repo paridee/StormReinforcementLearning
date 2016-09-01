@@ -18,14 +18,19 @@ import org.slf4j.LoggerFactory;
 import mainClasses.MainClass;
 import singletons.SystemStatus;
 
+/**
+ * This monitor queries the Storm UI in order to have topology metrics
+ * @author Paride Casulli
+ *
+ */
 public class NewStormMonitor implements Runnable {
 	long latestLatencyRead=0;
 	double latestLatencyValueRead=0;
 	private String promUrl;
 	private String stormUIUrl;
 	private int pollingInt;
-	private HashMap<String,Double> executeLatencyBolt	=	new HashMap();
-	private HashMap<String,Double> executedBolt			=	new HashMap();
+	private HashMap<String,Double> executeLatencyBolt	=	new HashMap<String, Double>();
+	private HashMap<String,Double> executedBolt			=	new HashMap<String, Double>();
 	int emitted			=	-1;
 	double latency		=	-1.0;
 	int window			=	-1;
@@ -34,6 +39,9 @@ public class NewStormMonitor implements Runnable {
 	long totalEmitted	=	-1;
 	int emittedInPollingInterval;
 	String idT	=	null;
+	private static final Logger LOG = LoggerFactory.getLogger(NewStormMonitor.class);
+	boolean continueEx	=	true;
+	
 	public NewStormMonitor(String promUrl,String stormUIUrl,int pollingInt){
 		//interval			=	intervalM;
 		this.stormUIUrl		=	stormUIUrl;
@@ -42,10 +50,6 @@ public class NewStormMonitor implements Runnable {
 		this.latestLatencyRead	=	System.currentTimeMillis();
 		this.latestLatencyValueRead	=	singletons.SystemStatus.processLatency;
 	}
-	
-	
-	private static final Logger LOG = LoggerFactory.getLogger(NewStormMonitor.class);
-	boolean continueEx	=	true;
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
