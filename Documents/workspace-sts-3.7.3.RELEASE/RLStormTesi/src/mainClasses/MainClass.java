@@ -81,9 +81,9 @@ public class MainClass {
 	public static void dynamicSteps(){
 		int maxParallelism	=	32;
 		double loadOKTh		=	0.7;
-		int    latMax		=	80; //fibonacci was 4500
-		int    latObj		=	60; //fibonacci was 3000
-		int    latDelta		=	15; //fibonacci was 300
+		int    latMax		=	Settings.latMax; //fibonacci was 4500
+		int    latObj		=	Settings.latObj; //fibonacci was 3000
+		int    latDelta		=	Settings.latDelta; //fibonacci was 300
 		Jedis jedis = new Jedis("127.0.0.1",6379);
 	    jedis.flushAll();	    
 	    
