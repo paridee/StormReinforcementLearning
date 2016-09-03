@@ -88,7 +88,9 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 	@Override
 	public void run() {
 		this.loadVector(filename);
+		this.logger.debug("load finished");
 		currentState	=	reader.getCurrentState();	//read state
+		this.logger.debug("initial state read... beginning");
 		while(true){
 			int[] features	=	null;
 			System.out.println("features for state "+currentState+" action "+action);
