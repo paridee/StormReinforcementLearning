@@ -19,18 +19,20 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	int obj;
 	double loadCheck;
 	boolean losing;
+	double latencySensibility	=	0.3;
 	
-	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck) {
+	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck,double latencySensibility) {
 		super();
-		this.distThreshold = distThreshold;
-		this.obj = obj;
-		oldInstanceNumber	=	singletons.SystemStatus.getOperatorsLevel();
-		this.oldDistance	=	singletons.SystemStatus.processLatency-obj;	
-		this.upperBound		=	upperBound;
-		lowerBound			=	obj-(upperBound-obj);
-		this.maxStep		=	maxStep;
-		this.loadCheck		=	loadCheck;
-		this.losing			=	singletons.SystemStatus.losingTuples;
+		this.distThreshold 		= 	distThreshold;
+		this.obj 				= 	obj;
+		oldInstanceNumber		=	singletons.SystemStatus.getOperatorsLevel();
+		this.oldDistance		=	singletons.SystemStatus.processLatency-obj;	
+		this.upperBound			=	upperBound;
+		lowerBound				=	obj-(upperBound-obj);
+		this.maxStep			=	maxStep;
+		this.loadCheck			=	loadCheck;
+		this.losing				=	singletons.SystemStatus.losingTuples;
+		this.latencySensibility	=	latencySensibility;
 	}
 
 
@@ -66,7 +68,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		logger.debug("distance delta "+(distDelta)+"threshold "+this.distThreshold+" positive means decreased "+" machine delta "+machineDelta);
 		if((distDelta>this.distThreshold)&&(beginToLose==false)){
 			reward	=	reward+1;
-			reward	=	reward + ((distDelta/this.distThreshold)*0.3);
+			reward	=	reward + ((distDelta/this.distThreshold)*(this.latencySensibility));
 			if(machineDelta<0){	//ho aumentato il numero di thread
 				reward	=	reward+((machineDelta*(1/(maxStep*2))*reward));
 			}

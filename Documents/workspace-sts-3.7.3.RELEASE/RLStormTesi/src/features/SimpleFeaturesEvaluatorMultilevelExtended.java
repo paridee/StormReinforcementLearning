@@ -84,32 +84,32 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 				if(singletons.SystemStatus.isLeastLoadedWithMultipleExecutors(op)){
 					features[(state*this.featuresPerState)+0]	=	1; 
 					offset	=	0;
-					logger.debug("Feature decrease least loaded in state load "+state);
+				//	logger.debug("Feature decrease least loaded in state load "+state);
 				//	System.out.print(" least loaded\n");
 				}
 				else if(singletons.SystemStatus.isBottleneck(op)){
 					features[(state*this.featuresPerState)+2]	=	1;
 					offset	=	2;
-					logger.debug("Feature decrease bottleneck loaded in state load "+state);
+					//logger.debug("Feature decrease bottleneck loaded in state load "+state);
 					//System.out.print(" bottleneck\n");
 				}
 				else{
 					features[(state*this.featuresPerState)+4]	=	1;
-					logger.debug("Feature decrease intermediate loaded in state load "+state);
+					//logger.debug("Feature decrease intermediate loaded in state load "+state);
 					offset	=	4;
 				}
 			}
 			else if(actionV<2*steps.length){
 				String op	=	opName.get(operator);
 				if(singletons.SystemStatus.isBottleneck(op)){
-					logger.debug("operator "+op+" is bottleneck increase action "+action);
+					//logger.debug("operator "+op+" is bottleneck increase action "+action);
 					features[(state*this.featuresPerState)+1]	=	1;
-					logger.debug("Feature increase bottleneck loaded in state load "+state);
+					//logger.debug("Feature increase bottleneck loaded in state load "+state);
 					offset	=	1;
 				}
 				else{
 					features[(state*this.featuresPerState)+3]	=	1;
-					logger.debug("Feature increase another loaded in state load "+state);
+					//logger.debug("Feature increase another loaded in state load "+state);
 					offset	=	3;
 				}
 			}
@@ -130,7 +130,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		
 		int[][][]	secondBlock	=	new int[this.states][3][this.featuresPerState];	
 		secondBlock[state][loadMacroLevel][offset]	=	1;
-		logger.debug("Second Block Feature offset "+offset+" macro load level "+loadMacroLevel);
+		//logger.debug("Second Block Feature offset "+offset+" macro load level "+loadMacroLevel);
 		for(int i=0;i<this.states;i++){
 			for(int j=0;j<3;j++){
 				for(int k=0;k<this.featuresPerState;k++){
@@ -147,7 +147,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		int[][][] thirdBlock	= 	new int[this.states][steps.length][this.featuresPerState];
 		if(offset<(this.featuresPerState)){
 			thirdBlock[state][changeStep][offset]	=	1;
-			logger.debug("Third Block Feature offset "+offset+" state "+state+" step "+changeStep);
+			//logger.debug("Third Block Feature offset "+offset+" state "+state+" step "+changeStep);
 		}
 		for(int j=0;j<this.states;j++){
 			for(int k=0;k<steps.length;k++){
@@ -165,7 +165,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		int[][][][] fourthBlock	= 	new int[3][this.states][steps.length][this.featuresPerState];
 		if(offset<(this.featuresPerState)){
 			fourthBlock[loadMacroLevel][state][changeStep][offset]	=	1;
-			logger.debug("Fourth Block Feature offset "+offset+" for macrolevel "+loadMacroLevel+" state "+state+" step "+changeStep);
+			//logger.debug("Fourth Block Feature offset "+offset+" for macrolevel "+loadMacroLevel+" state "+state+" step "+changeStep);
 		}
 		for(int i=0;i<3;i++){
 			for(int j=0;j<this.states;j++){
@@ -184,7 +184,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		
 		int[][][]	fifth	=	new int[this.states][this.maxParallelism+1][this.featuresPerState];	
 		fifth[state][parallelismLevel][offset]	=	1;
-		logger.debug("Fifth Block Feature offset "+offset+" state "+state+" parallelism "+parallelismLevel);
+		//logger.debug("Fifth Block Feature offset "+offset+" state "+state+" parallelism "+parallelismLevel);
 		for(int i=0;i<this.states;i++){
 			for(int j=0;j<this.maxParallelism+1;j++){
 				for(int k=0;k<this.featuresPerState;k++){
@@ -200,7 +200,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		int[][][][] sixthBlock	= 	new int[maxParallelism+1][this.states][steps.length][this.featuresPerState];
 		if(offset<(this.featuresPerState)){
 			sixthBlock[parallelismLevel][state][changeStep][offset]	=	1;
-			logger.debug("Sixth Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
+			//logger.debug("Sixth Block Feature offset "+offset+" for level "+parallelismLevel+" state "+state+" step "+changeStep);
 		}
 		for(int i=0;i<maxParallelism+1;i++){
 			for(int j=0;j<this.states;j++){
@@ -222,7 +222,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			int[] preview		=	executor.newConfigurationPreview(action, stateRaw);
 			for(int i=0;i<preview.length;i++){
 				seventhBlock[parallelismLevel][i][preview[i]]=1;
-				logger.debug("Seventh block feature for parallelism level "+parallelismLevel+" operator "+i+" operator level "+preview[i]);
+				//logger.debug("Seventh block feature for parallelism level "+parallelismLevel+" operator "+i+" operator level "+preview[i]);
 			}
 			for(int i=0;i<maxParallelism+1;i++){
 				for(int j=0;j<this.opName.size();j++){
@@ -239,9 +239,9 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		int[][][][] eightthBlock	=	new int[this.states][this.opName.size()][11][this.featuresPerState];
 		if(operator<opName.size()){//if is not do nothing	
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
-			logger.debug("DEBUG block 8 "+state+" "+operator+" "+opUtilLevel+" "+offset);
+			//logger.debug("DEBUG block 8 "+state+" "+operator+" "+opUtilLevel+" "+offset);
 			eightthBlock[state][operator][opUtilLevel][offset]	=	1;			
-			logger.debug("Block feature 8 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
+			//logger.debug("Block feature 8 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
 		}
 		for(int i=0;i<this.states;i++){
 			for(int j=0;j<this.opName.size();j++){
@@ -260,7 +260,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		if(operator<opName.size()){//if is not do nothing
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
 			ninethBlock[state][operator][opUtilLevel][offset][changeStep]	=	1;
-			logger.debug("Block feature 9 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset+" step "+changeStep);
+			//logger.debug("Block feature 9 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset+" step "+changeStep);
 		}
 		for(int i=0;i<this.states;i++){
 			for(int j=0;j<this.opName.size();j++){
@@ -282,7 +282,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		if(operator<opName.size()){
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
 			tenthBlock[state][parallelismLevel][operator][opUtilLevel][offset]	=	1;
-			logger.debug("Block feature 10 for state "+state+" level "+parallelismLevel+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
+			//logger.debug("Block feature 10 for state "+state+" level "+parallelismLevel+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
 		}
 		for(int i=0;i<this.states;i++){
 			for(int j=0;j<this.maxParallelism+1;j++){
@@ -305,7 +305,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		if(operator<opName.size()){
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
 			eleventhBlock[state][parallelismLevel][operator][opUtilLevel][offset][changeStep]	=	1;
-			logger.debug("Block feature 11 for state "+state+" level "+parallelismLevel+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset+" step "+changeStep);
+			//logger.debug("Block feature 11 for state "+state+" level "+parallelismLevel+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset+" step "+changeStep);
 		}
 
 		for(int i=0;i<this.states;i++){
@@ -331,7 +331,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		
 		if(operator<opName.size()){
 			int opUtilLevel										=	feats[2+(opName.size())+operator];
-			logger.debug("Block feature 12 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
+			//logger.debug("Block feature 12 for state "+state+" operator "+operator+" operator util level "+opUtilLevel+" offset "+offset);
 			twelvethBlock[state][operator][opUtilLevel][offset]	=	1;
 		}
 		
@@ -357,7 +357,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 				ind	=	1;
 			}
 			thirteenthBlock[state][ind][offset]	=	1;
-			logger.debug("Block feature 13 for state "+state+" high utilization "+ind+" offset "+offset);
+			//logger.debug("Block feature 13 for state "+state+" high utilization "+ind+" offset "+offset);
 		}
 		for(int i=0;i<states;i++){
 			for(int j=0;j<2;j++){
@@ -372,7 +372,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			int opUtilLevel	=	feats[2+(opName.size())+operator];
 			int ind	=	opUtilLevel/2;
 			fourteenthBlock[state][ind][offset]	=	1;
-			logger.debug("Block feature 14 for state "+state+" utilization/5 "+ind+" offset "+offset);
+			//logger.debug("Block feature 14 for state "+state+" utilization/5 "+ind+" offset "+offset);
 		}
 		for(int i=0;i<states;i++){
 			for(int j=0;j<6;j++){
@@ -387,7 +387,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 			int opUtilLevel	=	feats[2+(opName.size())+operator];
 			int ind	=	opUtilLevel/2;
 			fifteenthBlock[state][ind][offset][changeStep]	=	1;
-			logger.debug("Block feature 15 for state "+state+" utilization/5 "+ind+" offset "+offset+" step "+changeStep);
+			//logger.debug("Block feature 15 for state "+state+" utilization/5 "+ind+" offset "+offset+" step "+changeStep);
 		}
 		for(int i=0;i<states;i++){
 			for(int j=0;j<6;j++){
