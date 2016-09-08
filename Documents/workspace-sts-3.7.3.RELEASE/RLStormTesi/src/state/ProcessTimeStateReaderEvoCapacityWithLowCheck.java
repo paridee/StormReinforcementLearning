@@ -85,9 +85,11 @@ public class ProcessTimeStateReaderEvoCapacityWithLowCheck implements StateReade
 		if(repLevel>1){
 			if(opLevel<this.correctLoadThreshold){
 				if(opLowCheck==0){
+					LOG.debug("operator "+opName+" load level "+opLevel);
 					return true;
 				}
 				if(opLevel<opLowCheck){
+					LOG.debug("operator "+opName+" load level "+opLevel);
 					return true;	
 				}
 			}
