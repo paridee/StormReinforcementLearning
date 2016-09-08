@@ -80,8 +80,11 @@ public class ProcessTimeStateReaderEvoCapacityWithLowCheck implements StateReade
 	public boolean isOperatorUnderloaded(String opName) {
 		double opLevel		=	singletons.SystemStatus.operatorCapacity.get(opName);
 		int    repLevel		=	singletons.SystemStatus.executors.get(opName);
-		double opLowCheck	=	(double)1-((double)1/(repLevel+1));
+		double opLowCheck	=	(double)1-((double)1/(repLevel));
 		if(opLevel<this.correctLoadThreshold){
+			if(opLowCheck==0){
+				return true;
+			}
 			if(opLevel<opLowCheck){
 				return true;	
 			}
