@@ -139,7 +139,7 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 				//System.out.println("updating values for feature "+i+" omega "+omega[i]);
 				//System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
 				double temp			=	omega[i];
-				double featDelta	=	(alphaCalculator.getAlpha(action)*delta*eVector[i])
+				double featDelta	=	(alphaCalculator.getAlpha(action)*delta*eVector[i]);
 				omega[i]	=	omega[i]+featDelta;
 				if(omega[i]!=0){
 					logger.debug("Updating omega before: "+temp+" after "+omega[i]+" feature delta "+featDelta);
