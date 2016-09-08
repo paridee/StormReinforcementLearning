@@ -118,9 +118,11 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			}		
 			mainClasses.MainClass.REWARD_VAL.set(reward);
 			double delta	=	reward;
+			double estValue	=	0;
 			for(int i=0;i<features.length;i++){
 				if(features[i]==1){
 					delta		=	delta	-	omega[i];	
+					estValue	=	estValue+	omega[i];
 				}
 			}
 			currentState	=	reader.getCurrentState();			
@@ -158,6 +160,7 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			logger.debug("Action choosen "+action);
 			this.saveVectors(filename);
 			logger.debug("previous action reward obtained "+reward);
+			logger.debug("previous action estimated value "+estValue);
 			logger.debug("previous action delta value "+delta);
 			
 			System.out.println("Omega vector:");
