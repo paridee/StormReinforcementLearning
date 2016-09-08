@@ -123,8 +123,6 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 					delta		=	delta	-	omega[i];	
 				}
 			}
-			logger.debug("reward obtained "+reward);
-			logger.debug("delta value "+delta);
 			currentState	=	reader.getCurrentState();			
 			double Q[]	=	this.getUpdatedQMatrix();			
 			double[] policyR	=	this.chooser.policyForState(currentState,Q);
@@ -154,6 +152,9 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			action				=	chooser.actionForState(currentState, Q);
 			logger.debug("Action choosen "+action);
 			this.saveVectors(filename);
+			logger.debug("previous action reward obtained "+reward);
+			logger.debug("previous action delta value "+delta);
+			
 			System.out.println("Omega vector:");
 			for(int i=0;i<featuresN;i++){
 				//System.out.print(omega[i]+" ");
