@@ -78,5 +78,14 @@ public class ProcessTimeStateReaderEvoCapacity implements StateReader {
 		return translator.getIntForState(feat);
 	}
 
+	@Override
+	public boolean isOperatorUnderloaded(String opName) {
+		double opLevel		=	singletons.SystemStatus.operatorCapacity.get(opName);
+		if(opLevel<this.correctLoadThreshold){
+			return true;
+		}
+		return false;
+	}
+
 
 }

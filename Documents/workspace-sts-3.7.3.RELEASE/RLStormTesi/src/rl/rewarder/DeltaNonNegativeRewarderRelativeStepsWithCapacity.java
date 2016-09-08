@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mainClasses.MainClass;
+import state.StateReader;
 
 public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements RewardCalculator {
 
@@ -20,8 +21,9 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	double loadCheck;
 	boolean losing;
 	double latencySensibility	=	0.3;
+	StateReader stateReader;
 	
-	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck,double latencySensibility) {
+	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck,double latencySensibility,StateReader reader) {
 		super();
 		this.distThreshold 		= 	distThreshold;
 		this.obj 				= 	obj;
@@ -33,6 +35,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		this.loadCheck			=	loadCheck;
 		this.losing				=	singletons.SystemStatus.losingTuples;
 		this.latencySensibility	=	latencySensibility;
+		this.stateReader		=	reader;
 	}
 
 
@@ -95,16 +98,14 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	
 	}
 	
+	
 	boolean operatorLoadCheckOK(){	//if there are underloaded bolts return false
 		ArrayList<String> boltsName	=	singletons.SystemStatus.bolts;
 		for(int i=0;i<boltsName.size();i++){
-			String boltName	=	boltsName.get(i);
-			int repLevel	=	singletons.SystemStatus.executors.get(boltName);
-			if(repLevel>1){
-				double capacity	=	singletons.SystemStatus.operatorCapacity.get(boltName);
-				if(capacity<this.loadCheck){
-					return false;
-				}
+			String boltName		=	boltsName.get(i);
+			boolean underloaded	=	this.stateReader.isOperatorUnderloaded(boltName);
+			if(underloaded==true){
+				return false;
 			}
 		}
 		return true;

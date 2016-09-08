@@ -123,7 +123,7 @@ public class MainClass {
 		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500,true);
 		//RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
 		//StateReader								reader		=	new ProcessTimeStateReaderEvo(1500,4500,translator,maxParallelism);
-		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacityWithLowCheck(latMax,translator,maxParallelism,loadOKTh);
+		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacity(latMax,translator,maxParallelism,loadOKTh);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(Settings.softmaxTemperature);//EpsilonGreedyChooser(0.1);
