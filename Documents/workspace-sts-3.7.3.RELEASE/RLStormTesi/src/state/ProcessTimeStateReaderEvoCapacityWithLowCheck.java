@@ -82,12 +82,14 @@ public class ProcessTimeStateReaderEvoCapacityWithLowCheck implements StateReade
 		double opLevel		=	singletons.SystemStatus.operatorCapacity.get(opName);
 		int    repLevel		=	singletons.SystemStatus.executors.get(opName);
 		double opLowCheck	=	(double)1-((double)1/(repLevel));
-		if(opLevel<this.correctLoadThreshold){
-			if(opLowCheck==0){
-				return true;
-			}
-			if(opLevel<opLowCheck){
-				return true;	
+		if(repLevel>1){
+			if(opLevel<this.correctLoadThreshold){
+				if(opLowCheck==0){
+					return true;
+				}
+				if(opLevel<opLowCheck){
+					return true;	
+				}
 			}
 		}
 		return false;
