@@ -138,9 +138,12 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			for(int i=0;i<featuresN;i++){
 				//System.out.println("updating values for feature "+i+" omega "+omega[i]);
 				//System.out.println("alpha "+alphaCalculator.getAlpha(action)+" delta "+delta+" trace "+eVector[i]);
-				double temp	=	omega[i];
-				omega[i]	=	omega[i]+(alphaCalculator.getAlpha(action)*delta*eVector[i]);
-				logger.debug("Updating omega before: "+temp+" after "+omega[i]);
+				double temp			=	omega[i];
+				double featDelta	=	(alphaCalculator.getAlpha(action)*delta*eVector[i])
+				omega[i]	=	omega[i]+featDelta;
+				if(omega[i]!=0){
+					logger.debug("Updating omega before: "+temp+" after "+omega[i]+" feature delta "+featDelta);
+				}
 				//System.out.println("updated values for feature "+i+" omega "+omega[i]);
 				eVector[i]	=	yota*lambda*eVector[i];
 			}				
