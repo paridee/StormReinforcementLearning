@@ -14,7 +14,7 @@ public class ProcessTimeStateReaderEvoCapacityWithLowCheck implements StateReade
 	int upperBound;
 	StateTranslator translator;
 	int maxParallelism;
-	int correctLoadThreshold;
+	double correctLoadThreshold;
 	private static final Logger LOG = LoggerFactory.getLogger(ProcessTimeStateReaderEvoCapacityWithLowCheck.class);
 	
 	public ProcessTimeStateReaderEvoCapacityWithLowCheck(int upperBound, StateTranslator translator,int maxParallelism,double correctLoadThreshold) {
@@ -22,7 +22,7 @@ public class ProcessTimeStateReaderEvoCapacityWithLowCheck implements StateReade
 		this.upperBound 			= 	upperBound;
 		this.translator 			= 	translator;
 		this.maxParallelism			=	maxParallelism;
-		this.correctLoadThreshold	=	(int) (correctLoadThreshold*10);
+		this.correctLoadThreshold	=	correctLoadThreshold;
 	}
 
 	@Override
