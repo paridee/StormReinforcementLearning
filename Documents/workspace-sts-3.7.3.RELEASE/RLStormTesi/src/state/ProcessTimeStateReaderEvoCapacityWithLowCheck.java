@@ -72,6 +72,7 @@ public class ProcessTimeStateReaderEvoCapacityWithLowCheck implements StateReade
 				feat[0]		=	0;
 			}
 		}
+		LOG.debug("State wrap up result state "+feat[0]+" underloaded "+underloaded+" latency "+latency+" upperbound "+upperBound);
 		MainClass.STATE_READ.set(feat[0]);
 		return translator.getIntForState(feat);
 	}
