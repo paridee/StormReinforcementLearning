@@ -54,9 +54,7 @@ public class ProcessTimeStateReaderEvoCapacityWithLowCheck implements StateReade
 			}
 			feat[2+bolts.size()+i]	=	opLevel;
 			if(singletons.SystemStatus.executors.get(bolts.get(i))>1){
-				if(opLevel<this.correctLoadThreshold){
-					underloaded	=	true;
-				}
+				underloaded	=	this.isOperatorUnderloaded(bolts.get(i));
 			}
 		}
 		if(latency>upperBound){
