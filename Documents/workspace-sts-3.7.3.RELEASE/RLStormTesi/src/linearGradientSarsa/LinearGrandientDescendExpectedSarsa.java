@@ -160,7 +160,7 @@ public class LinearGrandientDescendExpectedSarsa implements Runnable {
 			logger.debug("Action choosen "+action);
 			this.saveVectors(filename);
 			logger.debug("previous action reward obtained "+reward);
-			logger.debug("previous action estimated value "+delta);
+			logger.debug("previous action estimated value "+estValue);
 			logger.debug("previous action delta value "+delta+" yota "+this.yota);
 			
 			System.out.println("Omega vector:");
