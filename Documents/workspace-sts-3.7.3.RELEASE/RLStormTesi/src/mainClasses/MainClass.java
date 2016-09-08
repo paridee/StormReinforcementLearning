@@ -80,7 +80,7 @@ public class MainClass {
 	
 	public static void dynamicSteps(){
 		int maxParallelism	=	32;
-		double loadOKTh		=	0.7;
+		double loadOKTh		=	Settings.loadOKTh; //IOT 0.7
 		int    latMax		=	Settings.latMax; //fibonacci was 4500
 		int    latObj		=	Settings.latObj; //fibonacci was 3000
 		int    latDelta		=	Settings.latDelta; //fibonacci was 300
@@ -123,7 +123,7 @@ public class MainClass {
 		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500,true);
 		//RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
 		//StateReader								reader		=	new ProcessTimeStateReaderEvo(1500,4500,translator,maxParallelism);
-		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacity(latMax,translator,maxParallelism,loadOKTh);
+		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacityWithLowCheck(latMax,translator,maxParallelism,loadOKTh);
 		FixedIntervalManager					intManager	=	new FixedIntervalManager(Settings.decisionInterval);
 		//WorkerNumberExecutor					executor	=	new WorkerNumberExecutor(rewarder,intManager);
 		rl.policies.PolicyChooser				chooser		=	new rl.policies.SoftmaxPolicyChooser(Settings.softmaxTemperature);//EpsilonGreedyChooser(0.1);

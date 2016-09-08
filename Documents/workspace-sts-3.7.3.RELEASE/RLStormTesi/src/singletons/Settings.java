@@ -13,6 +13,7 @@ public class Settings {
 	public static int    			latDelta			=	Integer.parseInt((String)propsReader.getValue("latDelta")); //fibonacci was 300
 	public static double			softmaxTemperature	=	Double.parseDouble((String)propsReader.getValue("softmaxTemperature"));
 	public static double			alpha				=	Double.parseDouble((String)propsReader.getValue("alpha"));
-	public static double 			latSensibility		=	Double.parseDouble((String)propsReader.getValue("latSensibility"));;
+	public static double 			latSensibility		=	Double.parseDouble((String)propsReader.getValue("latSensibility"));
+	public static double 			loadOKTh			=	Double.parseDouble((String)propsReader.getValue("loadOKTh"));;
 }
 
