@@ -122,7 +122,7 @@ public class MainClass {
 		//RewardCalculator					 	rewarder	=	new ParabolicComplexResponseTimeRewarder(3000,125,4500,ACTIONS_NUM);
 		//RewardCalculator					 	rewarder	=	new DeltaRewarder(3000,4500,15,0.2);
 		StateReader								reader		=	new ProcessTimeStateReaderEvoCapacityWithLowCheck(latMax,translator,maxParallelism,loadOKTh);
-		RewardCalculator						rewarder	=	new DeltaNonNegativeRewarderRelativeStepsWithCapacity(latDelta,latObj,latMax,maxParallelism,loadOKTh,latSensib,reader);
+		RewardCalculator						rewarder	=	new DeltaNonNegativeRewarderRelativeStepsWithCapacity(latDelta,latObj,latMax,maxParallelism,loadOKTh,latSensib,reader,loadOKBonus);
 		//RewardCalculator					 	rewarder	=	new DeltaRewarderSimplified(300,3000,4500,true);
 		//RewardCalculator					 	rewarder	=	new CongestionDeltaRewarder(boltsName,4500,3000);
 		//StateReader								reader		=	new ProcessTimeStateReaderEvo(1500,4500,translator,maxParallelism);
