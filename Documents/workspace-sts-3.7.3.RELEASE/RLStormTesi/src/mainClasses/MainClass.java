@@ -86,6 +86,7 @@ public class MainClass {
 		int    latObj		=	Settings.latObj; //fibonacci was 3000
 		int    latDelta		=	Settings.latDelta; //fibonacci was 300
 		double latSensib	=	Settings.latSensibility; //Iot 0.3
+		double loadOKBonus	=	Settings.loadOKBonus;//default 30
 		Jedis jedis = new Jedis("127.0.0.1",6379);
 	    jedis.flushAll();	    
 	    

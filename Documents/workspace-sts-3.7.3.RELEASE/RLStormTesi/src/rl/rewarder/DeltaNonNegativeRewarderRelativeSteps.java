@@ -13,8 +13,9 @@ public class DeltaNonNegativeRewarderRelativeSteps implements RewardCalculator {
 	double maxStep;
 	double oldDistance;
 	int obj;
+	private double loadOKBonus;
 	
-	public DeltaNonNegativeRewarderRelativeSteps(int distThreshold, int obj,int upperBound,int maxStep) {
+	public DeltaNonNegativeRewarderRelativeSteps(int distThreshold, int obj,int upperBound,int maxStep,double loadOKBonus) {
 		super();
 		this.distThreshold = distThreshold;
 		this.obj = obj;
@@ -23,6 +24,7 @@ public class DeltaNonNegativeRewarderRelativeSteps implements RewardCalculator {
 		this.upperBound		=	upperBound;
 		lowerBound			=	obj-(upperBound-obj);
 		this.maxStep		=	maxStep;
+		this.loadOKBonus	=	loadOKBonus;
 	}
 
 
@@ -35,7 +37,7 @@ public class DeltaNonNegativeRewarderRelativeSteps implements RewardCalculator {
 			currentDist	=	-currentDist;
 		}
 		if(currentDist<this.distThreshold){
-			reward	=	reward+30;
+			reward	=	reward+loadOKBonus;
 		}
 		double distDelta	=	oldDistance-currentDist;
 		int machineDelta		=	this.oldInstanceNumber-singletons.SystemStatus.getOperatorsLevel();

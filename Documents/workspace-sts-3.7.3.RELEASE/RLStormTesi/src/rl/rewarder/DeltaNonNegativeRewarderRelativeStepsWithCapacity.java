@@ -22,8 +22,9 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 	boolean losing;
 	double latencySensibility	=	0.3;
 	StateReader stateReader;
+	private double loadOKBonus;
 	
-	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck,double latencySensibility,StateReader reader) {
+	public DeltaNonNegativeRewarderRelativeStepsWithCapacity(int distThreshold, int obj,int upperBound,int maxStep,double loadCheck,double latencySensibility,StateReader reader,double loadOKBonus) {
 		super();
 		this.distThreshold 		= 	distThreshold;
 		this.obj 				= 	obj;
@@ -36,6 +37,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		this.losing				=	singletons.SystemStatus.losingTuples;
 		this.latencySensibility	=	latencySensibility;
 		this.stateReader		=	reader;
+		this.loadOKBonus		=	loadOKBonus;
 	}
 
 
@@ -62,7 +64,7 @@ public class DeltaNonNegativeRewarderRelativeStepsWithCapacity implements Reward
 		}
 		if(currentDist<upperBound&&(beginToLose==false)){
 			if(this.operatorLoadCheckOK()==true){
-				reward	=	reward+30;
+				reward	=	reward+loadOKBonus;
 				logger.debug("All operators loaded and latency compliant, reward+30");
 			}
 		}
