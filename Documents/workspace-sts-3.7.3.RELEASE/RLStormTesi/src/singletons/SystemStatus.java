@@ -19,6 +19,10 @@ public class SystemStatus {
 		}
 	}
 	
+	/**
+	 * Return the TOTAL number of executing operators
+	 * @return integer with operators sum
+	 */
 	public static int getOperatorsLevel(){
 		int temp	=	0;
 		Iterator<String> it	=	executors.keySet().iterator();

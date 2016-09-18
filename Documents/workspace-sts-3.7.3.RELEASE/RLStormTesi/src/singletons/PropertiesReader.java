@@ -14,7 +14,7 @@ import mainClasses.MainClass;
 public class PropertiesReader {
 	Properties prop		=	new Properties();
 	
-	PropertiesReader(String filename){
+	public PropertiesReader(String filename){
 		
 		InputStream input	=	null;
 		try{
@@ -33,7 +33,7 @@ public class PropertiesReader {
 		}
 	}
 	
-	Object getValue(String propName){
+	public Object getValue(String propName){
 		if(prop.containsKey(propName)){
 			System.out.println("Proprieta richiesta "+propName+" valore "+prop.getProperty(propName));
 			return prop.getProperty(propName);	

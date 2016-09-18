@@ -86,13 +86,13 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 					features[(state*this.featuresPerState)+0]	=	1; 
 					offset	=	0;
 					logger.debug("Feature decrease least loaded in state load "+state);
-				//	System.out.print(" least loaded\n");
+					System.out.print(" least loaded\n");
 				}
 				else if(singletons.SystemStatus.isBottleneck(op)){
 					features[(state*this.featuresPerState)+2]	=	1;
 					offset	=	2;
 					logger.debug("Feature decrease bottleneck loaded in state load "+state);
-					//System.out.print(" bottleneck\n");
+					System.out.print(" bottleneck\n");
 				}
 				else{
 					features[(state*this.featuresPerState)+4]	=	1;
@@ -114,7 +114,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 					offset	=	3;
 				}
 			}
-			//System.out.print(" Action "+actionV+" on operator "+operator+"\n");
+			System.out.print(" Action "+actionV+" on operator "+operator+"\n");
 		}
 		for(int i=0;i<features.length;i++){
 			allFeatures[i]	=	features[i];
