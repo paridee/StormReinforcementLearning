@@ -52,7 +52,7 @@ public class SimpleFeaturesEvaluatorMultilevelExtended implements FeaturesEvalua
 		for(int i=0;i<arraySizes.length;i++){
 			totalSize	=	totalSize	+	arraySizes[i];
 		}
-		logger.setLevel(Level.OFF);
+		//logger.setLevel(Level.OFF);
 	}
 
 
