@@ -9,6 +9,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import io.prometheus.client.exporter.MetricsServlet;
+import mainClasses.MainClass;
 import mainClasses.NoLogging;
 import monitors.NewStormMonitor;
 import monitors.StormMonitor;
@@ -92,6 +93,7 @@ public class ThresholdSystem implements Runnable {
 					System.out.println("trigger collo bottiglia "+bottleneckName+" da "+decisionMap.get(bottleneckName)+" repliche a ");
 					int repLevel			=	decisionMap.get(bottleneckName);
 					if(repLevel<Settings.maxParallelism){
+						MainClass.STATE_READ.set(2);
 						decisionMap.put(bottleneckName, decisionMap.get(bottleneckName)+1);
 						SystemStatus.executors.put(bottleneckName, decisionMap.get(bottleneckName));
 						System.out.println(" a "+decisionMap.get(bottleneckName));
@@ -103,6 +105,7 @@ public class ThresholdSystem implements Runnable {
 				}
 				else{
 					if(leastLoadedCapacity<min){
+						MainClass.STATE_READ.set(0);
 						System.out.println("trigger meno carico "+leastLoadedName+" da "+decisionMap.get(leastLoadedName)+" repliche a ");
 						decisionMap.put(leastLoadedName, decisionMap.get(leastLoadedName)-1);
 						SystemStatus.executors.put(leastLoadedName, decisionMap.get(leastLoadedName));
@@ -110,6 +113,11 @@ public class ThresholdSystem implements Runnable {
 						ex.executeConfiguration(decisionMap, Settings.topologyName);
 					}
 				}
+				else{
+					MainClass.STATE_READ.set(0);
+				}
+				MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
+				
 				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
