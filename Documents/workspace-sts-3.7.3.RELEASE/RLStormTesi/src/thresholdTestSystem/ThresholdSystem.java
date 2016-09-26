@@ -112,9 +112,9 @@ public class ThresholdSystem implements Runnable {
 						System.out.println(" a "+decisionMap.get(leastLoadedName));
 						ex.executeConfiguration(decisionMap, Settings.topologyName);
 					}
-				}
-				else{
-					MainClass.STATE_READ.set(0);
+					else{
+						MainClass.STATE_READ.set(0);
+					}
 				}
 				MainClass.LATENCY_VAL.set(singletons.SystemStatus.processLatency);
 				
