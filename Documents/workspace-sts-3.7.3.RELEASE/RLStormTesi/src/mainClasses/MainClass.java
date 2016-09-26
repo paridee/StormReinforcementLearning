@@ -49,6 +49,7 @@ import state.ProcessTimeStateReaderEvoCapacity;
 import state.ProcessTimeStateReaderEvoCapacityWithLowCheck;
 import state.StateReader;
 import state.StateTranslator;
+import thresholdTestSystem.ThresholdSystem;
 
 public class MainClass {
 	private static final Logger LOG = LoggerFactory.getLogger(MainClass.class);
@@ -76,7 +77,14 @@ public class MainClass {
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
-		dynamicSteps();
+		//dynamicSteps();
+		thrSystem();
+	}
+	
+	public static void thrSystem(){
+		ThresholdSystem	ts	=	new ThresholdSystem(0.3,0.8);
+		Thread th			=	new Thread(ts);
+		th.start();
 	}
 	
 	public static void dynamicSteps(){
