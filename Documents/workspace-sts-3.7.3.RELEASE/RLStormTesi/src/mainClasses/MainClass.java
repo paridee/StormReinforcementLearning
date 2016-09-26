@@ -88,7 +88,7 @@ public class MainClass {
 	}
 	
 	public static void dynamicSteps(){
-		int maxParallelism	=	32;
+		int maxParallelism	=	Settings.maxParallelism;
 		double loadOKTh		=	Settings.loadOKTh; //IOT 0.7
 		int    latMax		=	Settings.latMax; //fibonacci was 4500
 		int    latObj		=	Settings.latObj; //fibonacci was 3000

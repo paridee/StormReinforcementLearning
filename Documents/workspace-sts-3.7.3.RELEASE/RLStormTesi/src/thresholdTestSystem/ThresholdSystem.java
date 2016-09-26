@@ -90,10 +90,16 @@ public class ThresholdSystem implements Runnable {
 			try {
 				if(bottleneckCapacity>max){
 					System.out.println("trigger collo bottiglia "+bottleneckName+" da "+decisionMap.get(bottleneckName)+" repliche a ");
-					decisionMap.put(bottleneckName, decisionMap.get(bottleneckName)+1);
-					SystemStatus.executors.put(bottleneckName, decisionMap.get(bottleneckName));
-					System.out.println(" a "+decisionMap.get(bottleneckName));
-					ex.executeConfiguration(decisionMap, Settings.topologyName);
+					int repLevel			=	decisionMap.get(bottleneckName);
+					if(repLevel<Settings.maxParallelism){
+						decisionMap.put(bottleneckName, decisionMap.get(bottleneckName)+1);
+						SystemStatus.executors.put(bottleneckName, decisionMap.get(bottleneckName));
+						System.out.println(" a "+decisionMap.get(bottleneckName));
+						ex.executeConfiguration(decisionMap, Settings.topologyName);
+					}
+					else{
+						System.out.println("max replication for bottleneck... PROBLEM!");
+					}
 				}
 				else{
 					if(leastLoadedCapacity<min){

@@ -16,5 +16,6 @@ public class Settings {
 	public static double 			latSensibility		=	Double.parseDouble((String)propsReader.getValue("latSensibility"));
 	public static double 			loadOKTh			=	Double.parseDouble((String)propsReader.getValue("loadOKTh"));
 	public static double 			loadOKBonus			=	Double.parseDouble((String)propsReader.getValue("loadOKBonus"));
+	public static int 				maxParallelism		=	Integer.parseInt((String)propsReader.getValue("maxParallelism"));
 }
 
