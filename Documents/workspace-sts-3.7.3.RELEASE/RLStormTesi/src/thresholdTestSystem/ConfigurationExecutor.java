@@ -8,6 +8,8 @@ import javax.swing.text.html.HTMLDocument.Iterator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import mainClasses.MainClass;
+
 public class ConfigurationExecutor {
 	public final static Logger logger	=	LogManager.getLogger(ConfigurationExecutor.class);
 	public void executeConfiguration(HashMap<String,Integer> newConf,String topologyName){
@@ -22,6 +24,7 @@ public class ConfigurationExecutor {
 		totalExecutors	=	totalExecutors/8;
 		String command	=	singletons.Settings.stormPath+"storm rebalance -w 0 "+topologyName+" -n "+totalExecutors+execFlags;
 		logger.debug("sending command "+command);
+		MainClass.PARALLELISM_VAL.set(totalExecutors);
 		Runtime rt 		= 	Runtime.getRuntime();
 		try {
 			Process pr 		= 	rt.exec(command);
