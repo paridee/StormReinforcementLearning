@@ -50,6 +50,7 @@ import state.ProcessTimeStateReaderEvoCapacityWithLowCheck;
 import state.StateReader;
 import state.StateTranslator;
 import thresholdTestSystem.ThresholdSystem;
+import thresholdTestSystem.ThresholdSystemWithCheck;
 
 public class MainClass {
 	private static final Logger LOG = LoggerFactory.getLogger(MainClass.class);
@@ -82,8 +83,8 @@ public class MainClass {
 	}
 	
 	public static void thrSystem(){
-		ThresholdSystem	ts	=	new ThresholdSystem(0.3,0.8);
-		Thread th			=	new Thread(ts);
+		ThresholdSystemWithCheck	ts	=	new ThresholdSystemWithCheck(0.6,0.9);
+		Thread th						=	new Thread(ts);
 		th.start();
 	}
 	
