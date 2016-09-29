@@ -83,8 +83,9 @@ public class MainClass {
 	}
 	
 	public static void thrSystem(){
+		//ThresholdSystem	ts	=	new ThresholdSystem(0.3,0.8);
 		ThresholdSystemWithCheck	ts	=	new ThresholdSystemWithCheck(0.6,0.9);
-		Thread th						=	new Thread(ts);
+		Thread th			=	new Thread(ts);
 		th.start();
 	}
 	
