@@ -78,8 +78,8 @@ public class MainClass {
 		if (args != null && args.length > 0) {
 			Settings.topologyName	=	args[0];
 		}
-		//dynamicSteps();
-		thrSystem();
+		dynamicSteps();
+		//thrSystem();
 	}
 	
 	public static void thrSystem(){
